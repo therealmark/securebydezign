@@ -39,10 +39,12 @@ export const handler = async (event) => {
     // POST /webhooks/stripe (path may include stage prefix, e.g. /prod/webhooks/stripe)
     if ((path === '/webhooks/stripe' || path.endsWith('/webhooks/stripe')) && method === 'POST') {
       let rawBody;
-      if (event.isBase64Encoded && event.body) {
-        rawBody = Buffer.from(event.body, 'base64').toString('utf8');
+      if (typeof event.body === 'string') {
+        rawBody = event.isBase64Encoded ? Buffer.from(event.body, 'base64').toString('utf8') : event.body;
+      } else if (event.body && typeof event.body === 'object') {
+        rawBody = JSON.stringify(event.body);
       } else {
-        rawBody = typeof event.body === 'string' ? event.body : (event.body && Buffer.from(event.body).toString('utf8')) || '';
+        rawBody = '';
       }
       const signature = event.headers?.Stripe-Signature ?? event.headers?.['stripe-signature'] ?? '';
       const isTestRun = event.headers?.['x-stripe-webhook-test'] === 'true' || event.headers?.['X-Stripe-Webhook-Test'] === 'true';
