@@ -30,46 +30,11 @@
     <div class="mb-8">
       <i class="fas fa-check-circle text-6xl text-emerald-500 mb-4"></i>
       <h1 class="text-4xl font-bold tracking-tight mb-4">Purchase Successful!</h1>
-      <p class="text-xl text-zinc-400 mb-8">Thank you for supporting AI Shield. Here's your access to the full guides.</p>
+      <p class="text-xl text-zinc-400 mb-8">Thank you for your purchase.</p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-8 mb-12">
-      <div class="bg-zinc-900 rounded-3xl overflow-hidden card-hover">
-        <img src="https://picsum.photos/id/1015/600/340" alt="Prompt Injection Attacks" class="w-full h-48 object-cover">
-        <div class="p-8">
-          <h2 class="text-2xl font-semibold mb-3">Prompt Injection Attacks</h2>
-          <p class="text-zinc-400 mb-6 line-clamp-3">How attackers trick LLMs and the 5-layer defense that stops 95% of attacks.</p>
-          <a href="pdfs/pinjection.pdf" download class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
-            <i class="fas fa-download"></i> Download PDF
-          </a>
-        </div>
-      </div>
-
-      <div class="bg-zinc-900 rounded-3xl overflow-hidden card-hover">
-        <img src="https://picsum.photos/id/201/600/340" alt="LLM API Security" class="w-full h-48 object-cover">
-        <div class="p-8">
-          <h2 class="text-2xl font-semibold mb-3">Securing LLM APIs</h2>
-          <p class="text-zinc-400 mb-6 line-clamp-3">The exact checklist used by top AI companies for authentication, rate limiting, and monitoring.</p>
-          <a href="pdfs/api-security.pdf" download class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
-            <i class="fas fa-download"></i> Download PDF
-          </a>
-        </div>
-      </div>
-
-      <div class="bg-zinc-900 rounded-3xl overflow-hidden card-hover">
-        <img src="https://picsum.photos/id/870/600/340" alt="Data Poisoning" class="w-full h-48 object-cover">
-        <div class="p-8">
-          <h2 class="text-2xl font-semibold mb-3">Data Poisoning Defense</h2>
-          <p class="text-zinc-400 mb-6 line-clamp-3">How malicious training data breaks models and the robust protection strategy that works today.</p>
-          <a href="pdfs/data-poisoning.pdf" download class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
-            <i class="fas fa-download"></i> Download PDF
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <div id="session-message" class="text-center hidden mb-6">
-      <p id="session-email" class="text-zinc-400"></p>
+    <div id="session-message" class="text-center mb-10">
+      <p id="session-email" class="text-xl text-zinc-300"></p>
       <p id="session-debug" class="text-xs text-zinc-500 mt-2 font-mono hidden"></p>
     </div>
     <div class="text-center">
@@ -102,18 +67,18 @@
       }
 
       if (!sessionId) {
-        sessionMessage.classList.remove('hidden');
-        sessionEmail.textContent = "No session ID in URL. After checkout, Stripe should redirect here with ?session_id=cs_xxx. Check your Payment Link's success URL in Stripe Dashboard.";
+        sessionEmail.textContent = "No session ID in URL. If you just completed checkout, check your email for the guides or contact hello@securebydezign.com.";
         showDebug('Current URL: ' + window.location.href);
         return;
       }
 
       if (!apiBase) {
-        sessionMessage.classList.remove('hidden');
-        sessionEmail.textContent = "API URL not set. Add: window.SECUREBYDEZIGN_API = 'https://z01mzuzo05.execute-api.us-east-1.amazonaws.com/prod'; before this script.";
+        sessionEmail.textContent = "API URL not set. Add window.SECUREBYDEZIGN_API in the page configuration.";
         showDebug('Session ID from URL: ' + sessionId);
         return;
       }
+
+      sessionEmail.textContent = "Preparing your guides…";
 
       var apiUrl = apiBase + '/api/session?session_id=' + encodeURIComponent(sessionId);
       showDebug('Calling: ' + apiUrl);
@@ -124,12 +89,11 @@
           return r.json();
         })
         .then(function(data) {
-          sessionMessage.classList.remove('hidden');
           sessionDebug.classList.add('hidden');
           if (data.email) {
-            sessionEmail.textContent = "We've emailed your guides to " + data.email + ". Your downloads are starting.";
+            sessionEmail.textContent = "Check your inbox at " + data.email + " for a copy of the guides. Your downloads have also started automatically.";
           } else {
-            sessionEmail.textContent = "Your downloads are starting.";
+            sessionEmail.textContent = "Check your inbox for a copy of the guides. Your downloads have also started automatically.";
           }
           (data.downloads || []).forEach(function(d, i) {
             setTimeout(function() {
@@ -144,8 +108,7 @@
           });
         })
         .catch(function(err) {
-          sessionMessage.classList.remove('hidden');
-          sessionEmail.textContent = "Could not verify purchase. Check the message below or try the download links above.";
+          sessionEmail.textContent = "Could not verify purchase. Please contact hello@securebydezign.com with your order details.";
           showDebug('Session: ' + sessionId + ' — Error: ' + err.message);
         });
     })();
