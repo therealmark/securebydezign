@@ -11,9 +11,20 @@ import { config } from '../config.js';
 const stripe = new Stripe(config.stripeSecretKey);
 const s3 = new S3Client({});
 
+const CORS = {
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+function json(statusCode, body) {
+  return { statusCode, headers: CORS, body: JSON.stringify(body) };
+}
+
 export async function handleSession(sessionId) {
   if (!sessionId || !sessionId.startsWith('cs_')) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid session_id' }) };
+    return json(400, { error: 'Invalid session_id' });
   }
 
   let session;
@@ -22,21 +33,17 @@ export async function handleSession(sessionId) {
       expand: ['customer_details'],
     });
   } catch (e) {
-    return { statusCode: 404, body: JSON.stringify({ error: 'Session not found' }) };
+    return json(404, { error: 'Session not found' });
   }
 
   if (session.payment_status !== 'paid') {
-    return { statusCode: 403, body: JSON.stringify({ error: 'Payment not completed' }) };
+    return json(403, { error: 'Payment not completed' });
   }
 
   const email = session.customer_details?.email || session.customer_email || '';
 
   if (!config.pdfBucket) {
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ email, downloads: [] }),
-    };
+    return json(200, { email, downloads: [] });
   }
 
   const downloads = [];
@@ -49,19 +56,11 @@ export async function handleSession(sessionId) {
         ResponseContentDisposition: `attachment; filename="${item.filename}"`,
       });
       const url = await getSignedUrl(s3, cmd, { expiresIn: config.presignExpirySeconds });
-      downloads.push({
-        name: item.title,
-        filename: item.filename,
-        url,
-      });
+      downloads.push({ name: item.title, filename: item.filename, url });
     } catch (e) {
       console.warn(`Presign failed for ${key}:`, e.message);
     }
   }
 
-  return {
-    statusCode: 200,
-    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-    body: JSON.stringify({ email, downloads }),
-  };
+  return json(200, { email, downloads });
 }
