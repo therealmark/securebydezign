@@ -1,0 +1,245 @@
+<!-- Secure by DeZign — Full Logo Set -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" style="background:#0a0a0a">
+  <defs>
+    <!-- Emerald glow filter -->
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-strong" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="7" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Shield gradient -->
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f2027"/>
+      <stop offset="50%" stop-color="#0d1f1a"/>
+      <stop offset="100%" stop-color="#091a10"/>
+    </linearGradient>
+    <linearGradient id="shieldStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="50%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="lockGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="nodeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+
+    <!-- Monochrome versions -->
+    <linearGradient id="monoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0e0e0"/>
+      <stop offset="100%" stop-color="#a0a0a0"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+
+    <clipPath id="v1clip"><rect x="50" y="30" width="350" height="350"/></clipPath>
+    <clipPath id="v2clip"><rect x="30" y="420" width="840" height="220"/></clipPath>
+    <clipPath id="v3clip"><rect x="150" y="680" width="600" height="460"/></clipPath>
+    <clipPath id="v4clip"><rect x="50" y="700" width="350" height="350"/></clipPath>
+  </defs>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION LABELS
+  ════════════════════════════════════════════════ -->
+  <text x="30" y="22" font-family="system-ui,sans-serif" font-size="11" fill="#444" letter-spacing="2">1 — ICON ONLY</text>
+  <text x="30" y="412" font-family="system-ui,sans-serif" font-size="11" fill="#444" letter-spacing="2">2 — HORIZONTAL</text>
+  <text x="30" y="672" font-family="system-ui,sans-serif" font-size="11" fill="#444" letter-spacing="2">3 — STACKED VERTICAL</text>
+  <text x="30" y="1090" font-family="system-ui,sans-serif" font-size="11" fill="#444" letter-spacing="2">4 — MONOCHROME</text>
+
+  <!-- ═══════════════════════════════════════════════
+       SHARED SHIELD SYMBOL — defined as group, reused
+  ════════════════════════════════════════════════ -->
+
+  <!-- ── VARIATION 1: ICON ONLY (350×350, centered at 225,205) ── -->
+  <g transform="translate(225,205)">
+    <!-- Shield body -->
+    <path d="M0,-130 L100,-85 L100,30 Q100,110 0,150 Q-100,110 -100,30 L-100,-85 Z"
+          fill="url(#shieldGrad)" stroke="url(#shieldStroke)" stroke-width="3" filter="url(#glow-soft)"/>
+    <!-- Shield inner bevel -->
+    <path d="M0,-115 L86,-75 L86,28 Q86,98 0,134 Q-86,98 -86,28 L-86,-75 Z"
+          fill="none" stroke="#10b981" stroke-width="0.7" opacity="0.3"/>
+
+    <!-- Neural net lines -->
+    <g stroke="#10b981" stroke-width="1.2" opacity="0.55" filter="url(#glow-soft)">
+      <line x1="-60" y1="-60" x2="0" y2="-20"/>
+      <line x1="60" y1="-60" x2="0" y2="-20"/>
+      <line x1="-60" y1="-60" x2="-30" y2="20"/>
+      <line x1="60" y1="-60" x2="30" y2="20"/>
+      <line x1="0" y1="-20" x2="-30" y2="20"/>
+      <line x1="0" y1="-20" x2="30" y2="20"/>
+      <line x1="-30" y1="20" x2="0" y2="65"/>
+      <line x1="30" y1="20" x2="0" y2="65"/>
+      <line x1="-60" y1="-60" x2="60" y2="-60" stroke-width="0.6" opacity="0.4"/>
+    </g>
+    <!-- Circuit traces -->
+    <g stroke="#06b6d4" stroke-width="0.9" opacity="0.35" fill="none">
+      <polyline points="-80,10 -55,10 -55,-30 -30,-30"/>
+      <polyline points="80,10 55,10 55,-30 30,-30"/>
+      <polyline points="-55,50 -40,50 -40,70"/>
+      <polyline points="55,50 40,50 40,70"/>
+      <rect x="-58" y="7" width="6" height="6" rx="1" fill="#06b6d4" opacity="0.4"/>
+      <rect x="52" y="7" width="6" height="6" rx="1" fill="#06b6d4" opacity="0.4"/>
+    </g>
+
+    <!-- Neural nodes -->
+    <g filter="url(#glow)">
+      <circle cx="-60" cy="-60" r="6" fill="url(#nodeGrad)"/>
+      <circle cx="60" cy="-60" r="6" fill="url(#nodeGrad)"/>
+      <circle cx="0" cy="-20" r="5" fill="#34d399"/>
+      <circle cx="-30" cy="20" r="4.5" fill="url(#nodeGrad)"/>
+      <circle cx="30" cy="20" r="4.5" fill="url(#nodeGrad)"/>
+      <circle cx="0" cy="65" r="5" fill="#34d399"/>
+    </g>
+
+    <!-- Lock body -->
+    <g filter="url(#glow-strong)" transform="translate(0,0)">
+      <!-- Lock shackle -->
+      <path d="M-14,-18 Q-14,-34 0,-34 Q14,-34 14,-18" fill="none" stroke="url(#lockGrad)" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Lock body box -->
+      <rect x="-18" y="-18" width="36" height="28" rx="5" fill="url(#shieldGrad)" stroke="url(#lockGrad)" stroke-width="2.5"/>
+      <!-- Keyhole -->
+      <circle cx="0" cy="-6" r="5" fill="url(#lockGrad)"/>
+      <rect x="-2.5" y="-4" width="5" height="8" rx="1" fill="url(#lockGrad)"/>
+    </g>
+  </g>
+
+  <!-- ── VARIATION 2: HORIZONTAL LOGO ── -->
+  <g transform="translate(60,540)">
+    <!-- Mini shield (80px tall) -->
+    <g transform="translate(70,0) scale(0.53)">
+      <path d="M0,-130 L100,-85 L100,30 Q100,110 0,150 Q-100,110 -100,30 L-100,-85 Z"
+            fill="url(#shieldGrad)" stroke="url(#shieldStroke)" stroke-width="3" filter="url(#glow-soft)"/>
+      <path d="M0,-115 L86,-75 L86,28 Q86,98 0,134 Q-86,98 -86,28 L-86,-75 Z"
+            fill="none" stroke="#10b981" stroke-width="0.7" opacity="0.3"/>
+      <g stroke="#10b981" stroke-width="1.4" opacity="0.55" filter="url(#glow-soft)">
+        <line x1="-60" y1="-60" x2="0" y2="-20"/>
+        <line x1="60" y1="-60" x2="0" y2="-20"/>
+        <line x1="-60" y1="-60" x2="-30" y2="20"/>
+        <line x1="60" y1="-60" x2="30" y2="20"/>
+        <line x1="0" y1="-20" x2="-30" y2="20"/>
+        <line x1="0" y1="-20" x2="30" y2="20"/>
+        <line x1="-30" y1="20" x2="0" y2="65"/>
+        <line x1="30" y1="20" x2="0" y2="65"/>
+      </g>
+      <g filter="url(#glow)">
+        <circle cx="-60" cy="-60" r="6" fill="url(#nodeGrad)"/>
+        <circle cx="60" cy="-60" r="6" fill="url(#nodeGrad)"/>
+        <circle cx="0" cy="-20" r="5" fill="#34d399"/>
+        <circle cx="-30" cy="20" r="4.5" fill="url(#nodeGrad)"/>
+        <circle cx="30" cy="20" r="4.5" fill="url(#nodeGrad)"/>
+        <circle cx="0" cy="65" r="5" fill="#34d399"/>
+      </g>
+      <g filter="url(#glow-strong)">
+        <path d="M-14,-18 Q-14,-34 0,-34 Q14,-34 14,-18" fill="none" stroke="url(#lockGrad)" stroke-width="3.5" stroke-linecap="round"/>
+        <rect x="-18" y="-18" width="36" height="28" rx="5" fill="url(#shieldGrad)" stroke="url(#lockGrad)" stroke-width="2.5"/>
+        <circle cx="0" cy="-6" r="5" fill="url(#lockGrad)"/>
+        <rect x="-2.5" y="-4" width="5" height="8" rx="1" fill="url(#lockGrad)"/>
+      </g>
+    </g>
+
+    <!-- Text: SECURE by DeZign -->
+    <g transform="translate(148,-52)">
+      <text font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-1" fill="#f0fdf4" filter="url(#glow-soft)">
+        SECURE
+      </text>
+      <text y="16" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-size="13" font-weight="400" letter-spacing="6" fill="#10b981">
+        BY
+      </text>
+      <text y="58" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-size="52" font-weight="900" letter-spacing="-1" fill="#10b981" filter="url(#glow-soft)">
+        DeZign
+      </text>
+      <!-- Tagline -->
+      <text y="82" font-family="'Helvetica Neue',Arial,sans-serif" font-size="11" font-weight="300" letter-spacing="4" fill="#6b7280">
+        AI SECURITY BEST PRACTICES
+      </text>
+    </g>
+  </g>
+
+  <!-- ── VARIATION 3: STACKED VERTICAL ── -->
+  <g transform="translate(450,780)">
+    <!-- Shield centered -->
+    <g transform="translate(0,-60) scale(0.72)">
+      <path d="M0,-130 L100,-85 L100,30 Q100,110 0,150 Q-100,110 -100,30 L-100,-85 Z"
+            fill="url(#shieldGrad)" stroke="url(#shieldStroke)" stroke-width="3" filter="url(#glow-soft)"/>
+      <path d="M0,-115 L86,-75 L86,28 Q86,98 0,134 Q-86,98 -86,28 L-86,-75 Z"
+            fill="none" stroke="#10b981" stroke-width="0.7" opacity="0.3"/>
+      <g stroke="#10b981" stroke-width="1.4" opacity="0.55" filter="url(#glow-soft)">
+        <line x1="-60" y1="-60" x2="0" y2="-20"/>
+        <line x1="60" y1="-60" x2="0" y2="-20"/>
+        <line x1="-60" y1="-60" x2="-30" y2="20"/>
+        <line x1="60" y1="-60" x2="30" y2="20"/>
+        <line x1="0" y1="-20" x2="-30" y2="20"/>
+        <line x1="0" y1="-20" x2="30" y2="20"/>
+        <line x1="-30" y1="20" x2="0" y2="65"/>
+        <line x1="30" y1="20" x2="0" y2="65"/>
+      </g>
+      <g filter="url(#glow)">
+        <circle cx="-60" cy="-60" r="6" fill="url(#nodeGrad)"/>
+        <circle cx="60" cy="-60" r="6" fill="url(#nodeGrad)"/>
+        <circle cx="0" cy="-20" r="5" fill="#34d399"/>
+        <circle cx="-30" cy="20" r="4.5" fill="url(#nodeGrad)"/>
+        <circle cx="30" cy="20" r="4.5" fill="url(#nodeGrad)"/>
+        <circle cx="0" cy="65" r="5" fill="#34d399"/>
+      </g>
+      <g filter="url(#glow-strong)">
+        <path d="M-14,-18 Q-14,-34 0,-34 Q14,-34 14,-18" fill="none" stroke="url(#lockGrad)" stroke-width="3.5" stroke-linecap="round"/>
+        <rect x="-18" y="-18" width="36" height="28" rx="5" fill="url(#shieldGrad)" stroke="url(#lockGrad)" stroke-width="2.5"/>
+        <circle cx="0" cy="-6" r="5" fill="url(#lockGrad)"/>
+        <rect x="-2.5" y="-4" width="5" height="8" rx="1" fill="url(#lockGrad)"/>
+      </g>
+    </g>
+    <!-- Stacked text -->
+    <text y="110" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-size="46" font-weight="900" letter-spacing="2" fill="#f0fdf4" text-anchor="middle" filter="url(#glow-soft)">SECURE</text>
+    <text y="148" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-size="12" font-weight="300" letter-spacing="8" fill="#10b981" text-anchor="middle">BY</text>
+    <text y="194" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-size="46" font-weight="900" letter-spacing="2" fill="#10b981" text-anchor="middle" filter="url(#glow-soft)">DeZign</text>
+    <!-- Divider -->
+    <line x1="-130" y1="210" x2="130" y2="210" stroke="#10b981" stroke-width="0.8" opacity="0.4"/>
+    <text y="228" font-family="'Helvetica Neue',Arial,sans-serif" font-size="10" font-weight="300" letter-spacing="4.5" fill="#6b7280" text-anchor="middle">AI SECURITY BEST PRACTICES</text>
+  </g>
+
+  <!-- ── VARIATION 4: MONOCHROME ── -->
+  <text x="30" y="1082" font-family="system-ui,sans-serif" font-size="11" fill="#444" letter-spacing="2">4 — MONOCHROME</text>
+  <g transform="translate(225,1155)">
+    <!-- Shield mono -->
+    <path d="M0,-130 L100,-85 L100,30 Q100,110 0,150 Q-100,110 -100,30 L-100,-85 Z"
+          fill="#1a1a1a" stroke="#c0c0c0" stroke-width="3"/>
+    <path d="M0,-115 L86,-75 L86,28 Q86,98 0,134 Q-86,98 -86,28 L-86,-75 Z"
+          fill="none" stroke="#888" stroke-width="0.7" opacity="0.5"/>
+    <!-- Neural lines mono -->
+    <g stroke="#888" stroke-width="1.2" opacity="0.6">
+      <line x1="-60" y1="-60" x2="0" y2="-20"/>
+      <line x1="60" y1="-60" x2="0" y2="-20"/>
+      <line x1="-60" y1="-60" x2="-30" y2="20"/>
+      <line x1="60" y1="-60" x2="30" y2="20"/>
+      <line x1="0" y1="-20" x2="-30" y2="20"/>
+      <line x1="0" y1="-20" x2="30" y2="20"/>
+      <line x1="-30" y1="20" x2="0" y2="65"/>
+      <line x1="30" y1="20" x2="0" y2="65"/>
+    </g>
+    <!-- Nodes mono -->
+    <circle cx="-60" cy="-60" r="6" fill="url(#monoGrad)"/>
+    <circle cx="60" cy="-60" r="6" fill="url(#monoGrad)"/>
+    <circle cx="0" cy="-20" r="5" fill="#c0c0c0"/>
+    <circle cx="-30" cy="20" r="4.5" fill="url(#monoGrad)"/>
+    <circle cx="30" cy="20" r="4.5" fill="url(#monoGrad)"/>
+    <circle cx="0" cy="65" r="5" fill="#c0c0c0"/>
+    <!-- Lock mono -->
+    <path d="M-14,-18 Q-14,-34 0,-34 Q14,-34 14,-18" fill="none" stroke="#c0c0c0" stroke-width="3.5" stroke-linecap="round"/>
+    <rect x="-18" y="-18" width="36" height="28" rx="5" fill="#111" stroke="#c0c0c0" stroke-width="2.5"/>
+    <circle cx="0" cy="-6" r="5" fill="#c0c0c0"/>
+    <rect x="-2.5" y="-4" width="5" height="8" rx="1" fill="#c0c0c0"/>
+  </g>
+
+</svg>

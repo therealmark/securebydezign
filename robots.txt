@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /pdfs/
+
+Sitemap: https://www.securebydezign.com/sitemap.xml

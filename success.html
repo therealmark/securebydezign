@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Purchase successful! Download your AI Security Guides.">
+  <title>Success — Secure by DeZign Guides</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="canonical" href="https://www.securebydezign.com/success.html">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body class="bg-zinc-950 text-zinc-200">
+  <nav class="border-b border-zinc-800 bg-zinc-950 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <i class="fas fa-shield-alt text-3xl text-emerald-500"></i>
+        <span class="text-2xl font-bold tracking-tight">Secure by DeZign</span>
+      </div>
+      <div class="space-x-8 text-sm font-medium">
+        <a href="index.html" class="hover:text-emerald-400">Home</a>
+        <a href="articles/" class="hover:text-emerald-400">Articles</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-6 py-16 text-center">
+    <div class="mb-8">
+      <i class="fas fa-check-circle text-6xl text-emerald-500 mb-4"></i>
+      <h1 class="text-4xl font-bold tracking-tight mb-4">Purchase Successful!</h1>
+      <p class="text-xl text-zinc-400 mb-8">Thank you for supporting AI Shield. Here's your access to the full guides.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8 mb-12">
+      <div class="bg-zinc-900 rounded-3xl overflow-hidden card-hover">
+        <img src="https://picsum.photos/id/1015/600/340" alt="Prompt Injection Attacks" class="w-full h-48 object-cover">
+        <div class="p-8">
+          <h2 class="text-2xl font-semibold mb-3">Prompt Injection Attacks</h2>
+          <p class="text-zinc-400 mb-6 line-clamp-3">How attackers trick LLMs and the 5-layer defense that stops 95% of attacks.</p>
+          <a href="pdfs/pinjection.pdf" download class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
+            <i class="fas fa-download"></i> Download PDF
+          </a>
+        </div>
+      </div>
+
+      <div class="bg-zinc-900 rounded-3xl overflow-hidden card-hover">
+        <img src="https://picsum.photos/id/201/600/340" alt="LLM API Security" class="w-full h-48 object-cover">
+        <div class="p-8">
+          <h2 class="text-2xl font-semibold mb-3">Securing LLM APIs</h2>
+          <p class="text-zinc-400 mb-6 line-clamp-3">The exact checklist used by top AI companies for authentication, rate limiting, and monitoring.</p>
+          <a href="pdfs/api-security.pdf" download class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
+            <i class="fas fa-download"></i> Download PDF
+          </a>
+        </div>
+      </div>
+
+      <div class="bg-zinc-900 rounded-3xl overflow-hidden card-hover">
+        <img src="https://picsum.photos/id/870/600/340" alt="Data Poisoning" class="w-full h-48 object-cover">
+        <div class="p-8">
+          <h2 class="text-2xl font-semibold mb-3">Data Poisoning Defense</h2>
+          <p class="text-zinc-400 mb-6 line-clamp-3">How malicious training data breaks models and the robust protection strategy that works today.</p>
+          <a href="pdfs/data-poisoning.pdf" download class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
+            <i class="fas fa-download"></i> Download PDF
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="session-message" class="text-center hidden mb-6">
+      <p id="session-email" class="text-zinc-400"></p>
+    </div>
+    <div class="text-center">
+      <p class="text-zinc-500 mb-4">Enjoy the guides! For questions or support, email <a href="mailto:hello@securebydezign.com" class="text-emerald-400 hover:underline">hello@securebydezign.com</a>.</p>
+      <a href="index.html" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
+        <i class="fas fa-home"></i> Back to Home
+      </a>
+    </div>
+  </main>
+
+  <footer class="border-t border-zinc-800 py-12 text-center text-zinc-500 text-sm">
+    © 2026 Secure by DeZign
+  </footer>
+
+  <script>
+    (function() {
+      // Set if your API is on a different origin (e.g. API Gateway URL). Leave unset if /api is same origin.
+      var apiBase = window.SECUREBYDEZIGN_API || '';
+
+      var urlParams = new URLSearchParams(window.location.search);
+      var sessionId = urlParams.get('session_id');
+      if (!sessionId) return;
+
+      var sessionMessage = document.getElementById('session-message');
+      var sessionEmail = document.getElementById('session-email');
+
+      fetch(apiBase + '/api/session?session_id=' + encodeURIComponent(sessionId), { credentials: 'include' })
+        .then(function(r) {
+          if (!r.ok) throw new Error('Session invalid');
+          return r.json();
+        })
+        .then(function(data) {
+          sessionMessage.classList.remove('hidden');
+          if (data.email) {
+            sessionEmail.textContent = "We've emailed your guides to " + data.email + ". Your downloads are starting.";
+          } else {
+            sessionEmail.textContent = "Your downloads are starting.";
+          }
+          (data.downloads || []).forEach(function(d, i) {
+            setTimeout(function() {
+              var a = document.createElement('a');
+              a.href = d.url;
+              a.download = d.filename || d.name + '.pdf';
+              a.rel = 'noopener noreferrer';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+            }, i * 800);
+          });
+        })
+        .catch(function() {
+          sessionMessage.classList.remove('hidden');
+          sessionEmail.textContent = "Thanks for your purchase. If you don't see your download, check your email or contact hello@securebydezign.com.";
+        });
+    })();
+  </script>
+</body>
+</html>

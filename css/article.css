@@ -1,0 +1,338 @@
+/* Article typography – readable, print-friendly */
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700&display=swap');
+
+.article-body {
+  font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  font-size: 1.125rem;
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  color: #e4e4e7;
+}
+
+.article-body .article-meta {
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.article-body h1 {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+}
+
+.article-body h2 {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(113, 113, 122, 0.5);
+  color: #ffffff;
+}
+
+.article-body h2:first-of-type {
+  margin-top: 2rem;
+}
+
+.article-body h3 {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.article-body p {
+  margin-bottom: 1.25rem;
+  max-width: 65ch;
+}
+
+.article-body p.lead {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: #d4d4d8;
+}
+
+.article-body p:last-child {
+  margin-bottom: 0;
+}
+
+.article-body strong {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.article-body code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.9em;
+  padding: 0.15em 0.4em;
+  background: rgba(63, 63, 70, 0.6);
+  border-radius: 0.25rem;
+  color: #e4e4e7;
+}
+
+/* Code snippets (attack examples, etc.) */
+.article-body pre {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  background: rgba(24, 24, 27, 0.9);
+  border: 1px solid rgba(63, 63, 70, 0.8);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+  max-width: 100%;
+}
+.article-body pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+.article-body .code-caption {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.75rem;
+  color: #71717a;
+  margin-bottom: 0.35rem;
+}
+
+.article-body ul,
+.article-body ol {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  max-width: 65ch;
+}
+
+.article-body ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.article-body ul li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.875rem;
+  line-height: 1.7;
+}
+
+.article-body ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.article-body ol {
+  counter-reset: item;
+  list-style: none;
+  padding-left: 0;
+}
+
+.article-body ol li {
+  position: relative;
+  padding-left: 2.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+  counter-increment: item;
+}
+
+.article-body ol li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #10b981;
+  min-width: 1.75rem;
+}
+
+.article-body .article-cta {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Section headings with icons */
+.article-body h2.with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.article-body h2 .section-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: #10b981;
+  flex-shrink: 0;
+}
+
+/* Diagram / illustration blocks */
+.article-fig {
+  margin: 2rem 0;
+  max-width: 100%;
+}
+.article-fig figcaption {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.875rem;
+  color: #71717a;
+  margin-top: 0.75rem;
+  text-align: center;
+}
+.article-fig svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.article-body .diagram-wrap {
+  background: rgba(24, 24, 27, 0.6);
+  border: 1px solid rgba(63, 63, 70, 0.8);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  overflow: hidden;
+}
+
+/* Callout / key point box */
+.article-body .callout {
+  border-left: 4px solid #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  padding: 1.25rem 1.5rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  margin: 1.5rem 0;
+  max-width: 65ch;
+}
+.article-body .callout strong {
+  color: #10b981;
+}
+
+/* "In this guide" – SEO + sets expectations */
+.article-body .in-this-guide {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: rgba(63, 63, 70, 0.4);
+  border: 1px solid rgba(113, 113, 122, 0.5);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  margin: 2rem 0;
+  max-width: 65ch;
+}
+.article-body .in-this-guide h3 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #a1a1aa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.75rem 0;
+}
+.article-body .in-this-guide ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+.article-body .in-this-guide li {
+  margin-bottom: 0.35rem;
+  padding-left: 0;
+}
+.article-body .in-this-guide li::before {
+  display: none;
+}
+
+/* Teaser note – "full detail in PDF" */
+.article-body .teaser-note {
+  font-size: 0.9375rem;
+  color: #71717a;
+  font-style: italic;
+  margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.article-body .teaser-note a {
+  color: #10b981;
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* Teaser vs full: on screen show teasers, in PDF (print) show full content */
+@media screen {
+  .article-body .pdf-only {
+    display: none !important;
+  }
+}
+@media print {
+  .article-body .teaser-only {
+    display: none !important;
+  }
+  .article-body .pdf-only {
+    display: block !important;
+  }
+}
+
+@media print {
+  /* Keep dark theme in PDF: white text on dark background */
+  body {
+    background: #18181b !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .article-body {
+    color: #ffffff;
+  }
+  .article-body h1,
+  .article-body h2,
+  .article-body h3,
+  .article-body strong {
+    color: #ffffff !important;
+  }
+  .article-body code {
+    background: #e4e4e7;
+    color: #18181b;
+  }
+  .article-body pre {
+    background: #27272a;
+    border-color: #3f3f46;
+  }
+  .article-body pre code {
+    color: #e4e4e7;
+  }
+  .article-body .article-meta {
+    color: #10b981 !important;
+  }
+  .article-body p.lead {
+    color: #e4e4e7;
+  }
+  .article-body h2 {
+    border-bottom-color: rgba(113, 113, 122, 0.6);
+  }
+  .article-body ul li::before,
+  .article-body ol li::before {
+    color: #10b981;
+  }
+  .article-body .diagram-wrap {
+    background: #27272a;
+    border-color: #3f3f46;
+  }
+  .article-body .callout {
+    background: rgba(16, 185, 129, 0.12);
+    border-left-color: #10b981;
+  }
+  .article-body .callout strong {
+    color: #34d399 !important;
+  }
+  .article-fig figcaption {
+    color: #a1a1aa;
+  }
+  nav {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How attackers extract training data from AI models and the hardening techniques that stop them.">
+  <title>Model Inversion Attacks – Complete Guide 2026 • Secure by DeZign</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/article.css">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="canonical" href="https://www.securebydezign.com/articles/model-inversion.html">
+</head>
+<body class="bg-zinc-950 text-zinc-200">
+  <nav class="border-b border-zinc-800 bg-zinc-950">
+    <div class="max-w-4xl mx-auto px-6 py-5">
+      <a href="../index.html" class="flex items-center gap-2 hover:text-emerald-400"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+  </nav>
+
+  <article class="article-body max-w-4xl mx-auto px-6 py-16">
+    <div class="article-meta text-emerald-400 text-sm mb-8">21 Feb 2026 • 12 min read</div>
+
+<h1>Model Inversion Attacks: How Attackers Extract Training Data from AI Models – Complete Defense Guide 2026</h1>
+
+<p class="lead">Your carefully curated training data isn't as protected as you think. Model inversion attacks exploit the mathematical relationship between model outputs and training inputs, allowing adversaries to reconstruct sensitive data—faces, medical records, proprietary datasets—from nothing more than API access. This guide dissects the attack mechanics and delivers battle-tested hardening techniques that actually work.</p>
+
+<figure class="article-fig">
+  <div class="diagram-wrap">
+    <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+      <rect width="800" height="400" fill="#27272a"/>
+      
+      <!-- Attacker -->
+      <rect x="30" y="150" width="120" height="100" rx="8" fill="#27272a" stroke="#ef4444" stroke-width="2"/>
+      <text x="90" y="190" text-anchor="middle" fill="#e4e4e7" font-size="14" font-weight="bold">Attacker</text>
+      <text x="90" y="210" text-anchor="middle" fill="#a1a1aa" font-size="11">Optimization</text>
+      <text x="90" y="225" text-anchor="middle" fill="#a1a1aa" font-size="11">Loop</text>
+      
+      <!-- Query arrows -->
+      <path d="M150 180 L250 180" stroke="#10b981" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <text x="200" y="170" text-anchor="middle" fill="#10b981" font-size="10">Queries</text>
+      
+      <!-- Target Model -->
+      <rect x="260" y="120" width="160" height="160" rx="8" fill="#27272a" stroke="#3f3f46" stroke-width="2"/>
+      <text x="340" y="160" text-anchor="middle" fill="#e4e4e7" font-size="14" font-weight="bold">Target Model</text>
+      <rect x="280" y="180" width="120" height="40" rx="4" fill="#3f3f46"/>
+      <text x="340" y="205" text-anchor="middle" fill="#e4e4e7" font-size="11">f(x) → confidence</text>
+      <text x="340" y="250" text-anchor="middle" fill="#a1a1aa" font-size="10">Leaks information</text>
+      <text x="340" y="265" text-anchor="middle" fill="#a1a1aa" font-size="10">via gradients</text>
+      
+      <!-- Response arrows -->
+      <path d="M250 220 L150 220" stroke="#ef4444" stroke-width="2" marker-end="url(#arrowhead-red)"/>
+      <text x="200" y="240" text-anchor="middle" fill="#ef4444" font-size="10">Confidence Scores</text>
+      
+      <!-- Reconstruction Process -->
+      <rect x="480" y="80" width="140" height="80" rx="8" fill="#27272a" stroke="#f59e0b" stroke-width="2"/>
+      <text x="550" y="110" text-anchor="middle" fill="#e4e4e7" font-size="12" font-weight="bold">Gradient</text>
+      <text x="550" y="128" text-anchor="middle" fill="#e4e4e7" font-size="12" font-weight="bold">Descent</text>
+      <text x="550" y="148" text-anchor="middle" fill="#a1a1aa" font-size="10">∇L(x̂, target)</text>
+      
+      <!-- Arrow from model to reconstruction -->
+      <path d="M420 160 L470 120" stroke="#3f3f46" stroke-width="2" stroke-dasharray="5,5"/>
+      
+      <!-- Reconstructed Data -->
+      <rect x="480" y="200" width="140" height="100" rx="8" fill="#27272a" stroke="#10b981" stroke-width="2"/>
+      <text x="550" y="235" text-anchor="middle" fill="#e4e4e7" font-size="12" font-weight="bold">Reconstructed</text>
+      <text x="550" y="255" text-anchor="middle" fill="#e4e4e7" font-size="12" font-weight="bold">Training Data</text>
+      <text x="550" y="280" text-anchor="middle" fill="#10b981" font-size="10">x̂ ≈ x_original</text>
+      
+      <!-- Arrow from gradient to reconstructed -->
+      <path d="M550 160 L550 190" stroke="#f59e0b" stroke-width="2" marker-end="url(#arrowhead-orange)"/>
+      
+      <!-- Training Data (what's being extracted) -->
+      <rect x="660" y="150" width="120" height="100" rx="8" fill="#27272a" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,4"/>
+      <text x="720" y="185" text-anchor="middle" fill="#e4e4e7" font-size="11" font-weight="bold">Original</text>
+      <text x="720" y="203" text-anchor="middle" fill="#e4e4e7" font-size="11" font-weight="bold">Training Data</text>
+      <text x="720" y="230" text-anchor="middle" fill="#ef4444" font-size="10">EXPOSED</text>
+      
+      <!-- Similarity indicator -->
+      <path d="M620 250 L650 200" stroke="#10b981" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="655" y="270" text-anchor="start" fill="#10b981" font-size="9">High Similarity</text>
+      
+      <!-- Legend -->
+      <rect x="30" y="330" width="12" height="12" fill="#ef4444"/>
+      <text x="50" y="340" fill="#a1a1aa" font-size="10">Attack Vector</text>
+      <rect x="150" y="330" width="12" height="12" fill="#10b981"/>
+      <text x="170" y="340" fill="#a1a1aa" font-size="10">Extracted Data</text>
+      <rect x="280" y="330" width="12" height="12" fill="#f59e0b"/>
+      <text x="300" y="340" fill="#a1a1aa" font-size="10">Optimization</text>
+      
+      <!-- Arrow markers -->
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+        </marker>
+        <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444"/>
+        </marker>
+        <marker id="arrowhead-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#f59e0b"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+  <figcaption>Model inversion attack flow: Adversaries iteratively query the target model, using confidence scores to guide gradient descent toward reconstructing original training samples.</figcaption>
+</figure>
+
+<div class="in-this-guide teaser-only">
+  <strong>In this guide:</strong>
+  <ul>
+    <li>The mathematical foundations of model inversion and why modern architectures leak training data</li>
+    <li>Three attack variants: white-box, black-box, and federated learning inversion with real-world case studies</li>
+    <li>Defense implementation: differential privacy, confidence masking, and architectural hardening patterns</li>
+    <li>NIST AI RMF alignment and production deployment checklists for enterprise environments</li>
+  </ul>
+</div>
+
+<h2 class="with-icon"><i class="fas fa-microscope section-icon" aria-hidden="true"></i> Understanding Model Inversion: The Mathematics of Data Leakage</h2>
+
+<p>Model inversion attacks exploit a fundamental tension in machine learning: models must learn enough about training data to make accurate predictions, but this learned information can be reverse-engineered. First formalized by Fredrikson et al. in 2014 against pharmacogenetic models, these attacks have evolved from theoretical concerns to practical threats against production systems.</p>
+
+<p>The core principle is straightforward. Given a trained model <em>f</em> and a target class or identity <em>y</em>, an attacker constructs an input <em>x̂</em> that maximizes the model's confidence for that target. Through iterative optimization—typically gradient descent—the attacker refines <em>x̂</em> until it approximates actual training samples associated with <em>y</em>. The attack succeeds because high-confidence predictions encode statistical regularities present in the training distribution.</p>
+
+<p>What makes modern attacks particularly dangerous is their efficiency. Contemporary techniques require only API access—no model weights, no architecture knowledge. Black-box variants use zeroth-order optimization, estimating gradients through finite differences. An attacker with rate-limited query access can still extract meaningful reconstructions within hours, not days. The 2023 PII extraction from large language models demonstrated that even text-based models leak memorized training data through carefully crafted prompts.</p>
+
+<div class="pdf-only">
+  <p>The mathematical formulation centers on solving an optimization problem. For a classifier <em>f</em> with softmax output, the attacker minimizes:</p>
+  
+  <p><strong>L(x̂) = -log f(x̂)_y + λR(x̂)</strong></p>
+  
+  <p>Where <em>f(x̂)_y</em> is the predicted probability for target class <em>y</em>, and <em>R(x̂)</em> is a regularization term encoding prior knowledge about valid inputs (e.g., total variation for images, perplexity for text). The regularizer prevents convergence to adversarial examples that maximize confidence without resembling real data.</p>
+
+  <span class="code-caption">White-Box Model Inversion Attack Implementation</span>
+  <pre><code>import torch
+import torch.nn.functional as F
+
+class ModelInversionAttack:
+    """
+    White-box model inversion attack using gradient descent.
+    Reconstructs training data from model access.
+    """
+    def __init__(self, model, target_class, device='cuda'):
+        self.model = model.eval()
+        self.target_class = target_class
+        self.device = device
+        
+    def attack(self, input_shape, num_iterations=2000, lr=0.1, 
+               tv_weight=1e-3, l2_weight=1e-4):
+        """
+        Reconstruct training sample for target class.
+        
+        Args:
+            input_shape: Shape of input (e.g., (1, 3, 224, 224))
+            num_iterations: Optimization steps
+            lr: Learning rate
+            tv_weight: Total variation regularization
+            l2_weight: L2 norm regularization
+        """
+        # Initialize with random noise or prior distribution
+        x_hat = torch.randn(input_shape, device=self.device, 
+                           requires_grad=True)
+        optimizer = torch.optim.Adam([x_hat], lr=lr)
+        
+        for i in range(num_iterations):
+            optimizer.zero_grad()
+            
+            # Forward pass
+            logits = self.model(x_hat)
+            probs = F.softmax(logits, dim=1)
+            
+            # Classification loss (maximize target confidence)
+            cls_loss = -torch.log(probs[0, self.target_class] + 1e-8)
+            
+            # Total variation regularization (smoothness)
+            tv_loss = self._total_variation(x_hat)
+            
+            # L2 regularization (prevent extreme values)
+            l2_loss = torch.norm(x_hat, p=2)
+            
+            # Combined loss
+            loss = cls_loss + tv_weight * tv_loss + l2_weight * l2_loss
+            
+            loss.backward()
+            optimizer.step()
+            
+            # Clamp to valid input range
+            with torch.no_grad():
+                x_hat.clamp_(-1, 1)
+                
+            if i % 500 == 0:
+                print(f"Iter {i}: Loss={loss.item():.4f}, "
+                      f"Confidence={probs[0, self.target_class].item():.4f}")
+        
+        return x_hat.detach()
+    
+    def _total_variation(self, x):
+        """Compute total variation for image smoothness."""
+        diff_h = torch.abs(x[:, :, 1:, :] - x[:, :, :-1, :])
+        diff_w = torch.abs(x[:, :, :, 1:] - x[:, :, :, :-1])
+        return diff_h.sum() + diff_w.sum()</code></pre>
+
+  <span class="code-caption">Black-Box Attack Using Zeroth-Order Optimization</span>
+  <pre><code>import numpy as np
+import requests
+
+class BlackBoxModelInversion:
+    """
+    Black-box model inversion using finite difference gradients.
+    Only requires API query access to target model.
+    """
+    def __init__(self, api_endpoint, target_class, query_budget=50000):
+        self.api_endpoint = api_endpoint
+        self.target_class = target_class
+        self.query_budget = query_budget
+        self.queries_used = 0
+        
+    def query_model(self, x):
+        """Query the target model API."""
+        self.queries_used += 1
+        response = requests.post(
+            self.api_endpoint,
+            json={"input": x.tolist()}
+        )
+        return np.array(response.json()["probabilities"])
+    
+    def estimate_gradient(self, x, epsilon=0.01, num_samples=50):
+        """
+        Estimate gradient using random direction finite differences.
+        Natural Evolution Strategy (NES) variant.
+        """
+        grad_estimate = np.zeros_like(x)
+        
+        for _ in range(num_samples):
+            # Random perturbation direction
+            delta = np.random.randn(*x.shape)
+            delta = delta / np.linalg.norm(delta)
+            
+            # Query model at perturbed points
+            prob_plus = self.query_model(x + epsilon * delta)
+            prob_minus = self.query_model(x - epsilon * delta)
+            
+            # Finite difference in target class confidence
+            fd = (prob_plus[self.target_class] - 
+                  prob_minus[self.target_class]) / (2 * epsilon)
+            
+            grad_estimate += fd * delta
+            
+        return grad_estimate / num_samples
+    
+    def attack(self, input_shape, num_iterations=1000, lr=0.5):
+        """Execute black-box model inversion attack."""
+        x_hat = np.random.randn(*input_shape) * 0.1
+        
+        for i in range(num_iterations):
+            if self.queries_used >= self.query_budget:
+                print(f"Query budget exhausted at iteration {i}")
+                break
+                
+            grad = self.estimate_gradient(x_hat)
+            x_hat += lr * grad  # Gradient ascent on confidence
+            x_hat = np.clip(x_hat, -1, 1)
+            
+            if i % 100 == 0:
+                conf = self.query_model(x_hat)[self.target_class]
+                print(f"Iter {i}: Queries={self.queries_used}, "
+                      f"Confidence={conf:.4f}")
+        
+        return x_hat</code></pre>
+
+  <p>The white-box variant converges faster due to exact gradients, typically achieving recognizable reconstructions in 1,000-2,000 iterations. Black-box attacks require more queries but remain practical—50,000 queries against a facial recognition API can reconstruct training identities with sufficient fidelity to violate privacy.</p>
+
+  <p>Federated learning environments face a specialized variant: gradient inversion. When clients share model updates rather than data, attackers (including malicious aggregation servers) can invert the gradients to recover training batches. Research by Zhu et al. demonstrated pixel-perfect image reconstruction from a single gradient update when batch sizes are small.</p>
+</div>
+
+<h2 class="with-icon"><i class="fas fa-shield-virus section-icon" aria-hidden="true"></i> Attack Variants and Real-World Impact</h2>
+
+<p>Model inversion manifests differently across deployment contexts. White-box attacks against stolen or open-source models allow direct gradient computation. Black-box attacks against MLaaS APIs require only prediction confidence scores. Federated inversion targets gradient updates in distributed learning. Each demands distinct defensive considerations aligned with your threat model.</p>
+
+<p>The real-world impact extends beyond academic proof-of-concepts. In healthcare, model inversion has reconstructed patient facial images from diagnostic models, violating HIPAA privacy guarantees. Financial models trained on transaction data can leak customer spending patterns. Perhaps most concerning, facial recognition systems deployed at scale represent high-value targets where reconstructing enrolled identities enables downstream attacks from identity theft to surveillance evasion.</p>
+
+<div class="teaser-note teaser-only">
+  <i class="fas fa-file-pdf"></i> The full guide includes detailed case studies of production attacks, attack complexity analysis by model architecture, and a decision tree for assessing your exposure based on deployment model and data sensitivity classification.
+</div>
+
+<div class="pdf-only">
+  <h3>Case Study: Healthcare Model Privacy Breach</h3>
+  
+  <p>In 2024, researchers demonstrated model inversion against a dermatology classification model deployed by a major telehealth provider. The model, trained on 50,000 patient images, accepted skin lesion photos and returned diagnostic probabilities. Using only black-box API access with 10,000 queries per target identity, the researchers reconstructed patient facial features visible in the original training images with 73% structural similarity.</p>
+  
+  <p>The attack succeeded because the model had memorized patient-specific features correlated with rare conditions. When optimizing for high confidence on "actinic keratosis in elderly male," the reconstruction converged toward features of the small number of elderly males with that diagnosis in the training set.</p>
+
+  <h3>Attack Complexity by Architecture</h3>
+  
+  <table style="width:100%; border-collapse: collapse; margin: 1rem 0;">
+    <thead>
+      <tr style="border-bottom: 2px solid #3f3f46;">
+        <th style="text-align:left; padding: 0.5rem; color: #e4e4e7;">Architecture</th>
+        <th style="text-align:left; padding: 0.5rem; color: #e4e4e7;">Attack Difficulty</th>
+        <th style="text-align:left; padding: 0.5rem; color: #e4e4e7;">Leakage Vector</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid #3f3f46;">
+        <td style="padding: 0.5rem; color: #a1a1aa;">Simple CNNs</td>
+        <td style="padding: 0.5rem; color: #10b981;">Low</td>
+        <td style="padding: 0.5rem; color: #a1a1aa;">Direct gradient path to input</td>
+      </tr>
+      <tr style="border-bottom: 1px solid #3f3f46;">
+        <td style="padding: 0.5rem; color: #a1a1aa;">ResNets/DenseNets</td>
+        <td style="padding: 0.5rem; color: #f59e0b;">Medium</td>
+        <td style="padding: 0.5rem; color: #a1a1aa;">Skip connections preserve signal</td>
+      </tr>
+      <tr style="border-bottom: 1px solid #3f3f46;">
+        <td style="padding: 0.5rem; color: #a1a1aa;">Transformers</td>
+        <td style="padding: 0.5rem; color: #f59e0b;">Medium-High</td>
+        <td style="padding: 0.5rem; color: #a1a1aa;">Attention memorizes sequences</td>
+      </tr>
+      <tr style="border-bottom: 1px solid #3f3f46;">
+        <td style="padding: 0.5rem; color: #a1a1aa;">LLMs</td>
+        <td style="padding: 0.5rem; color: #10b981;">Low (memorization)</td>
+        <td style="padding: 0.5rem; color: #a1a1aa;">Verbatim training data extraction</td>
+      </tr>
+      <tr>
+        <td style="padding: 0.5rem; color: #a1a1aa;">Federated Models</td>
+        <td style="padding: 0.5rem; color: #10b981;">Low (gradient inversion)</td>
+        <td style="padding: 0.5rem; color: #a1a1aa;">Gradient updates reveal batches</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <span class="code-caption">Federated Learning Gradient Inversion Attack</span>
+  <pre><code>import torch
+import torch.nn.functional as F
+
+class GradientInversionAttack:
+    """
+    Recover training data from federated learning gradient updates.
+    Implements DLG (Deep Leakage from Gradients) approach.
+    """
+    def __init__(self, model, device='cuda'):
+        self.model = model
+        self.device = device
+        
+    def attack(self, original_gradients, input_shape, label_shape,
+               num_iterations=5000, lr=1.0):
+        """
+        Reconstruct training batch from gradient update.
+        
+        Args:
+            original_gradients: List of gradient tensors from victim
+            input_shape: Shape of training input batch
+            label_shape: Shape of training labels
+        """
+        # Initialize dummy data and labels
+        dummy_data = torch.randn(input_shape, device=self.device,
+                                 requires_grad=True)
+        dummy_labels = torch.randn(label_shape, device=self.device,
+                                   requires_grad=True)
+        
+        optimizer = torch.optim.LBFGS([dummy_data, dummy_labels], lr=lr)
+        
+        for i in range(num_iterations):
+            def closure():
+                optimizer.zero_grad()
+                
+                # Compute gradients on dummy data
+                self.model.zero_grad()
+                dummy_output = self.model(dummy_data)
+                dummy_loss = F.cross_entropy(
+                    dummy_output, 
+                    F.softmax(dummy_labels, dim=1)
+                )
+                dummy_gradients = torch.autograd.grad(
+                    dummy_loss, 
+                    self.model.parameters(),
+                    create_graph=True
+                )
+                
+                # Match gradient distance
+                grad_diff = 0
+                for dg, og in zip(dummy_gradients, original_gradients):
+                    grad_diff += ((dg - og) ** 2).sum()
+                
+                grad_diff.backward()
+                return grad_diff
+            
+            optimizer.step(closure)
+            
+            if i % 500 == 0:
+                with torch.no_grad():
+                    current_loss = closure()
+                print(f"Iter {i}: Gradient MSE = {current_loss.item():.6f}")
+        
+        # Recover labels from dummy_labels
+        recovered_labels = F.softmax(dummy_labels, dim=1).argmax(dim=1)
+        
+        return dummy_data.detach(), recovered_labels</code></pre>
+
+  <p>Gradient inversion attacks are particularly effective when batch sizes are small (1-8 samples) and image resolution is moderate (32x32 to 128x128). Larger batches provide natural aggregation that obscures individual samples, forming the basis for one defensive strategy.</p>
+</div>
+
+<div class="article-cta teaser-only text-center my-10">
+  <a href="https://buy.stripe.com/aFadR8gDw2jm4UM6atb7y00" class="inline-flex items-center gap-3 bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-2xl font-semibold transition">
+    <i class="fas fa-credit-card"></i> Buy Guide for $27
+  </a>
+</div>
+
+<h2 class="with-icon"><i class="fas fa-lock section-icon" aria-hidden="true"></i> Defense Implementation: Layered Hardening Techniques</h2>
+
+<p>Effective defense against model inversion requires layered controls addressing multiple attack surfaces. No single technique provides complete protection; the goal is defense-in-depth that raises attack cost beyond adversary resources while maintaining model utility. The primary defensive categories include differential privacy during training, output perturbation at inference, architectural modifications, and access controls.</p>
+
+<p>Differential privacy (DP) remains the gold standard for provable privacy guarantees. By adding calibrated noise during training—either to gradients (DP-SGD) or to the objective function—you bound the influence any individual training sample can have on model outputs. This directly limits what inversion attacks can reconstruct. However, DP introduces a privacy-utility tradeoff: stronger privacy (lower ε) degrades model accuracy. Production deployments typically target ε values between 1 and 10, accepting modest accuracy drops for meaningful privacy.</p>
+
+<div class="teaser-note teaser-only">
+  <i class="fas fa-file-pdf"></i> The complete guide provides production-ready implementations of DP-SGD, confidence score rounding, query rate limiting, and architectural defenses including the MixUp training protocol and knowledge distillation for privacy.
+</div>
+
+<div class="pdf-only">
+  <figure class="article-fig">
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="500" fill="#27272a"/>
+        
+        <!-- Title -->
+        <text x="400" y="35" text-anchor="middle" fill="#e4e4e7" font-size="16" font-weight="bold">Layered Model Inversion Defense Architecture</text>
+        
+        <!-- Layer 1: Access Controls -->
+        <rect x="50" y="60" width="700" height="80" rx="8" fill="#27272a" stroke="#10b981" stroke-width="2"/>
+        <text x="70" y="85" fill="#10b981" font-size="13" font-weight="bold">Layer 1: Access Controls</text>
+        <rect x="70" y="95" width="150" height="35" rx="4" fill="#3f3f46"/>
+        <text x="145" y="117" text-anchor="middle" fill="#e4e4e7" font-size="11">Rate Limiting</text>
+        <rect x="240" y="95" width="150" height="35" rx="4" fill="#3f3f46"/>
+        <text x="315" y="117" text-anchor="middle" fill="#e4e4e7" font-size="11">Query Budgets</text>
+        <rect x="410" y="95" width="150" height="35" rx="4" fill="#3f3f46"/>
+        <text x="485" y="117" text-anchor="middle" fill="#e4e4e7" font-size="11">Authentication</text>
+        <rect x="580" y="95" width="150" height="35" rx="4" fill="#3f3f46"/>
+        <text x="655" y="117" text-anchor="middle" fill="#e4e4e7" font-size="11">Anomaly Detection</text>
+        
+        <!-- Layer 2: Output Perturbation -->
+        <rect x="50" y="160" width="700" height="80" rx="8" fill="#27272a" stroke="#10b981" stroke-width="2"/>
+        <text x="70" y="185" fill="#10b981" font-size="13" font-weight="bold">Layer 2: Output Perturbation</text>
+        <rect x="70" y="195" width="200" height="35" rx="4" fill="#3f3f46"/>
+        <text x="170" y="217" text-anchor="middle" fill="#e4e4e7" font-size="11">Confidence Rounding (k=3)</text>
+        <rect x="290" y="195" width="200" height="35" rx="4" fill="#3f3f46"/>
+        <text x="390" y="217" text-anchor="middle" fill="#e4e4e7" font-size="11">Top-K Only Responses</text>
+        <rect x="510" y="195" width="220" height="35" rx="4" fill="#3f3f46"/>
+        <text x="620" y="217" text-anchor="middle" fill="#e4e4e7" font-size="11">Laplacian Noise Injection</text>
+        
+        <!-- Layer 3: Training Defense -->
+        <rect x="50" y="260" width="700" height="80" rx="8" fill="#27272a" stroke="#10b981" stroke-width="2"/>
+        <text x="70" y="285" fill="#10b981" font-size="13" font-weight="bold">Layer 3: Training-Time Defense</text>
+        <rect x="70" y="295" width="160" height="35" rx="4" fill="#3f3f46"/>
+        <text x="150" y="317" text-anchor="middle" fill="#e4e4e7" font-size="11">DP-SGD (ε=8)</text>
+        <rect x="250" y="295" width="160" height="35" rx="4" fill="#3f3f46"/>
+        <text x="330" y="317" text-anchor="middle" fill="#e4e4e7" font-size="11">MixUp Training</text>
+        <rect x="430" y="295" width="160" height="35" rx="4" fill="#3f3f46"/>
+        <text x="510" y="317" text-anchor="middle" fill="#e4e4e7" font-size="11">Label Smoothing</text>
+        <rect x="610" y="295" width="120" height="35" rx="4" fill="#3f3f46"/>
+        <text x="670" y="317" text-anchor="middle" fill="#e4e4e7" font-size="11">Distillation</text>
+        
+        <!-- Layer 4: Architectural -->
+        <rect x="50" y="360" width="700" height="80" rx="8" fill="#27272a" stroke="#10b981" stroke-width="2"/>
+        <text
+  </article>
+  <script src="model-inversion-stripe.js"></script>
+</body>
+</html>
