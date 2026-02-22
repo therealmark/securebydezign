@@ -144,6 +144,40 @@ Then:
 ### Cron Jobs
 - `aa181782-d6e9-4466-ae60-a5306f1cbf88` — memory-ingest-daily (3AM PST daily)
 - `891f9e77-3e80-4ef6-9b2d-da2af3c2d73b` — memory-archive-weekly (2AM PST Sundays)
+- `366cf083-1961-4a59-8a15-800ec88270e6` — pax-daily-backup (2AM PST daily)
+
+### Full System Backup & Restore
+
+**Backup runs:** Daily at 2AM PST → `s3://pax-memory-sbdz/backups/YYYY-MM-DD/`
+**Backup contents:**
+- `workspace.tar.gz` — entire workspace, plaintext
+- `secrets.tar.gz.enc` — `openclaw.json` + `.env.local`, AES-256 encrypted
+- `cron-jobs.json` — all cron job definitions
+- `manifest.json` — versions, checksums, restore steps
+
+**Encryption passphrase:** stored in macOS Keychain (`pax-backup` / `pax`). Mark has it in his password manager.
+
+**To restore from scratch (Mac wipe / catastrophic failure):**
+```bash
+# 1. Install Homebrew + Node + AWS CLI
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install node awscli
+
+# 2. Install OpenClaw
+npm install -g openclaw
+
+# 3. Configure AWS CLI with mark-cli credentials
+aws configure
+
+# 4. Run restore script
+aws s3 cp s3://pax-memory-sbdz/backups/LATEST/restore.sh . 2>/dev/null || \
+  curl -s https://raw.githubusercontent.com/.../restore.sh | bash  # fallback
+# OR manually:
+aws s3 cp s3://pax-memory-sbdz/backups/ . --recursive --exclude "*" --include "*/manifest.json"
+# Pick the latest date, then:
+PAX_BACKUP_PASSPHRASE="your-passphrase" bash restore.sh 2026-02-22
+```
+**Restore script location:** `memory/bin/restore.sh` (also inside workspace.tar.gz)
 
 ### How to Search Prior Conversations
 When you need context from a past session, run:
