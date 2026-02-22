@@ -129,6 +129,35 @@ Then:
 | prompt-injection | pinjection.pdf | price_1T3hMPBSD7Ij1cUS4xAZnY3u | price_1T3hSIB50TQ4M7eDya2ws2sO |
 | agentic-ai-security | agentic-ai-security.pdf | price_1T3hMQBSD7Ij1cUSrlDQSOGn | price_1T3hSJB50TQ4M7eDqd926TEt |
 
+## Tiered Memory Storage
+
+### Architecture
+- **Hot tier** (local SQLite FTS5): `memory/hot.db` — all memory files from the last 90 days, full-text indexed
+- **Cold tier** (S3): `s3://pax-memory-sbdz/archive/` — memory files older than 90 days, gzip-compressed
+- **Cold index**: `s3://pax-memory-sbdz/index.json` — searchable metadata for all archived files
+
+### Scripts
+- `memory/bin/ingest.py` — re-indexes all markdown files into SQLite FTS5 (runs daily at 3AM via cron)
+- `memory/bin/search.py` — searches hot tier, falls back to cold tier if sparse results
+- `memory/bin/archive.py` — pushes old files to S3 (runs weekly Sundays at 2AM via cron)
+
+### Cron Jobs
+- `aa181782-d6e9-4466-ae60-a5306f1cbf88` — memory-ingest-daily (3AM PST daily)
+- `891f9e77-3e80-4ef6-9b2d-da2af3c2d73b` — memory-archive-weekly (2AM PST Sundays)
+
+### How to Search Prior Conversations
+When you need context from a past session, run:
+```bash
+cd /Users/pax/.openclaw/workspace
+python3 memory/bin/search.py "your query here"
+python3 memory/bin/search.py "your query here" --cold   # force S3 search too
+python3 memory/bin/search.py "your query here" --limit 15
+```
+Search automatically queries hot first, then falls back to cold if fewer than 5 results.
+
+### Writing to Memory
+After any significant session, write a summary to `memory/YYYY-MM-DD.md` — the daily ingest cron will pick it up and index it automatically.
+
 ## Lessons Learned
 
 - Read memory files first thing each session — daily notes are in `memory/YYYY-MM-DD.md`
