@@ -101,6 +101,25 @@ Then:
 4. Rebuild Lambda zip and redeploy: `zip -r ../lambda-deploy.zip . && aws lambda update-function-code --function-name emailer --zip-file fileb://../lambda-deploy.zip --region us-east-1`
 5. Push all changes to GitHub + sync to S3
 
+**Pre-publish HTML validation (REQUIRED):** Before pushing any article, run:
+```bash
+python3 -c "
+from html.parser import HTMLParser
+class C(HTMLParser):
+    VOID={'area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr'}
+    def __init__(self): super().__init__(); self.stack=[]; self.errors=[]
+    def handle_starttag(self,t,a):
+        if t not in self.VOID: self.stack.append((t,self.getpos()[0]))
+    def handle_endtag(self,t):
+        if t in self.VOID: return
+        if self.stack and self.stack[-1][0]==t: self.stack.pop()
+        else: self.errors.append(f'Line {self.getpos()[0]}: unexpected </{t}>')
+import sys; html=open(sys.argv[1]).read(); c=C(); c.feed(html)
+print('Errors:',c.errors[:5] or 'none'); print('Unclosed:',[(t,l) for t,l in c.stack[-5:]])
+" articles/SLUG.html
+```
+Catches malformed SVG `<text>` tags and other unclosed elements that silently break Safari/iOS script execution.
+
 **Note:** The `stripe-setup.mjs` script lives in `lambda/` and expects `STRIPE_KEY` env var. It creates one product per article slug with $27 price and sets the success URL to `https://www.securebydezign.com/success.html?session_id={CHECKOUT_SESSION_ID}`.
 
 **Step 3 — Publish**
