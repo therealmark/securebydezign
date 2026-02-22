@@ -10,6 +10,7 @@ export const PRICE_PDF_MAP = {
   'price_1T3hMOBSD7Ij1cUSimNXPXnP': 'model-inversion.pdf',
   'price_1T3hMPBSD7Ij1cUS4xAZnY3u': 'pinjection.pdf',
   'price_1T3hMQBSD7Ij1cUSrlDQSOGn': 'agentic-ai-security.pdf',
+  'price_1T3jN4BSD7Ij1cUSs4Bkug3E': 'enterprise-agentic-security.pdf',
 
   // ── LIVE ──────────────────────────────────────────────────────────────────
   'price_1T3hSEB50TQ4M7eDLwmSbW3y': 'supply-chain-ai.pdf',
@@ -19,6 +20,7 @@ export const PRICE_PDF_MAP = {
   'price_1T3hSHB50TQ4M7eDrUTZxNHT': 'model-inversion.pdf',
   'price_1T3hSIB50TQ4M7eDya2ws2sO': 'pinjection.pdf',
   'price_1T3hSJB50TQ4M7eDqd926TEt': 'agentic-ai-security.pdf',
+  'price_1T3jN8B50TQ4M7eD6YQppz0e': 'enterprise-agentic-security.pdf',
 };
 
 // PDF display names for email

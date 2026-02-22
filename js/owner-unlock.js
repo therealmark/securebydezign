@@ -25,6 +25,7 @@
     'model-inversion':    '/pdfs/model-inversion.pdf',
     'prompt-injection':   '/pdfs/pinjection.pdf',
     'agentic-ai-security':'/pdfs/agentic-ai-security.pdf',
+    'enterprise-agentic-security': '/pdfs/enterprise-agentic-security.pdf',
   };
 
   var path = window.location.pathname;

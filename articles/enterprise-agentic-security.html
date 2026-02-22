@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The CISO's guide to securing enterprise AI adoption and agentic workflows: shadow AI governance, NHI sprawl, OWASP LLM Top 10, NIST AI RMF, and a 30/90/180-day AppSec roadmap.">
+  <title>Securing Enterprise AI Adoption & Agentic Workflows: The CISO Playbook • Secure by DeZign</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/article.css">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="canonical" href="https://www.securebydezign.com/articles/enterprise-agentic-security.html">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://www.securebydezign.com/articles/enterprise-agentic-security.html">
+  <meta property="og:title" content="Securing Enterprise AI Adoption & Agentic Workflows: The CISO Playbook">
+  <meta property="og:description" content="The CISO's guide to securing enterprise AI adoption and agentic workflows: shadow AI governance, NHI sprawl, OWASP LLM Top 10, NIST AI RMF, and a 30/90/180-day AppSec roadmap.">
+  <meta property="og:image" content="https://www.securebydezign.com/images/prompt-injection.jpg">
+  <meta property="og:site_name" content="Secure by DeZign">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Securing Enterprise AI Adoption & Agentic Workflows: The CISO Playbook">
+  <meta name="twitter:description" content="The CISO's guide to securing enterprise AI adoption and agentic workflows: shadow AI governance, NHI sprawl, OWASP LLM Top 10, NIST AI RMF, and a 30/90/180-day AppSec roadmap.">
+  <meta name="twitter:image" content="https://www.securebydezign.com/images/prompt-injection.jpg">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Securing Enterprise AI Adoption & Agentic Workflows: The CISO Playbook","description":"The CISO's guide to securing enterprise AI adoption and agentic workflows: shadow AI governance, NHI sprawl, OWASP LLM Top 10, NIST AI RMF, and a 30/90/180-day AppSec roadmap.","datePublished":"2026-02-23","dateModified":"2026-02-23","author":{"@type":"Organization","name":"Secure by DeZign"},"publisher":{"@type":"Organization","name":"Secure by DeZign","logo":{"@type":"ImageObject","url":"https://www.securebydezign.com/logo.svg"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.securebydezign.com/articles/enterprise-agentic-security.html"}}</script>
+  <script src="../js/stripe-checkout.js"></script>
+  <script src="../js/owner-unlock.js"></script>
+</head>
+<body class="bg-zinc-950 text-zinc-200">
+  <nav class="border-b border-zinc-800 bg-zinc-950">
+    <div class="max-w-4xl mx-auto px-6 py-5">
+      <a href="../index.html" class="flex items-center gap-2 hover:text-emerald-400"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+  </nav>
+
+  <article class="article-body max-w-4xl mx-auto px-6 py-16">
+    <div class="article-meta text-emerald-400 text-sm mb-8">23 Feb 2026 • 22 min read</div>
+    <h1>Securing Enterprise AI Adoption &amp; Agentic Workflows: The CISO Playbook</h1>
+
+    <p class="lead">Every enterprise is adopting AI. Most are doing it faster than their security programs can keep up. This is not a future problem — it is the defining AppSec challenge of right now. When employees use unauthorized AI tools, when DevOps ships LLM-powered microservices without threat models, and when autonomous agents get production credentials, your attack surface grows in ways your existing controls were never designed to see.</p>
+
+    <!-- Diagram 1: Enterprise AI Attack Surface Map -->
+    <figure class="article-fig">
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 620 280" xmlns="http://www.w3.org/2000/svg" aria-label="Enterprise AI Attack Surface Map">
+          <defs>
+            <linearGradient id="eas-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1e1e2e"/><stop offset="100%" stop-color="#18181b"/></linearGradient>
+            <linearGradient id="eas-red" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#dc2626"/><stop offset="100%" stop-color="#7f1d1d"/></linearGradient>
+            <linearGradient id="eas-amber" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#d97706"/><stop offset="100%" stop-color="#78350f"/></linearGradient>
+            <linearGradient id="eas-blue" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1e3a8a"/></linearGradient>
+            <linearGradient id="eas-em" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#064e3b"/></linearGradient>
+            <linearGradient id="eas-zinc" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#3f3f46"/><stop offset="100%" stop-color="#27272a"/></linearGradient>
+            <marker id="eas-ar" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#71717a"/></marker>
+            <marker id="eas-ar-red" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0 0,7 3.5,0 7" fill="#ef4444"/></marker>
+          </defs>
+          <rect width="620" height="280" fill="url(#eas-bg)" rx="10"/>
+          <text x="310" y="24" fill="#a1a1aa" font-size="11" font-family="Inter,sans-serif" text-anchor="middle" font-weight="600" letter-spacing="1">ENTERPRISE AI ATTACK SURFACE</text>
+
+          <!-- Center: Enterprise AI Core -->
+          <ellipse cx="310" cy="148" rx="58" ry="44" fill="url(#eas-em)" stroke="#10b981" stroke-width="1.5"/>
+          <text x="310" y="143" fill="#fff" font-size="11" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Enterprise</text>
+          <text x="310" y="157" fill="#6ee7b7" font-size="9.5" font-family="Inter,sans-serif" text-anchor="middle">AI Systems</text>
+
+          <!-- Threat Zone 1: Shadow AI (top-left) -->
+          <rect x="20" y="36" width="120" height="52" rx="7" fill="url(#eas-red)" stroke="#ef4444" stroke-width="1.2"/>
+          <text x="80" y="57" fill="#fff" font-size="10" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Shadow AI</text>
+          <text x="80" y="71" fill="#fca5a5" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Ungoverned tools &amp; models</text>
+          <text x="80" y="82" fill="#fca5a5" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">used without approval</text>
+          <line x1="140" y1="70" x2="252" y2="120" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#eas-ar-red)"/>
+
+          <!-- Threat Zone 2: Supply Chain (top-center) -->
+          <rect x="240" y="36" width="140" height="52" rx="7" fill="url(#eas-red)" stroke="#ef4444" stroke-width="1.2"/>
+          <text x="310" y="57" fill="#fff" font-size="10" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">AI Supply Chain</text>
+          <text x="310" y="71" fill="#fca5a5" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Model weights, datasets,</text>
+          <text x="310" y="82" fill="#fca5a5" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">pip packages, registries</text>
+          <line x1="310" y1="88" x2="310" y2="104" stroke="#ef4444" stroke-width="1.2" marker-end="url(#eas-ar-red)"/>
+
+          <!-- Threat Zone 3: Third-Party APIs (top-right) -->
+          <rect x="460" y="36" width="140" height="52" rx="7" fill="url(#eas-amber)" stroke="#f59e0b" stroke-width="1.2"/>
+          <text x="530" y="57" fill="#fff" font-size="10" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Third-Party AI APIs</text>
+          <text x="530" y="71" fill="#fde68a" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">OpenAI, Anthropic, Bedrock</text>
+          <text x="530" y="82" fill="#fde68a" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Vendor plugin ecosystems</text>
+          <line x1="460" y1="70" x2="368" y2="120" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#eas-ar)"/>
+
+          <!-- Threat Zone 4: User Input Surface (left) -->
+          <rect x="20" y="122" width="120" height="52" rx="7" fill="url(#eas-red)" stroke="#ef4444" stroke-width="1.2"/>
+          <text x="80" y="143" fill="#fff" font-size="10" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">User Input</text>
+          <text x="80" y="157" fill="#fca5a5" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Prompt injection,</text>
+          <text x="80" y="168" fill="#fca5a5" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">adversarial inputs</text>
+          <line x1="140" y1="148" x2="252" y2="148" stroke="#ef4444" stroke-width="1.2" marker-end="url(#eas-ar-red)"/>
+
+          <!-- Threat Zone 5: Agentic Layer (right) -->
+          <rect x="460" y="122" width="140" height="52" rx="7" fill="url(#eas-red)" stroke="#ef4444" stroke-width="1.2"/>
+          <text x="530" y="143" fill="#fff" font-size="10" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Agentic Workflows</text>
+          <text x="530" y="157" fill="#fca5a5" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Autonomous action,</text>
+          <text x="530" y="168" fill="#fca5a5" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">NHI credential sprawl</text>
+          <line x1="460" y1="148" x2="368" y2="148" stroke="#ef4444" stroke-width="1.2" marker-end="url(#eas-ar-red)"/>
+
+          <!-- Threat Zone 6: Data/RAG (bottom-left) -->
+          <rect x="20" y="208" width="120" height="52" rx="7" fill="url(#eas-amber)" stroke="#f59e0b" stroke-width="1.2"/>
+          <text x="80" y="229" fill="#fff" font-size="10" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Training &amp; RAG Data</text>
+          <text x="80" y="243" fill="#fde68a" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Poisoning, exfiltration,</text>
+          <text x="80" y="254" fill="#fde68a" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">sensitive data leakage</text>
+          <line x1="140" y1="226" x2="252" y2="176" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#eas-ar)"/>
+
+          <!-- Threat Zone 7: Output/Integration (bottom-right) -->
+          <rect x="460" y="208" width="140" height="52" rx="7" fill="url(#eas-amber)" stroke="#f59e0b" stroke-width="1.2"/>
+          <text x="530" y="229" fill="#fff" font-size="10" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Output Handling</text>
+          <text x="530" y="243" fill="#fde68a" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Insecure rendering, XSS,</text>
+          <text x="530" y="254" fill="#fde68a" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">downstream system abuse</text>
+          <line x1="460" y1="226" x2="368" y2="176" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#eas-ar)"/>
+
+          <!-- Legend -->
+          <rect x="200" y="252" width="12" height="12" rx="2" fill="#ef4444"/>
+          <text x="216" y="263" fill="#a1a1aa" font-size="8.5" font-family="Inter,sans-serif">Critical</text>
+          <rect x="280" y="252" width="12" height="12" rx="2" fill="#f59e0b"/>
+          <text x="296" y="263" fill="#a1a1aa" font-size="8.5" font-family="Inter,sans-serif">High</text>
+          <rect x="340" y="252" width="12" height="12" rx="2" fill="#10b981"/>
+          <text x="356" y="263" fill="#a1a1aa" font-size="8.5" font-family="Inter,sans-serif">Protected Core</text>
+        </svg>
+      </div>
+      <figcaption>Enterprise AI attack surface: seven distinct threat zones converge on AI systems that were never designed to be this interconnected. Most enterprises are currently undefended across at least three of them.</figcaption>
+    </figure>
+
+    <div class="in-this-guide teaser-only">
+      <h3>In this guide</h3>
+      <ul>
+        <li><strong>The expanded enterprise attack surface</strong> — shadow AI, supply chain risks, third-party AI APIs, and why your existing SDLC doesn't cover them.</li>
+        <li><strong>Agentic AI threat landscape</strong> — what changes when AI acts autonomously with credentials, memory, and tool access.</li>
+        <li><strong>Trust architecture for AI systems</strong> — how to design zero-trust boundaries for agents, models, and AI-generated outputs.</li>
+        <li><strong>OWASP LLM Top 10 — enterprise mapping</strong> — which of the 10 affect your org today and what to do about each.</li>
+        <li><strong>NIST AI RMF alignment</strong> — mapping your AI security program to GOVERN, MAP, MEASURE, MANAGE.</li>
+        <li><strong>Non-Human Identity (NHI) governance</strong> — the fastest-growing and least-managed credential class in the enterprise.</li>
+        <li><strong>Secure AI Development Lifecycle (SAIDLC)</strong> — shift-left controls that catch AI vulnerabilities before they hit production.</li>
+        <li><strong>30/90/180-Day Roadmap</strong> — a prioritized, actionable sequence for CISOs and AppSec directors.</li>
+      </ul>
+    </div>
+
+    <h2 class="with-icon"><i class="fas fa-exclamation-triangle section-icon" aria-hidden="true"></i> The Problem Isn't AI — It's Ungoverned AI</h2>
+    <p>The boardroom wants AI adoption. Business units are already using it — with or without security's blessing. A recent wave of enterprise surveys consistently finds the same pattern: a significant fraction of employees are using AI tools that IT has never approved, processing data that security has never classified, in workflows that compliance has never reviewed. This is shadow AI, and it is the enterprise's most pressing ungoverned risk category today.</p>
+    <p>The security problem is not that AI is inherently dangerous. It is that the adoption outpaces governance, the threat models are missing, and the controls that worked for traditional software are poorly mapped to AI's actual failure modes. Firewalls don't stop prompt injection. DLP doesn't catch model inversion. Endpoint agents don't see what happens inside a third-party API call.</p>
+    <p class="teaser-note teaser-only">The full PDF covers each attack vector with technical depth, enterprise-specific mitigations, and implementation code.</p>
+    <div class="pdf-only">
+      <h3>What "Shadow AI" Actually Looks Like in Enterprise</h3>
+      <p>Shadow AI is not just employees using ChatGPT. It manifests across three layers that security teams systematically miss:</p>
+      <ul>
+        <li><strong>Consumer AI tool use:</strong> Employees paste source code, customer data, internal documents, and PII into public AI assistants. The data leaves your perimeter. You never see it in your DLP logs because it's an HTTPS POST to a trusted CDN.</li>
+        <li><strong>Developer-deployed AI:</strong> Engineers integrate AI APIs directly into applications during development — often before a design review, sometimes before there's a data classification. The integration ships to production before AppSec has context.</li>
+        <li><strong>Vendor AI features:</strong> SaaS vendors are quietly enabling AI features in products your enterprise already uses. Salesforce Einstein, Microsoft Copilot, Slack AI, GitHub Copilot — these ingest your data to train or improve their models by default in some configurations. You may have consented to this in a terms-of-service update you didn't read.</li>
+      </ul>
+      <p>Each layer requires a different detection and control strategy. Consumer tool use is primarily a policy and awareness problem, addressable with acceptable use policies, browser proxies, and DLP tuning. Developer-deployed AI requires security integration into CI/CD. Vendor AI requires contract review, data processing agreement (DPA) updates, and vendor risk reassessment.</p>
+    </div>
+
+    <h2 class="with-icon"><i class="fas fa-robot section-icon" aria-hidden="true"></i> Agentic AI: When the Attack Surface Walks Itself</h2>
+    <p>Agentic AI systems — AI that plans, calls tools, takes actions, and persists state across multiple steps — represent a qualitative shift in enterprise risk. A standard LLM integration has a bounded blast radius: bad output, possible data disclosure, maybe a confused user. An agentic system with production credentials and tool access has an unbounded blast radius: data exfiltration, infrastructure changes, communications sent in your name, persistent backdoors in memory stores.</p>
+
+    <!-- Diagram 2: Agentic AI Trust Boundary Architecture -->
+    <figure class="article-fig">
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" aria-label="Agentic AI Trust Boundary Architecture">
+          <defs>
+            <linearGradient id="atb-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#18181b"/></linearGradient>
+          </defs>
+          <rect width="600" height="300" fill="url(#atb-bg)" rx="10"/>
+          <text x="300" y="22" fill="#a1a1aa" font-size="11" font-family="Inter,sans-serif" text-anchor="middle" font-weight="600" letter-spacing="1">AGENTIC AI TRUST BOUNDARY ARCHITECTURE</text>
+
+          <!-- Zone 4: UNTRUSTED (outermost) -->
+          <rect x="12" y="32" width="576" height="258" rx="10" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6,3"/>
+          <text x="22" y="52" fill="#ef4444" font-size="9" font-family="Inter,sans-serif" font-weight="700" letter-spacing="0.5">UNTRUSTED ZONE</text>
+
+          <!-- Zone 3: SEMI-TRUSTED -->
+          <rect x="40" y="60" width="520" height="212" rx="8" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,3"/>
+          <text x="52" y="78" fill="#f59e0b" font-size="9" font-family="Inter,sans-serif" font-weight="700" letter-spacing="0.5">SEMI-TRUSTED: TOOL LAYER</text>
+
+          <!-- Zone 2: TRUSTED -->
+          <rect x="100" y="88" width="400" height="164" rx="8" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="6,3"/>
+          <text x="112" y="106" fill="#60a5fa" font-size="9" font-family="Inter,sans-serif" font-weight="700" letter-spacing="0.5">TRUSTED: AGENT RUNTIME</text>
+
+          <!-- Zone 1: PROTECTED (innermost) -->
+          <rect x="168" y="116" width="264" height="112" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+          <text x="300" y="135" fill="#6ee7b7" font-size="9" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700" letter-spacing="0.5">PROTECTED: CREDENTIALS &amp; DATA</text>
+
+          <!-- Protected contents -->
+          <rect x="180" y="143" width="100" height="28" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+          <text x="230" y="158" fill="#a7f3d0" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Secrets / API Keys</text>
+          <rect x="290" y="143" width="100" height="28" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+          <text x="340" y="158" fill="#a7f3d0" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">PII / Sensitive Data</text>
+          <rect x="180" y="178" width="100" height="28" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+          <text x="230" y="193" fill="#a7f3d0" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">System Prompt</text>
+          <rect x="290" y="178" width="100" height="28" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+          <text x="340" y="193" fill="#a7f3d0" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Memory Store</text>
+
+          <!-- Tool layer items -->
+          <rect x="50" y="114" width="86" height="28" rx="4" fill="#292524" stroke="#78350f" stroke-width="1"/>
+          <text x="93" y="129" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">Code Executor</text>
+          <rect x="50" y="150" width="86" height="28" rx="4" fill="#292524" stroke="#78350f" stroke-width="1"/>
+          <text x="93" y="165" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">Web / Search</text>
+          <rect x="50" y="186" width="86" height="28" rx="4" fill="#292524" stroke="#78350f" stroke-width="1"/>
+          <text x="93" y="201" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">Email / Comms</text>
+          <rect x="50" y="222" width="86" height="28" rx="4" fill="#292524" stroke="#78350f" stroke-width="1"/>
+          <text x="93" y="237" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">DB / File APIs</text>
+
+          <rect x="464" y="114" width="86" height="28" rx="4" fill="#292524" stroke="#78350f" stroke-width="1"/>
+          <text x="507" y="129" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">MCP Servers</text>
+          <rect x="464" y="150" width="86" height="28" rx="4" fill="#292524" stroke="#78350f" stroke-width="1"/>
+          <text x="507" y="165" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">Third-Party APIs</text>
+          <rect x="464" y="186" width="86" height="28" rx="4" fill="#292524" stroke="#78350f" stroke-width="1"/>
+          <text x="507" y="201" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">RAG / Vector DB</text>
+          <rect x="464" y="222" width="86" height="28" rx="4" fill="#292524" stroke="#78350f" stroke-width="1"/>
+          <text x="507" y="237" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">Webhooks / Events</text>
+
+          <!-- Untrusted external labels -->
+          <text x="300" y="276" fill="#f87171" font-size="9" font-family="Inter,sans-serif" text-anchor="middle">⚠ User input · External data · Attacker-controlled content · Third-party model responses</text>
+
+          <!-- Arrow from untrusted into zones -->
+          <text x="300" y="48" fill="#71717a" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">← All external inputs must be validated before crossing each boundary →</text>
+        </svg>
+      </div>
+      <figcaption>Trust boundary architecture for agentic systems. Each boundary crossing requires explicit validation. Credentials and sensitive data must never flow outward past the Protected zone boundary — yet most enterprise agent deployments have no such boundaries at all.</figcaption>
+    </figure>
+
+    <p>The trust boundary diagram above describes what security architects should design. What most enterprises have deployed looks nothing like it: agents with unrestricted internet access, credentials stored in plaintext environment variables, no validation of tool responses before passing them back to the LLM, and no audit log of what actions the agent actually took.</p>
+    <p class="teaser-note teaser-only">The full PDF includes architectural implementation guidance, policy templates, and enforcement patterns for each trust boundary layer.</p>
+    <div class="pdf-only">
+      <h3>The Five Properties That Make Agentic Systems Uniquely Risky</h3>
+      <ol>
+        <li><strong>Autonomy without oversight:</strong> Agents execute multi-step plans without human approval at each step. An attacker who influences step one influences all subsequent actions. By the time a human reviews anything, the damage may be irreversible.</li>
+        <li><strong>Credential accumulation:</strong> Agents require credentials to do their jobs — API keys, OAuth tokens, database credentials, cloud IAM roles. These accumulate in environment variables, memory stores, and session state. A compromised agent is a compromised credential store.</li>
+        <li><strong>Instruction ambiguity:</strong> Agents interpret natural language instructions. "Send the report to the team" is ambiguous. An attacker who can influence the agent's context (via poisoned RAG retrieval, malicious tool output, or injected system context) can redefine what "the team" means or what "the report" contains.</li>
+        <li><strong>Memory persistence:</strong> Agents maintain state across sessions via vector databases and persistent memory stores. An attacker who successfully injects into agent memory doesn't just affect the current session — they affect all future sessions that retrieve that memory.</li>
+        <li><strong>Tool chaining amplification:</strong> Individual tools may be low-risk. Chained together autonomously, they enable high-impact outcomes. Read-access to a vector store + ability to call a web API + email tool = data exfiltration channel. No single tool grants exfil capability, but the chain does.</li>
+      </ol>
+      <h3>Agentic Threat Modeling: STRIDE-LM Extensions</h3>
+      <p>Standard STRIDE was designed for human-triggered software interactions. Agentic systems require four additional threat categories:</p>
+      <ul>
+        <li><strong>Planner Subversion (PS):</strong> Manipulation of the agent's goal-setting or next-action decision process. Vectors: system prompt injection, poisoned tool descriptions, manipulated memory retrieval. Impact: attacker redirects agent's entire action sequence.</li>
+        <li><strong>Tool Weaponization (TW):</strong> Agent is induced to use legitimate tools in malicious ways. Vectors: crafted tool responses, indirect prompt injection via retrieved documents. Impact: legitimate tool calls achieve attacker objectives (exfil via email tool, SSRF via search tool).</li>
+        <li><strong>Persistence Implant (PI):</strong> Attacker plants instructions or data in the agent's memory store that persist across sessions. Vectors: memory poisoning, RAG index poisoning. Impact: persistent backdoor that survives session termination.</li>
+        <li><strong>Cascading Authorization (CA):</strong> Agent uses its legitimate credentials to authorize subsequent actions that exceed intended scope. Vectors: over-privileged IAM roles, ambiguous authorization scope. Impact: privilege escalation through the agent as proxy.</li>
+      </ul>
+    </div>
+
+    <h2 class="with-icon"><i class="fas fa-id-badge section-icon" aria-hidden="true"></i> Non-Human Identity Sprawl: The Fastest-Growing Attack Surface</h2>
+    <p>Non-Human Identities (NHIs) — API keys, service accounts, OAuth tokens, agent credentials — are growing faster than any other identity category in the enterprise. Every AI integration creates new NHIs. Every agentic deployment multiplies them. And unlike human identities, NHIs rarely have an owner, never expire by default, and never get offboarded when a project ends.</p>
+
+    <!-- Diagram 3: NHI Sprawl -->
+    <figure class="article-fig">
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" aria-label="Non-Human Identity Sprawl in AI-Adopting Enterprises">
+          <defs>
+            <linearGradient id="nhi-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1a1a2e"/><stop offset="100%" stop-color="#16213e"/></linearGradient>
+          </defs>
+          <rect width="600" height="260" fill="url(#nhi-bg)" rx="10"/>
+          <text x="300" y="24" fill="#a1a1aa" font-size="11" font-family="Inter,sans-serif" text-anchor="middle" font-weight="600" letter-spacing="1">NON-HUMAN IDENTITY (NHI) SPRAWL IN AI ADOPTION</text>
+
+          <!-- Central AI Platform -->
+          <ellipse cx="300" cy="135" rx="50" ry="38" fill="#1e3a5f" stroke="#3b82f6" stroke-width="2"/>
+          <text x="300" y="130" fill="#93c5fd" font-size="10" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">AI Platform</text>
+          <text x="300" y="145" fill="#60a5fa" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Service Account</text>
+
+          <!-- NHI bubbles: arranged around the center -->
+          <!-- LLM API Key -->
+          <circle cx="130" cy="70" r="34" fill="#7f1d1d" stroke="#dc2626" stroke-width="1.5"/>
+          <text x="130" y="65" fill="#fca5a5" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">LLM API Key</text>
+          <text x="130" y="79" fill="#fca5a5" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">Never rotated</text>
+          <text x="130" y="91" fill="#f87171" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">⚠ No owner</text>
+          <line x1="162" y1="89" x2="258" y2="116" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,2"/>
+
+          <!-- Vector DB Token -->
+          <circle cx="80" cy="160" r="34" fill="#78350f" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="80" y="155" fill="#fde68a" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Vector DB</text>
+          <text x="80" y="169" fill="#fde68a" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Read+Write token</text>
+          <text x="80" y="181" fill="#fbbf24" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">⚠ Over-privileged</text>
+          <line x1="113" y1="150" x2="251" y2="140" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+
+          <!-- GitHub Actions PAT -->
+          <circle cx="140" cy="220" r="34" fill="#14532d" stroke="#22c55e" stroke-width="1.5"/>
+          <text x="140" y="215" fill="#bbf7d0" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">CI/CD PAT</text>
+          <text x="140" y="229" fill="#bbf7d0" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">GitHub Actions</text>
+          <text x="140" y="241" fill="#86efac" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">⚠ Stale 180d+</text>
+          <line x1="172" y1="210" x2="260" y2="158" stroke="#22c55e" stroke-width="1" stroke-dasharray="3,2"/>
+
+          <!-- MCP Server Cred -->
+          <circle cx="470" cy="70" r="34" fill="#7f1d1d" stroke="#dc2626" stroke-width="1.5"/>
+          <text x="470" y="65" fill="#fca5a5" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">MCP Server</text>
+          <text x="470" y="79" fill="#fca5a5" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">OAuth token</text>
+          <text x="470" y="91" fill="#f87171" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">⚠ Shared across agents</text>
+          <line x1="437" y1="89" x2="342" y2="116" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,2"/>
+
+          <!-- AWS IAM Role -->
+          <circle cx="520" cy="160" r="34" fill="#78350f" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="520" y="155" fill="#fde68a" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">AWS IAM Role</text>
+          <text x="520" y="169" fill="#fde68a" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">AdministratorAccess</text>
+          <text x="520" y="181" fill="#fbbf24" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">⚠ Way too broad</text>
+          <line x1="487" y1="150" x2="349" y2="140" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2"/>
+
+          <!-- Webhook Secret -->
+          <circle cx="460" cy="220" r="34" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5"/>
+          <text x="460" y="215" fill="#c7d2fe" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Webhook Secret</text>
+          <text x="460" y="229" fill="#c7d2fe" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Hardcoded in repo</text>
+          <text x="460" y="241" fill="#a5b4fc" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">⚠ Leaked in git history</text>
+          <line x1="427" y1="210" x2="340" y2="158" stroke="#818cf8" stroke-width="1" stroke-dasharray="3,2"/>
+
+          <!-- Count badge -->
+          <rect x="262" y="100" width="76" height="22" rx="4" fill="#dc2626"/>
+          <text x="300" y="115" fill="#fff" font-size="9" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">6 NHIs found</text>
+          <rect x="240" y="148" width="120" height="18" rx="4" fill="#1f2937"/>
+          <text x="300" y="161" fill="#9ca3af" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">0 in NHI inventory</text>
+        </svg>
+      </div>
+      <figcaption>NHI sprawl in a typical AI-adopting enterprise. Six non-human identities orbit a single AI platform — none inventoried, most over-privileged, some compromised before anyone notices. This scenario is routine, not exceptional.</figcaption>
+    </figure>
+
+    <p>The NHI problem is structural. Traditional PAM (Privileged Access Management) tools were built for human accounts — they assume a named owner, a provisioning request, and an offboarding process. AI agent credentials don't arrive through ServiceNow. They get created in a Jupyter notebook at 11pm by a data scientist who needed the pipeline to work.</p>
+    <p class="teaser-note teaser-only">NHI governance frameworks, tooling recommendations, and policy templates are in the full PDF.</p>
+    <div class="pdf-only">
+      <h3>NHI Governance Framework for AI Deployments</h3>
+      <p>An effective NHI program for AI environments requires five controls:</p>
+      <ol>
+        <li><strong>Discovery and inventory:</strong> You cannot govern what you cannot see. Deploy secrets scanning (Trufflehog, GitLeaks) across all code repos — including forks and PRs. Use cloud-provider tools (AWS IAM Access Analyzer, Azure Managed Identity audit) to find service accounts. Run periodic sweeps of environment variable stores (K8s secrets, SSM Parameter Store, GitHub Actions secrets) looking for API key patterns. Build a live inventory: who owns this credential, what does it have access to, when was it last used, when does it expire.</li>
+        <li><strong>Least privilege enforcement:</strong> AI agent credentials should follow the same least-privilege principle as human accounts — only the permissions needed for the specific task, scoped to the minimum resource set. An agent that reads from a vector database should have read-only access to that specific index, not read/write to all indexes. An agent that calls an email API should be scoped to send, not read. Review existing agent credentials against this principle and remediate. This is almost always a finding.</li>
+        <li><strong>Automated rotation:</strong> Credentials that never rotate become permanently valid attack primitives. Implement automated rotation for all AI agent credentials via your secrets management platform (HashiCorp Vault, AWS Secrets Manager, Azure Key Vault). Short TTLs (1–24 hours) for highly privileged credentials. Rotation events should trigger alerts in case the credential was cached somewhere unexpected.</li>
+        <li><strong>Usage monitoring and anomaly detection:</strong> Baseline the usage patterns for each AI agent credential — typical call volume, time of day, source IP range, API methods called. Alert on deviations: a credential that normally makes 100 API calls per hour suddenly making 10,000 is an incident. A credential that normally calls read-only endpoints suddenly calling write endpoints is an incident. This is achievable with CloudWatch, Azure Monitor, or a SIEM with the right correlation rules.</li>
+        <li><strong>Orphan detection and revocation:</strong> When an AI project ends, its credentials don't automatically die. Implement a quarterly review process for all NHIs: confirm the owning team still exists, the project is still active, and the credential is still being used. Revoke anything that fails this review. Set expiry dates on all new credentials at creation — never create a non-expiring credential for an AI agent.</li>
+      </ol>
+      <pre><code># Example: AWS IAM policy for a scoped AI agent (read-only RAG access)
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "RAGVectorReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::company-rag-index",
+        "arn:aws:s3:::company-rag-index/*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:PrincipalTag/ProjectID": "ai-agent-rag-v2"
+        }
+      }
+    }
+  ]
+}
+# Note: No s3:PutObject, no s3:DeleteObject, no cross-bucket access.
+# The agent can read the RAG index. That is all.</code></pre>
+    </div>
+
+    <h2 class="with-icon"><i class="fas fa-list-ol section-icon" aria-hidden="true"></i> OWASP LLM Top 10: Enterprise Risk Mapping</h2>
+    <p>The OWASP Top 10 for Large Language Model Applications is the closest thing the industry has to a standardized AI vulnerability taxonomy. For enterprise AppSec teams, the challenge is not awareness of the list — it is mapping each item to your specific deployment context and prioritizing mitigations accordingly.</p>
+
+    <!-- Diagram 4: OWASP LLM Top 10 Risk Matrix -->
+    <figure class="article-fig">
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 620 340" xmlns="http://www.w3.org/2000/svg" aria-label="OWASP LLM Top 10 Enterprise Risk Matrix">
+          <defs>
+            <linearGradient id="owm-bg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#111827"/><stop offset="100%" stop-color="#1f2937"/></linearGradient>
+          </defs>
+          <rect width="620" height="340" fill="url(#owm-bg)" rx="10"/>
+          <text x="310" y="24" fill="#a1a1aa" font-size="11" font-family="Inter,sans-serif" text-anchor="middle" font-weight="600" letter-spacing="1">OWASP LLM TOP 10 — ENTERPRISE LIKELIHOOD × IMPACT</text>
+
+          <!-- Axes -->
+          <!-- Y-axis: Impact -->
+          <line x1="80" y1="40" x2="80" y2="300" stroke="#374151" stroke-width="1.5"/>
+          <!-- X-axis: Likelihood -->
+          <line x1="80" y1="300" x2="590" y2="300" stroke="#374151" stroke-width="1.5"/>
+
+          <!-- Axis labels -->
+          <text x="24" y="175" fill="#6b7280" font-size="9" font-family="Inter,sans-serif" text-anchor="middle" transform="rotate(-90,24,175)">IMPACT →</text>
+          <text x="330" y="320" fill="#6b7280" font-size="9" font-family="Inter,sans-serif" text-anchor="middle">LIKELIHOOD →</text>
+
+          <!-- Grid lines -->
+          <line x1="80" y1="170" x2="590" y2="170" stroke="#1f2937" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="335" y1="40" x2="335" y2="300" stroke="#1f2937" stroke-width="1" stroke-dasharray="3,3"/>
+
+          <!-- Quadrant labels -->
+          <text x="200" y="60" fill="#374151" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">High Impact / Low Likelihood</text>
+          <text x="470" y="60" fill="#374151" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">CRITICAL</text>
+          <text x="200" y="292" fill="#374151" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Monitor</text>
+          <text x="470" y="292" fill="#374151" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Prioritize Mitigation</text>
+
+          <!-- Risk bubbles: x=likelihood(80-590), y=impact(40-300) higher=worse -->
+          <!-- LLM01: Prompt Injection — HIGH likelihood, HIGH impact -->
+          <circle cx="480" cy="68" r="28" fill="#7f1d1d" stroke="#ef4444" stroke-width="1.5" opacity="0.92"/>
+          <text x="480" y="63" fill="#fca5a5" font-size="8" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">LLM01</text>
+          <text x="480" y="76" fill="#fca5a5" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Prompt Injection</text>
+
+          <!-- LLM02: Insecure Output — HIGH likelihood, HIGH impact -->
+          <circle cx="420" cy="100" r="24" fill="#7f1d1d" stroke="#ef4444" stroke-width="1.5" opacity="0.90"/>
+          <text x="420" y="95" fill="#fca5a5" font-size="8" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">LLM02</text>
+          <text x="420" y="108" fill="#fca5a5" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Output Handling</text>
+
+          <!-- LLM05: Supply Chain — MED likelihood, HIGH impact -->
+          <circle cx="220" cy="80" r="26" fill="#78350f" stroke="#f59e0b" stroke-width="1.5" opacity="0.92"/>
+          <text x="220" y="75" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">LLM05</text>
+          <text x="220" y="88" fill="#fde68a" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Supply Chain</text>
+
+          <!-- LLM08: Excessive Agency — HIGH likelihood, HIGH impact -->
+          <circle cx="530" cy="115" r="26" fill="#7f1d1d" stroke="#ef4444" stroke-width="1.5" opacity="0.90"/>
+          <text x="530" y="110" fill="#fca5a5" font-size="8" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">LLM08</text>
+          <text x="530" y="123" fill="#fca5a5" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Excessive Agency</text>
+
+          <!-- LLM06: Sensitive Info Disclosure — HIGH likelihood, MEDIUM-HIGH impact -->
+          <circle cx="460" cy="180" r="24" fill="#78350f" stroke="#f59e0b" stroke-width="1.5" opacity="0.90"/>
+          <text x="460" y="175" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">LLM06</text>
+          <text x="460" y="188" fill="#fde68a" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Info Disclosure</text>
+
+          <!-- LLM03: Training Data Poisoning — LOW likelihood, HIGH impact -->
+          <circle cx="150" cy="110" r="22" fill="#78350f" stroke="#f59e0b" stroke-width="1.5" opacity="0.88"/>
+          <text x="150" y="105" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">LLM03</text>
+          <text x="150" y="118" fill="#fde68a" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Data Poisoning</text>
+
+          <!-- LLM07: Insecure Plugin Design — MED-HIGH likelihood, MED impact -->
+          <circle cx="390" cy="210" r="22" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5" opacity="0.90"/>
+          <text x="390" y="205" fill="#93c5fd" font-size="8" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">LLM07</text>
+          <text x="390" y="218" fill="#93c5fd" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Plugin Design</text>
+
+          <!-- LLM04: Model DoS — MED likelihood, MED impact -->
+          <circle cx="300" cy="220" r="20" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5" opacity="0.88"/>
+          <text x="300" y="215" fill="#93c5fd" font-size="8" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">LLM04</text>
+          <text x="300" y="228" fill="#93c5fd" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Model DoS</text>
+
+          <!-- LLM09: Overreliance — HIGH likelihood, LOW-MED impact -->
+          <circle cx="500" cy="265" r="20" fill="#14532d" stroke="#22c55e" stroke-width="1.5" opacity="0.88"/>
+          <text x="500" y="260" fill="#bbf7d0" font-size="8" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">LLM09</text>
+          <text x="500" y="273" fill="#bbf7d0" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Overreliance</text>
+
+          <!-- LLM10: Model Theft — LOW likelihood, MED impact -->
+          <circle cx="160" cy="240" r="20" fill="#14532d" stroke="#22c55e" stroke-width="1.5" opacity="0.88"/>
+          <text x="160" y="235" fill="#bbf7d0" font-size="8" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">LLM10</text>
+          <text x="160" y="248" fill="#bbf7d0" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Model Theft</text>
+
+          <!-- Legend -->
+          <circle cx="100" cy="326" r="6" fill="#7f1d1d" stroke="#ef4444" stroke-width="1.2"/>
+          <text x="112" y="330" fill="#a1a1aa" font-size="8.5" font-family="Inter,sans-serif">Critical Priority</text>
+          <circle cx="210" cy="326" r="6" fill="#78350f" stroke="#f59e0b" stroke-width="1.2"/>
+          <text x="222" y="330" fill="#a1a1aa" font-size="8.5" font-family="Inter,sans-serif">High Priority</text>
+          <circle cx="310" cy="326" r="6" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.2"/>
+          <text x="322" y="330" fill="#a1a1aa" font-size="8.5" font-family="Inter,sans-serif">Medium Priority</text>
+          <circle cx="430" cy="326" r="6" fill="#14532d" stroke="#22c55e" stroke-width="1.2"/>
+          <text x="442" y="330" fill="#a1a1aa" font-size="8.5" font-family="Inter,sans-serif">Monitor</text>
+        </svg>
+      </div>
+      <figcaption>OWASP LLM Top 10 mapped by enterprise likelihood and impact. Prompt Injection (LLM01), Excessive Agency (LLM08), and Insecure Output Handling (LLM02) are the critical-priority cluster. Supply Chain risk (LLM05) carries catastrophic potential even at lower likelihood.</figcaption>
+    </figure>
+
+    <p>The matrix is useful as a prioritization tool, but it flattens nuance that matters operationally. LLM01 (Prompt Injection) and LLM08 (Excessive Agency) are both critical — but they require fundamentally different mitigations. Prompt Injection is primarily an input validation and sandboxing problem. Excessive Agency is primarily an authorization and architecture problem.</p>
+    <p class="teaser-note teaser-only">Detailed enterprise mitigation playbook for each of the OWASP LLM Top 10 items is in the full PDF.</p>
+    <div class="pdf-only">
+      <h3>Enterprise Mitigation Mapping: Critical Tier</h3>
+      <p><strong>LLM01 — Prompt Injection:</strong> Separate system instructions from user data at the architecture layer, not just in the prompt. Use structured input schemas that reject free-text in positions that influence agent behavior. Deploy a secondary LLM or rule-based filter as an "injection detection" layer on all inputs before they reach the primary model. For agentic systems, treat every retrieved document, tool response, and external API result as potentially adversarial — never embed them directly in the system prompt context.</p>
+      <p><strong>LLM08 — Excessive Agency:</strong> This is an architecture problem, not a prompt engineering problem. Implement explicit authorization gates before any agent action that has real-world consequences (sends communication, modifies data, calls external APIs). Design agents with the minimum tool set required for their function. Enforce tool allowlists at the framework level, not via instructions to the model. Implement rate limits on all agent-accessible APIs. Require human-in-the-loop approval for actions above a configurable impact threshold.</p>
+      <p><strong>LLM02 — Insecure Output Handling:</strong> Never render LLM output as HTML without sanitization. Treat all model output as untrusted input to downstream systems. If output is passed to a shell, SQL interpreter, or another model, apply the same injection protections you would for user-supplied data. Use output schemas to constrain model responses to structured formats, reducing the attack surface for instruction injection in outputs.</p>
+      <h3>Enterprise Mitigation Mapping: High Priority Tier</h3>
+      <p><strong>LLM05 — Supply Chain:</strong> Audit your AI supply chain: model weights (source, hash verification), training datasets, fine-tuning pipelines, and pip/npm dependencies in AI projects. Run dependency vulnerability scanning (pip-audit, Safety, Snyk) on all AI-related repos. Verify model provenance — use models from sources with published security disclosure policies and reproducible builds where available. Never load model checkpoints from untrusted sources.</p>
+      <p><strong>LLM06 — Sensitive Information Disclosure:</strong> Classify data before it enters any AI system. PII, financial data, and intellectual property should never appear in prompts to public AI APIs unless under a data processing agreement with appropriate controls. Implement output scanning — monitor model outputs for patterns that indicate training data memorization (PII, internal code patterns, credentials). This is a real phenomenon, not a theoretical one.</p>
+      <pre><code># Example: Output scanning for PII in LLM responses
+import re
+
+PII_PATTERNS = {
+    'ssn': r'\b\d{3}-\d{2}-\d{4}\b',
+    'credit_card': r'\b(?:\d{4}[- ]?){3}\d{4}\b',
+    'email': r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b',
+    'api_key': r'(?:sk-|pk_|AIza)[A-Za-z0-9_-]{20,}',
+}
+
+def scan_output(text: str) -> list[str]:
+    findings = []
+    for label, pattern in PII_PATTERNS.items():
+        if re.search(pattern, text):
+            findings.append(label)
+    return findings
+
+# Use in production: block or redact responses with PII findings
+output = model.generate(prompt)
+findings = scan_output(output)
+if findings:
+    log_security_event('pii_in_output', findings=findings, truncated_output=output[:200])
+    output = '[Response redacted: contained sensitive content]'</code></pre>
+    </div>
+
+    <h2 class="with-icon"><i class="fas fa-balance-scale section-icon" aria-hidden="true"></i> NIST AI RMF: Building Your Governance Framework</h2>
+    <p>The NIST AI Risk Management Framework (AI RMF 1.0) provides the most mature governance structure available for enterprise AI security programs. Unlike the OWASP list (which is tactical), the AI RMF is strategic — it tells you how to build and sustain a program, not just what to fix today. For CISOs needing to justify AI security investment to the board or align with regulatory requirements (EU AI Act, NIST CSF 2.0), the AI RMF is your language.</p>
+
+    <!-- Diagram 5: NIST AI RMF -->
+    <figure class="article-fig">
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg" aria-label="NIST AI RMF Core Functions">
+          <defs>
+            <linearGradient id="rmf-bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#1e1b4b"/></linearGradient>
+            <linearGradient id="rmf-gov" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#4338ca"/><stop offset="100%" stop-color="#312e81"/></linearGradient>
+            <linearGradient id="rmf-map" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0e7490"/><stop offset="100%" stop-color="#164e63"/></linearGradient>
+            <linearGradient id="rmf-meas" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#064e3b"/></linearGradient>
+            <linearGradient id="rmf-man" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#b45309"/><stop offset="100%" stop-color="#78350f"/></linearGradient>
+          </defs>
+          <rect width="600" height="320" fill="url(#rmf-bg)" rx="10"/>
+          <text x="300" y="26" fill="#a1a1aa" font-size="11" font-family="Inter,sans-serif" text-anchor="middle" font-weight="600" letter-spacing="1">NIST AI RMF — CORE FUNCTIONS &amp; ENTERPRISE CONTROLS</text>
+
+          <!-- Central circle -->
+          <circle cx="300" cy="165" r="42" fill="#1e1b4b" stroke="#6366f1" stroke-width="2"/>
+          <text x="300" y="159" fill="#a5b4fc" font-size="10" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">NIST</text>
+          <text x="300" y="172" fill="#a5b4fc" font-size="10" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">AI RMF</text>
+          <text x="300" y="185" fill="#818cf8" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">v1.0</text>
+
+          <!-- GOVERN quadrant (top-left) -->
+          <rect x="40" y="44" width="190" height="110" rx="10" fill="url(#rmf-gov)" stroke="#6366f1" stroke-width="1.5"/>
+          <text x="135" y="67" fill="#e0e7ff" font-size="13" font-family="Inter,sans-serif" text-anchor="middle" font-weight="800">GOVERN</text>
+          <text x="135" y="83" fill="#c7d2fe" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">Policies, accountability,</text>
+          <text x="135" y="95" fill="#c7d2fe" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">organizational culture</text>
+          <text x="95" y="112" fill="#a5b4fc" font-size="7.5" font-family="Inter,sans-serif">• AI use policy</text>
+          <text x="95" y="124" fill="#a5b4fc" font-size="7.5" font-family="Inter,sans-serif">• Risk tolerance definition</text>
+          <text x="95" y="136" fill="#a5b4fc" font-size="7.5" font-family="Inter,sans-serif">• AI ethics board / RACI</text>
+          <text x="95" y="148" fill="#a5b4fc" font-size="7.5" font-family="Inter,sans-serif">• Board-level AI risk reporting</text>
+          <!-- Arrow to center -->
+          <line x1="230" y1="100" x2="260" y2="140" stroke="#6366f1" stroke-width="1.2" stroke-dasharray="4,2"/>
+
+          <!-- MAP quadrant (top-right) -->
+          <rect x="370" y="44" width="190" height="110" rx="10" fill="url(#rmf-map)" stroke="#0ea5e9" stroke-width="1.5"/>
+          <text x="465" y="67" fill="#e0f2fe" font-size="13" font-family="Inter,sans-serif" text-anchor="middle" font-weight="800">MAP</text>
+          <text x="465" y="83" fill="#bae6fd" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">Context, risk identification,</text>
+          <text x="465" y="95" fill="#bae6fd" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">AI system cataloguing</text>
+          <text x="425" y="112" fill="#7dd3fc" font-size="7.5" font-family="Inter,sans-serif">• AI asset inventory</text>
+          <text x="425" y="124" fill="#7dd3fc" font-size="7.5" font-family="Inter,sans-serif">• Threat modeling per system</text>
+          <text x="425" y="136" fill="#7dd3fc" font-size="7.5" font-family="Inter,sans-serif">• Data classification mapping</text>
+          <text x="425" y="148" fill="#7dd3fc" font-size="7.5" font-family="Inter,sans-serif">• Third-party AI vendor review</text>
+          <line x1="370" y1="100" x2="340" y2="140" stroke="#0ea5e9" stroke-width="1.2" stroke-dasharray="4,2"/>
+
+          <!-- MEASURE quadrant (bottom-left) -->
+          <rect x="40" y="168" width="190" height="110" rx="10" fill="url(#rmf-meas)" stroke="#10b981" stroke-width="1.5"/>
+          <text x="135" y="191" fill="#d1fae5" font-size="13" font-family="Inter,sans-serif" text-anchor="middle" font-weight="800">MEASURE</text>
+          <text x="135" y="207" fill="#a7f3d0" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">Analysis, metrics,</text>
+          <text x="135" y="219" fill="#a7f3d0" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">continuous evaluation</text>
+          <text x="95" y="236" fill="#6ee7b7" font-size="7.5" font-family="Inter,sans-serif">• Red team LLM deployments</text>
+          <text x="95" y="248" fill="#6ee7b7" font-size="7.5" font-family="Inter,sans-serif">• AI security KPIs / SLOs</text>
+          <text x="95" y="260" fill="#6ee7b7" font-size="7.5" font-family="Inter,sans-serif">• Bias / safety evaluations</text>
+          <text x="95" y="272" fill="#6ee7b7" font-size="7.5" font-family="Inter,sans-serif">• Penetration testing cadence</text>
+          <line x1="230" y1="232" x2="260" y2="192" stroke="#10b981" stroke-width="1.2" stroke-dasharray="4,2"/>
+
+          <!-- MANAGE quadrant (bottom-right) -->
+          <rect x="370" y="168" width="190" height="110" rx="10" fill="url(#rmf-man)" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="465" y="191" fill="#fef3c7" font-size="13" font-family="Inter,sans-serif" text-anchor="middle" font-weight="800">MANAGE</text>
+          <text x="465" y="207" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">Response, prioritization,</text>
+          <text x="465" y="219" fill="#fde68a" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">residual risk tracking</text>
+          <text x="425" y="236" fill="#fbbf24" font-size="7.5" font-family="Inter,sans-serif">• AI incident response plan</text>
+          <text x="425" y="248" fill="#fbbf24" font-size="7.5" font-family="Inter,sans-serif">• Vulnerability remediation SLA</text>
+          <text x="425" y="260" fill="#fbbf24" font-size="7.5" font-family="Inter,sans-serif">• Model rollback procedures</text>
+          <text x="425" y="272" fill="#fbbf24" font-size="7.5" font-family="Inter,sans-serif">• Risk register maintenance</text>
+          <line x1="370" y1="232" x2="340" y2="192" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4,2"/>
+
+          <!-- Bottom label -->
+          <text x="300" y="310" fill="#4b5563" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">GOVERN is foundational — MAP, MEASURE, MANAGE are iterative cycles</text>
+        </svg>
+      </div>
+      <figcaption>NIST AI RMF core functions with enterprise control mapping. GOVERN is foundational — without organizational policy and accountability structures, the other three functions produce reports that nobody acts on.</figcaption>
+    </figure>
+
+    <p>The most common AI RMF implementation failure is skipping GOVERN and jumping straight to MEASURE. Security teams want to run red team exercises and produce metrics. But if there is no AI use policy, no risk tolerance definition, and no accountable owner for AI risk at the executive level, the metrics go nowhere. GOVERN is the prerequisite.</p>
+    <p class="teaser-note teaser-only">Full AI RMF implementation guide with control templates and RACI models for each function is in the PDF.</p>
+    <div class="pdf-only">
+      <h3>Practical GOVERN Implementation for Enterprises</h3>
+      <p>The GOVERN function requires three foundational artifacts before anything else:</p>
+      <ol>
+        <li><strong>AI Use Policy:</strong> A written, board-approved policy that defines which AI tools are approved, which categories of data can be processed by AI systems, what approval process exists for new AI integrations, and what employees must do when they discover a potential AI security incident. This policy should be integrated into your acceptable use policy (AUP) and updated annually. Without this, every shadow AI situation becomes a grey area.</li>
+        <li><strong>AI Risk Tolerance Statement:</strong> Explicit definition of which AI-related risks are acceptable, which require mitigation, and which are unacceptable regardless of business benefit. This should specifically address: probability of AI system compromise, probability of data exfiltration via AI, probability of AI-assisted fraud, and probability of regulatory violation via AI use. Quantified tolerances, not platitudes.</li>
+        <li><strong>AI Risk RACI:</strong> Clear ownership. Who is accountable for AI security risk? (CISO, typically.) Who is responsible for implementing controls on AI systems? (AppSec team, typically.) Who must be consulted before deploying a new AI system? (Data privacy, legal, infosec.) Who must be informed? (Board AI committee.) Without a RACI, every AI security question becomes a meeting without a decision.</li>
+      </ol>
+    </div>
+
+    <h2 class="with-icon"><i class="fas fa-code-branch section-icon" aria-hidden="true"></i> The Secure AI Development Lifecycle (SAIDLC)</h2>
+    <p>Your existing SDLC was built for deterministic software. AI systems are probabilistic, data-dependent, and behavior-emergent — they fail in ways that no unit test catches and no static analyzer flags. The Secure AI Development Lifecycle extends your existing SDLC with AI-specific gates at every phase, from data acquisition through deployment and monitoring.</p>
+
+    <!-- Diagram 6: SAIDLC Pipeline -->
+    <figure class="article-fig">
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 620 200" xmlns="http://www.w3.org/2000/svg" aria-label="Secure AI Development Lifecycle Pipeline">
+          <defs>
+            <linearGradient id="sai-bg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#111827"/><stop offset="100%" stop-color="#1f2937"/></linearGradient>
+            <marker id="sai-ar" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><polygon points="0 0,8 4,0 8" fill="#4b5563"/></marker>
+          </defs>
+          <rect width="620" height="200" fill="url(#sai-bg)" rx="10"/>
+          <text x="310" y="24" fill="#a1a1aa" font-size="11" font-family="Inter,sans-serif" text-anchor="middle" font-weight="600" letter-spacing="1">SECURE AI DEVELOPMENT LIFECYCLE (SAIDLC)</text>
+
+          <!-- Phase boxes -->
+          <!-- Data -->
+          <rect x="14" y="50" width="80" height="64" rx="7" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="54" y="72" fill="#93c5fd" font-size="9.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Data</text>
+          <text x="54" y="84" fill="#60a5fa" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Classify</text>
+          <text x="54" y="95" fill="#60a5fa" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Validate</text>
+          <text x="54" y="106" fill="#60a5fa" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Provenance</text>
+
+          <line x1="94" y1="82" x2="108" y2="82" stroke="#4b5563" stroke-width="1.5" marker-end="url(#sai-ar)"/>
+
+          <!-- Design -->
+          <rect x="108" y="50" width="80" height="64" rx="7" fill="#312e81" stroke="#6366f1" stroke-width="1.5"/>
+          <text x="148" y="72" fill="#c7d2fe" font-size="9.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Design</text>
+          <text x="148" y="84" fill="#a5b4fc" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Threat model</text>
+          <text x="148" y="95" fill="#a5b4fc" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Trust bounds</text>
+          <text x="148" y="106" fill="#a5b4fc" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">NHI design</text>
+
+          <line x1="188" y1="82" x2="202" y2="82" stroke="#4b5563" stroke-width="1.5" marker-end="url(#sai-ar)"/>
+
+          <!-- Build -->
+          <rect x="202" y="50" width="80" height="64" rx="7" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+          <text x="242" y="72" fill="#a7f3d0" font-size="9.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Build</text>
+          <text x="242" y="84" fill="#6ee7b7" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Secrets scan</text>
+          <text x="242" y="95" fill="#6ee7b7" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Dep. audit</text>
+          <text x="242" y="106" fill="#6ee7b7" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">SAST/AI-SAST</text>
+
+          <line x1="282" y1="82" x2="296" y2="82" stroke="#4b5563" stroke-width="1.5" marker-end="url(#sai-ar)"/>
+
+          <!-- Test -->
+          <rect x="296" y="50" width="80" height="64" rx="7" fill="#78350f" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="336" y="72" fill="#fef3c7" font-size="9.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Test</text>
+          <text x="336" y="84" fill="#fde68a" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Red team LLM</text>
+          <text x="336" y="95" fill="#fde68a" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Prompt injection</text>
+          <text x="336" y="106" fill="#fde68a" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Output testing</text>
+
+          <line x1="376" y1="82" x2="390" y2="82" stroke="#4b5563" stroke-width="1.5" marker-end="url(#sai-ar)"/>
+
+          <!-- Deploy -->
+          <rect x="390" y="50" width="80" height="64" rx="7" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="430" y="72" fill="#bfdbfe" font-size="9.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Deploy</text>
+          <text x="430" y="84" fill="#93c5fd" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Least-priv NHI</text>
+          <text x="430" y="95" fill="#93c5fd" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">WAF / guardrails</text>
+          <text x="430" y="106" fill="#93c5fd" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Audit logging</text>
+
+          <line x1="470" y1="82" x2="484" y2="82" stroke="#4b5563" stroke-width="1.5" marker-end="url(#sai-ar)"/>
+
+          <!-- Monitor -->
+          <rect x="484" y="50" width="122" height="64" rx="7" fill="#7f1d1d" stroke="#ef4444" stroke-width="1.5"/>
+          <text x="545" y="72" fill="#fecaca" font-size="9.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Monitor &amp; Respond</text>
+          <text x="545" y="84" fill="#fca5a5" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Anomaly detection</text>
+          <text x="545" y="95" fill="#fca5a5" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Output scanning</text>
+          <text x="545" y="106" fill="#fca5a5" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">Incident response</text>
+
+          <!-- Feedback loop arrow -->
+          <path d="M 590 118 C 590 160, 310 180, 30 160 C 10 155, 10 130, 14 118" fill="none" stroke="#4b5563" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#sai-ar)"/>
+          <text x="310" y="172" fill="#4b5563" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">← Continuous feedback: incidents → updated threat models → improved controls</text>
+
+          <!-- Gate badges -->
+          <text x="54" y="132" fill="#dc2626" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">⬤ Gate: DPA signed</text>
+          <text x="148" y="132" fill="#dc2626" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">⬤ Gate: TM approved</text>
+          <text x="242" y="132" fill="#dc2626" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">⬤ Gate: 0 high vulns</text>
+          <text x="336" y="132" fill="#dc2626" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">⬤ Gate: Red team pass</text>
+          <text x="430" y="132" fill="#dc2626" font-size="7.5" font-family="Inter,sans-serif" text-anchor="middle">⬤ Gate: IR plan ready</text>
+        </svg>
+      </div>
+      <figcaption>Secure AI Development Lifecycle. Each phase has a mandatory security gate. "Deploy" is only reached after data provenance, threat model approval, zero high-severity vulnerabilities, and red team sign-off. The feedback loop ensures incidents improve future threat models.</figcaption>
+    </figure>
+
+    <p>The gates are the critical element. Most enterprises have SDLC documentation with security phases but no actual enforcement. An AI system can skip the threat model because the sprint is ending. The SAIDLC gates must be enforced in your CI/CD pipeline — automated checks that block deployment when criteria are not met, not advisory warnings that developers click through.</p>
+    <p class="teaser-note teaser-only">SAIDLC implementation guide with CI/CD integration scripts, gate configuration templates, and red team methodology for AI systems is in the full PDF.</p>
+    <div class="pdf-only">
+      <h3>AI-Specific SAST: What to Add to Your Pipeline</h3>
+      <p>Standard SAST tools (Semgrep, SonarQube, Checkmarx) have limited coverage for AI-specific vulnerabilities. Augment them with these checks:</p>
+      <ul>
+        <li><strong>Secrets in prompts:</strong> Detect hardcoded API keys, credentials, or PII in prompt template strings. Pattern: any string literal that contains a prompt instruction combined with a secret-looking pattern.</li>
+        <li><strong>Unvalidated LLM output use:</strong> Detect cases where the output of an LLM call is passed directly to shell execution, SQL queries, file writes, or HTML rendering without sanitization.</li>
+        <li><strong>Over-privileged tool definitions:</strong> Detect agent tool definitions that include dangerous capabilities (shell exec, arbitrary HTTP, file system write) combined with instructions that could allow prompt injection to trigger them.</li>
+        <li><strong>Insecure model loading:</strong> Detect loading of ML model files (.pkl, .pt, .h5) from remote URLs or unverified sources without hash validation. Pickle deserialization is a known RCE vector.</li>
+      </ul>
+      <pre><code># Semgrep rule: detect LLM output used in subprocess without sanitization
+rules:
+  - id: llm-output-in-subprocess
+    patterns:
+      - pattern: subprocess.run($CMD, ...)
+      - pattern-either:
+          - pattern-inside: |
+              $RESP = $LLM.generate(...)
+              ...
+              subprocess.run($RESP, ...)
+          - pattern-inside: |
+              $RESP = $CHAIN.run(...)
+              ...
+              subprocess.run($RESP, ...)
+    message: LLM output used directly in subprocess — potential command injection
+    severity: ERROR
+    languages: [python]</code></pre>
+      <h3>Red Team Methodology for Enterprise LLM Systems</h3>
+      <p>A complete LLM red team engagement for an enterprise AI system should cover five attack categories in order of priority:</p>
+      <ol>
+        <li><strong>Direct prompt injection:</strong> Systematically test the system prompt's resilience. Can you extract it? Can you override it? Can you get the model to ignore its instructions via role-play, fictional framing, or encoding attacks (base64, leet speak, Unicode)?</li>
+        <li><strong>Indirect injection via data sources:</strong> Can you inject instructions via the system's data sources — uploaded documents, retrieved web pages, database contents, email bodies? What happens when a retrieved document contains "IGNORE PREVIOUS INSTRUCTIONS"?</li>
+        <li><strong>Authorization bypass:</strong> Can you access data or capabilities you should not? Can you get the system to act on behalf of another user? Can you escalate from viewer to editor via the AI interface?</li>
+        <li><strong>Information extraction:</strong> Can you extract training data, other users' data, system configurations, or API keys from the model's responses? Try many-shot extraction, completion attacks, and membership inference probes.</li>
+        <li><strong>Agentic abuse (if applicable):</strong> Can you trigger the agent to take actions beyond its intended scope? Can you exfiltrate data via a side channel (encoded in a search query, embedded in an output filename)? Can you persist instructions across sessions via memory poisoning?</li>
+      </ol>
+    </div>
+
+    <h2 class="with-icon"><i class="fas fa-road section-icon" aria-hidden="true"></i> Your 30/90/180-Day Roadmap</h2>
+    <p>The most common mistake CISOs make with AI security is trying to solve everything at once. The threat surface is large and growing — attempting a comprehensive program from day one produces a large roadmap document that nobody executes. The roadmap below is sequenced by dependency and impact: each phase builds on the last, and each is achievable within the timeframe for a team of 2–4 security engineers.</p>
+
+    <!-- Diagram 7: 30/90/180 Roadmap -->
+    <figure class="article-fig">
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 620 240" xmlns="http://www.w3.org/2000/svg" aria-label="30/90/180-Day AI Security Roadmap">
+          <defs>
+            <linearGradient id="rm-bg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#111827"/><stop offset="100%" stop-color="#1f2937"/></linearGradient>
+          </defs>
+          <rect width="620" height="240" fill="url(#rm-bg)" rx="10"/>
+          <text x="310" y="25" fill="#a1a1aa" font-size="11" font-family="Inter,sans-serif" text-anchor="middle" font-weight="600" letter-spacing="1">AI SECURITY PROGRAM ROADMAP</text>
+
+          <!-- Timeline bar -->
+          <rect x="30" y="48" width="560" height="8" rx="4" fill="#1f2937"/>
+          <rect x="30" y="48" width="186" height="8" rx="4" fill="#ef4444"/>
+          <rect x="216" y="48" width="187" height="8" rx="4" fill="#f59e0b"/>
+          <rect x="403" y="48" width="187" height="8" rx="4" fill="#10b981"/>
+
+          <!-- Markers -->
+          <circle cx="30" cy="52" r="6" fill="#fff" stroke="#374151" stroke-width="1.5"/>
+          <text x="30" y="42" fill="#9ca3af" font-size="8" font-family="Inter,sans-serif" text-anchor="middle">Day 0</text>
+
+          <circle cx="216" cy="52" r="6" fill="#ef4444" stroke="#7f1d1d" stroke-width="1.5"/>
+          <text x="216" y="42" fill="#f87171" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Day 30</text>
+
+          <circle cx="403" cy="52" r="6" fill="#f59e0b" stroke="#78350f" stroke-width="1.5"/>
+          <text x="403" y="42" fill="#fbbf24" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Day 90</text>
+
+          <circle cx="590" cy="52" r="6" fill="#10b981" stroke="#064e3b" stroke-width="1.5"/>
+          <text x="590" y="42" fill="#34d399" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle" font-weight="700">Day 180</text>
+
+          <!-- Phase 1: 30 days -->
+          <rect x="14" y="72" width="200" height="150" rx="8" fill="#1f1e1e" stroke="#ef4444" stroke-width="1.5"/>
+          <text x="114" y="92" fill="#fca5a5" font-size="11" font-family="Inter,sans-serif" text-anchor="middle" font-weight="800">PHASE 1: FOUNDATION</text>
+          <text x="114" y="106" fill="#f87171" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Days 1–30 • Visibility &amp; Policy</text>
+          <text x="30" y="122" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ AI asset inventory &amp; shadow AI scan</text>
+          <text x="30" y="136" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Draft AI use policy (board sponsor)</text>
+          <text x="30" y="150" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ NHI discovery in all repos &amp; cloud</text>
+          <text x="30" y="164" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Identify top 5 highest-risk AI systems</text>
+          <text x="30" y="178" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Assign AI risk owner (CISO office)</text>
+          <text x="30" y="192" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Enable secrets scanning in CI/CD</text>
+          <text x="30" y="206" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Baseline AI vendor DPA review</text>
+
+          <!-- Phase 2: 90 days -->
+          <rect x="222" y="72" width="190" height="150" rx="8" fill="#1f1e1e" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="317" y="92" fill="#fde68a" font-size="11" font-family="Inter,sans-serif" text-anchor="middle" font-weight="800">PHASE 2: CONTROLS</text>
+          <text x="317" y="106" fill="#fbbf24" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Days 31–90 • Harden &amp; Gate</text>
+          <text x="236" y="122" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Threat model top 5 AI systems</text>
+          <text x="236" y="136" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ NHI least-privilege remediation</text>
+          <text x="236" y="150" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Deploy SAIDLC gates in CI/CD</text>
+          <text x="236" y="164" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Implement output scanning / WAF</text>
+          <text x="236" y="178" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ First LLM red team engagement</text>
+          <text x="236" y="192" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ AI incident response tabletop</text>
+          <text x="236" y="206" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Developer AI security training</text>
+
+          <!-- Phase 3: 180 days -->
+          <rect x="420" y="72" width="186" height="150" rx="8" fill="#1f1e1e" stroke="#10b981" stroke-width="1.5"/>
+          <text x="513" y="92" fill="#a7f3d0" font-size="11" font-family="Inter,sans-serif" text-anchor="middle" font-weight="800">PHASE 3: MATURE</text>
+          <text x="513" y="106" fill="#34d399" font-size="8.5" font-family="Inter,sans-serif" text-anchor="middle">Days 91–180 • Sustain &amp; Scale</text>
+          <text x="434" y="122" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ AI security KPI dashboard (board)</text>
+          <text x="434" y="136" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Automated NHI rotation</text>
+          <text x="434" y="150" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ AI risk in third-party assessments</text>
+          <text x="434" y="164" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Quarterly red team cadence</text>
+          <text x="434" y="178" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ NIST AI RMF formal alignment</text>
+          <text x="434" y="192" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Agentic AI governance policy</text>
+          <text x="434" y="206" fill="#e4e4e7" font-size="8" font-family="Inter,sans-serif">✦ Bug bounty scope: AI systems</text>
+        </svg>
+      </div>
+      <figcaption>30/90/180-day AI security roadmap. Phase 1 is about visibility — you cannot control what you cannot see. Phase 2 deploys controls where risk is highest. Phase 3 builds the sustaining program that doesn't require heroics to maintain.</figcaption>
+    </figure>
+
+    <div class="pdf-only">
+      <h3>Phase 1 Detail: The First 30 Days</h3>
+      <p>The first 30 days are entirely about gaining visibility. Do not attempt to fix things yet. Your goal is to answer: What AI systems are running in our environment? Who owns them? What data do they process? What credentials do they hold?</p>
+      <p>Start with passive discovery before active remediation. Passive discovery is low-risk and high-return. Active remediation on systems you don't fully understand can break production and create adversarial relationships with engineering teams who will resist your future work. Build the map before you start removing roads.</p>
+      <p><strong>AI asset inventory methodology:</strong></p>
+      <ol>
+        <li>Query your API gateway and cloud billing for calls to known AI endpoints (api.openai.com, api.anthropic.com, bedrock.us-east-1.amazonaws.com, *.azure-api.net/openai). This gives you active integrations.</li>
+        <li>Search code repositories (GitHub Advanced Security, GitLab, Bitbucket) for AI SDK imports (openai, anthropic, langchain, llama-index, transformers). This gives you developer activity.</li>
+        <li>Survey business unit leaders with a simple questionnaire: "What AI tools does your team use? Which are approved by IT?" This surfaces shadow AI at the consumer tool level.</li>
+        <li>Review SaaS vendor contracts for AI feature addenda or data sharing amendments that were signed in the last 18 months. Many AI features were added via T&amp;C updates, not new contracts.</li>
+      </ol>
+      <h3>Phase 2 Detail: The Critical 90-Day Controls</h3>
+      <p>With visibility established, Phase 2 deploys controls where risk is highest. Prioritize based on your Phase 1 findings, but in most enterprises, the following sequence holds:</p>
+      <p><strong>1. Threat model the top 5 AI systems first.</strong> Use STRIDE-LM. Document attack paths. Identify controls that are missing. This creates a defensible record that the system was analyzed, which matters for compliance and incident response. Schedule a workshop with the owning engineering team — do not threat model in isolation. They know the system. You know the attack techniques.</p>
+      <p><strong>2. NHI least-privilege remediation on identified over-privileged credentials.</strong> Start with the worst offenders: any AI agent with cloud administrator credentials, any service account with access to all data stores, any API key with no expiry. These are your P0 remediations. Don't try to fix everything — fix the ones that, if compromised, would cause a breach.</p>
+      <p><strong>3. SAIDLC gate deployment in CI/CD.</strong> Even a minimal gate set adds significant value: block secrets in code (Trufflehog pre-commit hook), require a threat model to exist before deployment to production (enforce via deployment pipeline check against threat model registry), and enable dependency audit on AI-related repos. These are pipeline changes, not code changes — they apply to all future deployments automatically.</p>
+      <h3>Phase 3 Detail: Building the Sustaining Program</h3>
+      <p>The Phase 3 objective is sustainability. Everything in Phases 1 and 2 was done by humans doing one-time work. Phase 3 automates the repetitive components and institutionalizes the program so it survives personnel changes.</p>
+      <p>The board-level AI security KPI dashboard is not optional for organizations with significant AI exposure. Boards cannot govern what they cannot see. Quarterly metrics should include: number of AI systems in inventory (trending), number of NHIs with expiry dates (trending toward 100%), number of AI security vulnerabilities found vs. remediated, and time-to-detect for AI security incidents. These four metrics give the board meaningful signal without operational noise.</p>
+    </div>
+
+    <h2 class="with-icon"><i class="fas fa-flag-checkered section-icon" aria-hidden="true"></i> The Bottom Line for CISOs</h2>
+    <p>The enterprise AI adoption wave is not slowing down because security hasn't caught up. It is continuing regardless. The question is not whether your organization will deploy AI — it already has. The question is whether your security program is positioned to see it, govern it, and defend it.</p>
+    <p>The good news: this is solvable with existing security disciplines extended for AI's specific failure modes. You are not starting from scratch. Your threat modeling skills translate. Your identity governance skills translate. Your red team capability translates. What is new is the attack surface, the vocabulary (prompt injection, NHI sprawl, tool poisoning), and the urgency.</p>
+    <p>Start with visibility. Assign ownership. Gate deployments. The enterprises that do these three things in the next 90 days will have a meaningful security advantage over those that spend 90 days building a comprehensive framework document that nobody executes.</p>
+
+    <div class="pdf-cta">
+      <h3>Get the Complete CISO Playbook (PDF)</h3>
+      <p>The full guide includes: detailed NHI governance templates, SAIDLC gate implementation scripts, red team methodology for LLM systems, NIST AI RMF alignment worksheets, OWASP LLM Top 10 mitigation playbook, and 40+ implementation-ready policy templates. Everything your AppSec team needs to execute the roadmap.</p>
+      <a href="https://buy.stripe.com/aFadR8gDw2jm4UM6atb7y00" class="buy-btn">Get the Full PDF — $27 <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </article>
+
+  <footer class="border-t border-zinc-800 py-12 text-center text-zinc-500 text-sm">
+    © 2026 Secure by DeZign
+  </footer>
+</body>
+</html>
