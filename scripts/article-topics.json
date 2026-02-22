@@ -1,0 +1,79 @@
+{
+  "published": [
+    "prompt-injection",
+    "api-security",
+    "data-poisoning"
+  ],
+  "queue": [
+    {
+      "slug": "model-inversion",
+      "title": "Model Inversion Attacks",
+      "description": "How attackers extract training data from AI models and the hardening techniques that stop them.",
+      "imagePrompt": "A dark glowing neural network diagram being reverse-engineered, with data fragments leaking out, cybersecurity digital art, dark background, emerald green accents",
+      "icon": "fa-brain"
+    },
+    {
+      "slug": "supply-chain-ai",
+      "title": "AI Supply Chain Security",
+      "description": "Compromised model weights, poisoned pip packages, and how to verify integrity end-to-end.",
+      "imagePrompt": "A broken supply chain of AI model boxes and containers, dark cyberpunk aesthetic, glowing green circuit patterns, digital security concept art",
+      "icon": "fa-boxes-stacked"
+    },
+    {
+      "slug": "rag-security",
+      "title": "Securing RAG Pipelines",
+      "description": "Retrieval-Augmented Generation opens new attack surfaces — here's how to lock them down.",
+      "imagePrompt": "A retrieval-augmented generation pipeline diagram with security shields, dark theme, glowing emerald accents, vector database nodes, cybersecurity illustration",
+      "icon": "fa-database"
+    },
+    {
+      "slug": "agent-privilege-escalation",
+      "title": "Agentic AI Privilege Escalation",
+      "description": "When AI agents go rogue: how attackers exploit autonomous agents and the guardrails that work.",
+      "imagePrompt": "An autonomous AI agent with escalating permissions, red warning indicators, dark cyberpunk aesthetic, digital security concept, emerald green and red accents",
+      "icon": "fa-robot"
+    },
+    {
+      "slug": "llm-jailbreaking",
+      "title": "LLM Jailbreaking: Attack & Defense",
+      "description": "The complete taxonomy of jailbreak techniques in 2026 and a defense-in-depth strategy that survives them.",
+      "imagePrompt": "A glowing padlock being broken through a neural network visualization, digital jailbreak concept, dark background, emerald and red cybersecurity art",
+      "icon": "fa-lock-open"
+    },
+    {
+      "slug": "multimodal-attacks",
+      "title": "Multimodal AI Attack Vectors",
+      "description": "Image-based prompt injection, audio attacks, and how vision-language models get exploited.",
+      "imagePrompt": "Multiple attack vectors targeting a multimodal AI system — images, audio waves, text — dark cybersecurity digital art, emerald green circuit aesthetic",
+      "icon": "fa-eye"
+    },
+    {
+      "slug": "ai-governance-nist",
+      "title": "AI Governance Using NIST AI RMF",
+      "description": "Mapping the NIST AI Risk Management Framework to real enterprise controls your security team can ship.",
+      "imagePrompt": "A structured governance framework with interconnected nodes and compliance shields, NIST-inspired diagram, dark background, emerald green, corporate security concept art",
+      "icon": "fa-scale-balanced"
+    },
+    {
+      "slug": "shadow-ai",
+      "title": "Shadow AI: The Threat Inside Your Org",
+      "description": "Employees are already using AI tools you don't know about. Here's how to find them and manage the risk.",
+      "imagePrompt": "A shadowy AI application running in the background of a corporate network, dark glowing digital art, unauthorized access concept, emerald accents, cybersecurity illustration",
+      "icon": "fa-user-secret"
+    },
+    {
+      "slug": "llm-dos",
+      "title": "Denial of Service Against LLM Systems",
+      "description": "Token flooding, sponge attacks, and the rate-limiting architecture that keeps your AI services alive.",
+      "imagePrompt": "A flood of malicious requests overwhelming an AI server, digital denial of service concept, dark red and emerald contrast, cybersecurity digital art",
+      "icon": "fa-server"
+    },
+    {
+      "slug": "zero-trust-ai",
+      "title": "Zero Trust Architecture for AI Systems",
+      "description": "Applying zero-trust principles to LLMs, agents, and AI pipelines — with a practical reference architecture.",
+      "imagePrompt": "A zero trust network architecture diagram centered on AI systems, dark futuristic design, emerald green verification nodes, trust boundary visualization, cybersecurity art",
+      "icon": "fa-shield-halved"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-strong" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f2027"/>
+      <stop offset="100%" stop-color="#091a10"/>
+    </linearGradient>
+    <linearGradient id="shieldStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="lockGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="nodeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(50,50) scale(0.37)">
+    <!-- Shield body -->
+    <path d="M0,-130 L100,-85 L100,30 Q100,110 0,150 Q-100,110 -100,30 L-100,-85 Z"
+          fill="url(#shieldGrad)" stroke="url(#shieldStroke)" stroke-width="4"/>
+    <!-- Inner bevel -->
+    <path d="M0,-115 L86,-75 L86,28 Q86,98 0,134 Q-86,98 -86,28 L-86,-75 Z"
+          fill="none" stroke="#10b981" stroke-width="1" opacity="0.3"/>
+    <!-- Neural lines -->
+    <g stroke="#10b981" stroke-width="2" opacity="0.6" filter="url(#glow)">
+      <line x1="-60" y1="-60" x2="0" y2="-20"/>
+      <line x1="60" y1="-60" x2="0" y2="-20"/>
+      <line x1="-60" y1="-60" x2="-30" y2="20"/>
+      <line x1="60" y1="-60" x2="30" y2="20"/>
+      <line x1="0" y1="-20" x2="-30" y2="20"/>
+      <line x1="0" y1="-20" x2="30" y2="20"/>
+      <line x1="-30" y1="20" x2="0" y2="65"/>
+      <line x1="30" y1="20" x2="0" y2="65"/>
+    </g>
+    <!-- Neural nodes -->
+    <g filter="url(#glow)">
+      <circle cx="-60" cy="-60" r="7" fill="url(#nodeGrad)"/>
+      <circle cx="60" cy="-60" r="7" fill="url(#nodeGrad)"/>
+      <circle cx="0" cy="-20" r="6" fill="#34d399"/>
+      <circle cx="-30" cy="20" r="5.5" fill="url(#nodeGrad)"/>
+      <circle cx="30" cy="20" r="5.5" fill="url(#nodeGrad)"/>
+      <circle cx="0" cy="65" r="6" fill="#34d399"/>
+    </g>
+    <!-- Lock -->
+    <g filter="url(#glow-strong)">
+      <path d="M-14,-18 Q-14,-34 0,-34 Q14,-34 14,-18"
+            fill="none" stroke="url(#lockGrad)" stroke-width="4.5" stroke-linecap="round"/>
+      <rect x="-18" y="-18" width="36" height="28" rx="5"
+            fill="#0a0a0a" stroke="url(#lockGrad)" stroke-width="3"/>
+      <circle cx="0" cy="-6" r="5.5" fill="url(#lockGrad)"/>
+      <rect x="-3" y="-4" width="6" height="9" rx="1.5" fill="url(#lockGrad)"/>
+    </g>
+  </g>
+</svg>
