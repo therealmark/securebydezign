@@ -64,10 +64,16 @@ async function getPdfFromS3(key) {
  * Handle checkout.session.completed: email customer with all bundle PDFs attached.
  */
 export async function handleWebhook(rawBody, signature) {
+  if (!config.stripeWebhookSecret) {
+    console.error('STRIPE_WEBHOOK_SECRET not set');
+    return { statusCode: 500, body: JSON.stringify({ error: 'Webhook not configured' }) };
+  }
+
   let event;
   try {
     event = Stripe.webhooks.constructEvent(rawBody, signature, config.stripeWebhookSecret);
   } catch (err) {
+    console.error('Stripe webhook signature verification failed:', err.message);
     return { statusCode: 400, body: JSON.stringify({ error: err.message }) };
   }
 
@@ -102,13 +108,18 @@ export async function handleWebhook(rawBody, signature) {
     return { statusCode: 500, body: JSON.stringify({ error: 'No PDFs available' }) };
   }
 
-  const rawMessage = buildMimeMessage(customerEmail, pdfParts);
-  const sendCmd = new SendRawEmailCommand({
-    Source: config.sesFromEmail,
-    Destinations: [customerEmail],
-    RawMessage: { Data: rawMessage },
-  });
-  await ses.send(sendCmd);
+  try {
+    const rawMessage = buildMimeMessage(customerEmail, pdfParts);
+    const sendCmd = new SendRawEmailCommand({
+      Source: config.sesFromEmail,
+      Destinations: [customerEmail],
+      RawMessage: { Data: rawMessage },
+    });
+    await ses.send(sendCmd);
+  } catch (err) {
+    console.error('SES send failed:', err.message);
+    return { statusCode: 500, body: JSON.stringify({ error: 'Failed to send email' }) };
+  }
 
   return { statusCode: 200, body: JSON.stringify({ received: true }) };
 }

@@ -36,7 +36,12 @@ export const handler = async (event) => {
 
   // POST /webhooks/stripe (path may include stage prefix, e.g. /prod/webhooks/stripe)
   if ((path === '/webhooks/stripe' || path.endsWith('/webhooks/stripe')) && method === 'POST') {
-    const rawBody = typeof event.body === 'string' ? event.body : (event.body && Buffer.from(event.body).toString('utf8')) || '';
+    let rawBody;
+    if (event.isBase64Encoded && event.body) {
+      rawBody = Buffer.from(event.body, 'base64').toString('utf8');
+    } else {
+      rawBody = typeof event.body === 'string' ? event.body : (event.body && Buffer.from(event.body).toString('utf8')) || '';
+    }
     const signature = event.headers?.Stripe-Signature ?? event.headers?.['stripe-signature'] ?? '';
     return handleWebhook(rawBody, signature);
   }
