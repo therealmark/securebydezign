@@ -108,7 +108,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
 
     <h2 class="with-icon"><i class="fas fa-list-check section-icon" aria-hidden="true"></i> The 8-Point Production Checklist</h2>
     <p class="teaser-only">The full PDF details all eight controls: strong authentication (API keys, OAuth, JWT, mTLS), rate limiting and quotas, input validation and sanitization, output filtering, logging and monitoring, network controls, versioning and deprecation, and cost guardrails. Each point includes implementation guidance.</p>
-    <p class="teaser-note teaser-only">Complete checklist with implementation notes in the <a href="../pdfs/api-security.pdf" target="_blank">downloadable PDF</a>.</p>
+    <p class="teaser-note teaser-only">Complete checklist with implementation notes in the downloadable PDF.</p>
     <ol class="pdf-only">
       <li><strong>Strong Authentication</strong> — Use API keys for programmatic access (store in env or secrets manager; never in client code). For user-facing apps use OAuth 2.0 or JWT with short-lived tokens and refresh flows. Enforce mTLS for service-to-service calls so only authorized services can reach the API. Rotate keys on a schedule (e.g. 90 days); support multiple active keys during rotation. Never log or expose full keys in responses or error messages. <strong>Scopes:</strong> Define scopes (e.g. <code>ai:infer</code>, <code>ai:embed</code>) and enforce them so a leaked key has limited impact.</li>
       <li><strong>Rate Limiting & Quotas</strong> — Apply per-user, per-IP, and per-model limits (e.g. 100 requests/minute, 1M tokens/day). Use sliding-window or token-bucket algorithms so bursts are smoothed. Throttle or block abusive patterns (e.g. rapid repeated prompts, automated scraping). <strong>Implementation:</strong> Use API Gateway or a reverse proxy (e.g. Kong, Envoy) with rate-limit plugins; back with Redis for distributed counters. Set different tiers for free vs. paid or internal vs. external.</li>
@@ -123,7 +123,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
 
     <h2 class="with-icon"><i class="fas fa-cloud-arrow-up section-icon" aria-hidden="true"></i> Real-World Implementation Notes</h2>
     <p class="teaser-only">How to implement this on AWS with API Gateway, Lambda or ECS, Secrets Manager, and CloudWatch, plus tying usage to rate limits and billing so abuse is both blocked and billable.</p>
-    <p class="teaser-note teaser-only">Full implementation details in the <a href="../pdfs/api-security.pdf" target="_blank">PDF guide</a>.</p>
+    <p class="teaser-note teaser-only">Full implementation details in the PDF guide.</p>
     <div class="callout pdf-only">
       <strong>Quick win:</strong> Use API Gateway for auth and throttling, Secrets Manager for keys, and CloudWatch for logs. Tie usage to rate limits so abuse is both blocked and billable.
     </div>

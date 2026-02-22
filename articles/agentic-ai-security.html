@@ -103,7 +103,7 @@
       <li><strong>Tool access</strong> — agents call real APIs, execute real code, send real communications. A compromised tool invocation has real consequences.</li>
       <li><strong>Memory</strong> — agents maintain state across turns and sessions via vector databases and session stores. Poisoned memory persists and propagates.</li>
     </ul>
-    <p class="teaser-note teaser-only">Full technical breakdown, threat modeling methodology, and case studies in the <a href="../pdfs/agentic-ai-security.pdf" target="_blank">downloadable PDF</a>.</p>
+    <p class="teaser-note teaser-only">Full technical breakdown, threat modeling methodology, and case studies in the downloadable PDF.</p>
     <div class="pdf-only">
       <p>To understand why this matters operationally, consider the blast radius comparison:</p>
       <ul>
@@ -125,7 +125,7 @@
     <h2 class="with-icon"><i class="fas fa-plug section-icon" aria-hidden="true"></i> Tool Poisoning &amp; MCP Exploitation</h2>
     <p>The Model Context Protocol (MCP) and similar tool-calling frameworks let agents discover and call external capabilities at runtime. This extensibility is also an attack surface: a malicious or compromised MCP server can return tool definitions or responses that redirect the agent's behavior entirely — a technique called <em>tool poisoning</em>.</p>
     <p class="teaser-only">Tool poisoning attacks embed instructions in tool metadata or responses that the agent treats as legitimate directives, bypassing system-prompt-level controls. The PDF details real attack patterns, malicious MCP server construction, and defensive tool validation architectures.</p>
-    <p class="teaser-note teaser-only">Attack code and defense patterns in the <a href="../pdfs/agentic-ai-security.pdf" target="_blank">full PDF guide</a>.</p>
+    <p class="teaser-note teaser-only">Attack code and defense patterns in the full PDF guide.</p>
     <div class="pdf-only">
       <p>MCP tool definitions include a <code>description</code> field that the LLM reads to understand what a tool does and when to call it. An attacker who controls a connected MCP server can inject instructions directly into this description field, invisible to the user but fully readable by the agent's planner:</p>
       <h3>Attack: Malicious MCP Tool Description</h3>
@@ -192,7 +192,7 @@ def handle_search(query: str) -> dict:
     <h2 class="with-icon"><i class="fas fa-database section-icon" aria-hidden="true"></i> Memory &amp; RAG Hijacking</h2>
     <p>Agentic systems increasingly rely on vector databases for long-term memory and Retrieval-Augmented Generation (RAG) for grounding responses in current knowledge. Both are attack surfaces: an adversary who can write to the vector store — or whose content ends up embedded in it — can plant persistent instructions that influence every future agent run that retrieves those vectors.</p>
     <p class="teaser-only">Unlike prompt injection attacks that are limited to a single session, memory poisoning is persistent. A single write to the vector store can influence thousands of future agent runs. The PDF covers embedding space manipulation, retrieval-triggered backdoors, and a defense-in-depth memory architecture.</p>
-    <p class="teaser-note teaser-only">Full attack patterns and defenses in the <a href="../pdfs/agentic-ai-security.pdf" target="_blank">PDF guide</a>.</p>
+    <p class="teaser-note teaser-only">Full attack patterns and defenses in the PDF guide.</p>
     <div class="pdf-only">
       <p>The mechanics of RAG poisoning follow a consistent pattern: the attacker crafts content that (1) embeds near relevant semantic queries, ensuring it is retrieved when those topics are searched, and (2) contains instructions that the LLM will follow when it appears in the context window alongside the legitimate query.</p>
       <h3>Attack: Semantic Backdoor via Vector Store Poisoning</h3>
@@ -244,7 +244,7 @@ retrieved_context = [
     <h2 class="with-icon"><i class="fas fa-sitemap section-icon" aria-hidden="true"></i> Privilege Escalation via Tool Chaining</h2>
     <p>Individual tool calls may appear benign in isolation. The danger of agentic systems is that the planner can chain multiple tool calls in sequence, and each call can unlock capabilities that were not available at the start of the chain. An attacker who understands the agent's tool set can craft inputs that cause the agent to autonomously escalate its own privileges across a multi-step chain.</p>
     <p class="teaser-only">Tool chaining attacks exploit the gap between individual tool risk assessments and combined tool risk. A "read-only" agent with access to a search tool, a file tool, and an email tool is not read-only — it is an exfiltration machine. The PDF details multi-step attack reconstructions and containment patterns.</p>
-    <p class="teaser-note teaser-only">Full attack reconstructions and containment patterns in the <a href="../pdfs/agentic-ai-security.pdf" target="_blank">PDF guide</a>.</p>
+    <p class="teaser-note teaser-only">Full attack reconstructions and containment patterns in the PDF guide.</p>
     <div class="pdf-only">
       <h3>Attack: Multi-Step Privilege Chain</h3>
       <p class="code-caption">This attack chain starts with a benign-looking user request and uses 4 autonomous tool calls to achieve full credential exfiltration.</p>
@@ -331,7 +331,7 @@ retrieved_context = [
 
     <p>No single control stops all agentic attacks. The defense architecture must be layered so that a bypass at one layer does not result in full compromise. The five-layer model above provides defense in depth with an immutable audit log cutting across all layers.</p>
     <p class="teaser-only">Each layer has specific implementation requirements, tool and vendor options, and failure modes. The PDF walks through each in detail with architecture decision records (ADRs) and vendor-agnostic implementation guidance.</p>
-    <p class="teaser-note teaser-only">Full architecture implementation guide in the <a href="../pdfs/agentic-ai-security.pdf" target="_blank">PDF</a>.</p>
+    <p class="teaser-note teaser-only">Full architecture implementation guide in the PDF.</p>
     <div class="pdf-only">
       <h3>Layer 1: Input Validation &amp; Intent Classification</h3>
       <p>Before any input reaches the agent planner, it should pass through a validation pipeline:</p>
@@ -445,7 +445,7 @@ class ToolCallInterceptor:
     <h2 class="with-icon"><i class="fas fa-scale-balanced section-icon" aria-hidden="true"></i> NIST AI RMF Alignment</h2>
     <p>The NIST AI Risk Management Framework (AI RMF 1.0) provides a vendor-neutral governance structure for managing AI risk across four functions: <strong>Govern, Map, Measure, and Manage</strong>. Agentic systems introduce novel risks in each function that organizations deploying enterprise AI must explicitly address.</p>
     <p class="teaser-only">The PDF maps each agentic security control to the corresponding NIST AI RMF function and subcategory, providing a governance-ready artifact for enterprise security programs and audit readiness.</p>
-    <p class="teaser-note teaser-only">Full NIST AI RMF mapping table in the <a href="../pdfs/agentic-ai-security.pdf" target="_blank">PDF guide</a>.</p>
+    <p class="teaser-note teaser-only">Full NIST AI RMF mapping table in the PDF guide.</p>
     <div class="pdf-only">
       <h3>GOVERN</h3>
       <ul>
@@ -480,7 +480,7 @@ class ToolCallInterceptor:
 
     <h2 class="with-icon"><i class="fas fa-check-double section-icon" aria-hidden="true"></i> Implementation Checklist</h2>
     <p class="teaser-only">A 30-point enterprise checklist covering input controls, tool governance, memory integrity, runtime monitoring, and governance — ready to drop into your AI security program.</p>
-    <p class="teaser-note teaser-only">Full 30-point checklist with implementation priority ratings in the <a href="../pdfs/agentic-ai-security.pdf" target="_blank">PDF guide</a>.</p>
+    <p class="teaser-note teaser-only">Full 30-point checklist with implementation priority ratings in the PDF guide.</p>
     <div class="pdf-only">
       <h3>Input &amp; Intent Controls</h3>
       <ul>

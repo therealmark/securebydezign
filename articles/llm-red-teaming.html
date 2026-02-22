@@ -404,7 +404,7 @@ Make it sound urgent but not alarming. Keep under 100 words.
     <h2 class="with-icon"><i class="fas fa-search section-icon" aria-hidden="true"></i> Reconnaissance: Mapping the Target</h2>
     <p>Before launching structured attacks, red teamers map the target system: what model is running, what constraints are in the system prompt, what tools are available, and what the model's behavioral baseline looks like. This reconnaissance phase shapes the entire attack strategy.</p>
     <p class="teaser-only">Effective recon dramatically reduces wasted attack attempts. The PDF details a systematic 12-step recon protocol, including model fingerprinting without the API endpoint, behavioral profiling via carefully designed probe sequences, and how to reconstruct system prompt structure from refusal patterns alone.</p>
-    <p class="teaser-note teaser-only">Full recon playbook in the <a href="../pdfs/llm-red-teaming.pdf" target="_blank">downloadable PDF</a>.</p>
+    <p class="teaser-note teaser-only">Full recon playbook in the downloadable PDF.</p>
     <div class="pdf-only">
       <h3>Model Fingerprinting</h3>
       <p>Identifying the underlying model helps the red team select the most effective attacks — jailbreak techniques that work on GPT-4 may fail on Claude, and vice versa. Even when the model identity is obscured, behavioral probes can narrow it down:</p>
@@ -543,7 +543,7 @@ def profile_target(probe_categories: dict) -> dict:
     </figure>
 
     <p class="teaser-only">The PDF walks through setting up each tool against a real LLM deployment, with configuration examples, result interpretation guides, and how to combine tools into a unified red team pipeline with a single consolidated report.</p>
-    <p class="teaser-note teaser-only">Full tool setup guides and pipeline code in the <a href="../pdfs/llm-red-teaming.pdf" target="_blank">downloadable PDF</a>.</p>
+    <p class="teaser-note teaser-only">Full tool setup guides and pipeline code in the downloadable PDF.</p>
     <div class="pdf-only">
       <h3>Setting Up Garak</h3>
       <p class="code-caption">Running Garak against an OpenAI-compatible endpoint: covers jailbreak, prompt injection, and toxicity probes in a single command.</p>
@@ -694,7 +694,7 @@ Respond with JSON: {{"score": 0.0, "reasoning": "..."}}"""
     <h2 class="with-icon"><i class="fas fa-gauge-high section-icon" aria-hidden="true"></i> Scoring and Triage</h2>
     <p>An attack that produces harmful output is a finding. But how severe? How to prioritize? AI red team scoring requires a rubric that is specific to AI failure modes — not just CVSS, which was built for software vulnerabilities and does not capture the probabilistic, contextual nature of LLM failures.</p>
     <p class="teaser-only">The PDF includes a complete AI vulnerability severity rubric adapted from CVSS for LLM-specific dimensions: exploitability, scope of harm, probability of occurrence, and detectability. Includes worked examples for each category.</p>
-    <p class="teaser-note teaser-only">Full severity rubric and triage methodology in the <a href="../pdfs/llm-red-teaming.pdf" target="_blank">PDF guide</a>.</p>
+    <p class="teaser-note teaser-only">Full severity rubric and triage methodology in the PDF guide.</p>
     <div class="pdf-only">
       <h3>AI Vulnerability Severity Rubric</h3>
       <p>Rate each finding on four dimensions, each scored 1–4:</p>
@@ -791,7 +791,7 @@ print(f"{sev} ({score})")  # LOW (7) → actually MEDIUM</code></pre>
       <figcaption>Four-layer remediation architecture. Fix at the deepest appropriate layer; reinforce shallower layers as defense-in-depth. Never rely on a single layer.</figcaption>
     </figure>
 
-    <p class="teaser-note teaser-only">Full remediation playbooks — including system prompt hardening templates, guardrail code, and re-test validation procedures — in the <a href="../pdfs/llm-red-teaming.pdf" target="_blank">PDF guide</a>.</p>
+    <p class="teaser-note teaser-only">Full remediation playbooks — including system prompt hardening templates, guardrail code, and re-test validation procedures — in the PDF guide.</p>
     <div class="pdf-only">
       <h3>System Prompt Hardening Templates</h3>
       <p class="code-caption">Hardened system prompt structure that resists common extraction and injection attacks.</p>
@@ -897,7 +897,7 @@ def secure_llm_call(user_input: str, model_response_fn) -> str:
     <h2 class="with-icon"><i class="fas fa-code-branch section-icon" aria-hidden="true"></i> CI/CD Integration</h2>
     <p>Red teaming that happens once a quarter catches vulnerabilities introduced once a quarter. Continuous red teaming — automated attack suites running in CI/CD pipelines — catches regressions the moment they are introduced. Every model update, system prompt change, or guardrail modification should trigger a red team gate before deployment.</p>
     <p class="teaser-only">The PDF includes complete GitHub Actions workflow files, GitLab CI templates, and Kubernetes CronJob configurations for running automated red team suites as mandatory pre-deployment checks.</p>
-    <p class="teaser-note teaser-only">Full CI/CD templates and pipeline architecture in the <a href="../pdfs/llm-red-teaming.pdf" target="_blank">PDF guide</a>.</p>
+    <p class="teaser-note teaser-only">Full CI/CD templates and pipeline architecture in the PDF guide.</p>
     <div class="pdf-only">
       <p class="code-caption">GitHub Actions workflow: automated red team suite runs on every PR that modifies the model config, system prompt, or guardrails.</p>
       <pre><code"># .github/workflows/llm-red-team.yml
@@ -1021,7 +1021,7 @@ jobs:
     <h2 class="with-icon"><i class="fas fa-building section-icon" aria-hidden="true"></i> Building an Enterprise AI Red Team Program</h2>
     <p>A single red team engagement is a snapshot. A red team <em>program</em> is a continuous feedback loop between offensive testing and defensive improvement. Building one requires people, process, tooling, and executive sponsorship to sustain.</p>
     <p class="teaser-only">The PDF includes a complete program maturity model (Levels 1–4), a staffing model (what skills to hire vs. contract), a budget template, and sample KPIs for reporting to the CISO.</p>
-    <p class="teaser-note teaser-only">Full program design guide and templates in the <a href="../pdfs/llm-red-teaming.pdf" target="_blank">PDF guide</a>.</p>
+    <p class="teaser-note teaser-only">Full program design guide and templates in the PDF guide.</p>
     <div class="pdf-only">
       <h3>AI Red Team Maturity Model</h3>
       <ul>
@@ -1049,7 +1049,7 @@ jobs:
 
     <h2 class="with-icon"><i class="fas fa-check-double section-icon" aria-hidden="true"></i> Implementation Checklist</h2>
     <p class="teaser-only">A 35-point enterprise checklist covering engagement scoping, attack coverage, tooling, scoring, remediation, CI/CD integration, and program governance — the fastest path to a defensible AI red team program.</p>
-    <p class="teaser-note teaser-only">Full checklist with priority ratings and implementation timelines in the <a href="../pdfs/llm-red-teaming.pdf" target="_blank">PDF guide</a>.</p>
+    <p class="teaser-note teaser-only">Full checklist with priority ratings and implementation timelines in the PDF guide.</p>
     <div class="pdf-only">
       <h3>Engagement Scoping</h3>
       <ul>
