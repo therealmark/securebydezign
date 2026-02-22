@@ -18,9 +18,6 @@ STRIPE_PUB_KEY  = "pk_live_51T3MFdB50TQ4M7eDzNU6jLJcucY4puhhw67IqguzSQlXpcGQiZkC
 STRIPE_LINK     = "https://buy.stripe.com/aFadR8gDw2jm4UM6atb7y00"
 SITE_BASE_URL   = "https://www.securebydezign.com"
 
-ANTHROPIC_KEY   = os.environ.get("ANTHROPIC_API_KEY", "")
-OPENAI_KEY      = os.environ.get("OPENAI_API_KEY", "")
-
 # Load local secrets (never committed, never synced to S3)
 _env_local = WORKSPACE / ".env.local"
 if _env_local.exists():
@@ -30,6 +27,9 @@ if _env_local.exists():
             k, v = line.split("=", 1)
             os.environ.setdefault(k.strip(), v.strip())
 
+# Capture keys AFTER .env.local is loaded
+ANTHROPIC_KEY     = os.environ.get("ANTHROPIC_API_KEY", "")
+OPENAI_KEY        = os.environ.get("OPENAI_API_KEY", "")
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
 XAI_API_KEY       = os.environ.get("XAI_API_KEY", "")
 
@@ -58,13 +58,11 @@ def anthropic_complete(prompt: str, system: str, max_tokens: int = 8000) -> str:
         return json.loads(r.read())["content"][0]["text"]
 
 def aurora_image(prompt: str, out_path: Path):
-    """Generate a 16:9 hero image via xAI Aurora (grok-imagine-image) and save as JPEG."""
+    """Generate a hero image via xAI Aurora (grok-imagine-image) and save as JPEG."""
     payload = json.dumps({
         "model": "grok-imagine-image",
         "prompt": prompt,
         "n": 1,
-        "aspect_ratio": "16:9",
-        "resolution": "2k",
         "response_format": "b64_json"
     }).encode()
     req = urllib.request.Request(
@@ -73,6 +71,7 @@ def aurora_image(prompt: str, out_path: Path):
         headers={
             "Authorization": f"Bearer {XAI_API_KEY}",
             "Content-Type": "application/json",
+            "User-Agent": "curl/8.4.0",   # Cloudflare WAF blocks Python urllib UA
         }
     )
     with urllib.request.urlopen(req, timeout=180) as r:
