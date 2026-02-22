@@ -155,7 +155,7 @@ Then:
 - `cron-jobs.json` — all cron job definitions
 - `manifest.json` — versions, checksums, restore steps
 
-**Encryption passphrase:** stored in macOS Keychain (`pax-backup` / `pax`). Mark has it in his password manager.
+**Encryption passphrase:** stored in macOS Keychain (`pax-backup` / `pax`). Mark has it in LastPass AND macOS native password manager.
 
 **To restore from scratch (Mac wipe / catastrophic failure):**
 ```bash
