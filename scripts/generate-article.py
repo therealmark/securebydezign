@@ -31,6 +31,7 @@ if _env_local.exists():
             os.environ.setdefault(k.strip(), v.strip())
 
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
+XAI_API_KEY       = os.environ.get("XAI_API_KEY", "")
 
 PST = timezone(timedelta(hours=-8))
 
@@ -56,30 +57,30 @@ def anthropic_complete(prompt: str, system: str, max_tokens: int = 8000) -> str:
     with urllib.request.urlopen(req, timeout=120) as r:
         return json.loads(r.read())["content"][0]["text"]
 
-def openai_image(prompt: str, out_path: Path):
-    """Generate a 1792x1024 hero image via DALL-E 3 and save as JPEG."""
+def aurora_image(prompt: str, out_path: Path):
+    """Generate a 16:9 hero image via xAI Aurora (grok-imagine-image) and save as JPEG."""
     payload = json.dumps({
-        "model": "dall-e-3",
+        "model": "grok-imagine-image",
         "prompt": prompt,
         "n": 1,
-        "size": "1792x1024",
-        "quality": "standard",
+        "aspect_ratio": "16:9",
+        "resolution": "2k",
         "response_format": "b64_json"
     }).encode()
     req = urllib.request.Request(
-        "https://api.openai.com/v1/images/generations",
+        "https://api.x.ai/v1/images/generations",
         data=payload,
         headers={
-            "Authorization": f"Bearer {OPENAI_KEY}",
+            "Authorization": f"Bearer {XAI_API_KEY}",
             "Content-Type": "application/json",
         }
     )
-    with urllib.request.urlopen(req, timeout=120) as r:
+    with urllib.request.urlopen(req, timeout=180) as r:
         data = json.loads(r.read())
     img_b64 = data["data"][0]["b64_json"]
     img_bytes = base64.b64decode(img_b64)
     out_path.write_bytes(img_bytes)
-    log(f"Image saved: {out_path} ({len(img_bytes)//1024} KB)")
+    log(f"Aurora image saved: {out_path} ({len(img_bytes)//1024} KB)")
 
 def run(cmd: list, **kwargs) -> str:
     result = subprocess.run(cmd, capture_output=True, text=True, **kwargs)
@@ -359,11 +360,11 @@ def main():
     slug  = topic["slug"]
     log(f"Topic: {topic['title']} ({slug})")
 
-    # 2. Generate hero image
+    # 2. Generate hero image via Aurora
     img_path = SITE_DIR / "images" / f"{slug}.jpg"
     if not img_path.exists():
-        log("Generating hero image via DALL-E 3...")
-        openai_image(topic["imagePrompt"], img_path)
+        log("Generating hero image via Aurora (grok-imagine-image)...")
+        aurora_image(topic["imagePrompt"], img_path)
     else:
         log(f"Hero image already exists: {img_path}")
 
