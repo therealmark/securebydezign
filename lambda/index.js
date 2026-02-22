@@ -44,7 +44,7 @@ export const handler = async (event) => {
       } else {
         rawBody = typeof event.body === 'string' ? event.body : (event.body && Buffer.from(event.body).toString('utf8')) || '';
       }
-      const signature = event.headers?.Stripe-Signature ?? event.headers?.['stripe-signature'] ?? '';
+      const signature = event.headers?.['Stripe-Signature'] ?? event.headers?.['stripe-signature'] ?? '';
       console.log('[Lambda] webhook', { bodyLen: rawBody?.length, hasSig: !!signature });
       const result = await handleWebhook(rawBody, signature);
       return ensureResponse(result);
