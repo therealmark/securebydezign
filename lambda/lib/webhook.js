@@ -56,12 +56,19 @@ export async function handleWebhook(rawBody, signature) {
     return { statusCode: 500, body: JSON.stringify({ error: 'Webhook not configured' }) };
   }
 
+  // Try live secret first, fall back to test secret.
+  // We don't know livemode until after signature verification, so we try both.
   let event;
-  try {
-    event = Stripe.webhooks.constructEvent(rawBody, signature, config.stripeWebhookSecret);
-  } catch (err) {
-    console.error('[webhook] Signature verification failed:', err.message);
-    return { statusCode: 400, body: JSON.stringify({ error: err.message }) };
+  const secrets = [config.stripeLiveWebhookSecret, config.stripeWebhookSecret].filter(Boolean);
+  for (const secret of secrets) {
+    try {
+      event = Stripe.webhooks.constructEvent(rawBody, signature, secret);
+      break;
+    } catch (_) {}
+  }
+  if (!event) {
+    console.error('[webhook] Signature verification failed against all known secrets');
+    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid webhook signature' }) };
   }
 
   if (event.type !== 'checkout.session.completed') {

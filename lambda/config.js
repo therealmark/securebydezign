@@ -46,9 +46,10 @@ function parsePdfBucketEnv() {
 const { bucket: pdfBucket, prefix: pdfPrefix } = parsePdfBucketEnv();
 
 export const config = {
-  stripeSecretKey:      process.env.STRIPE_SECRET_KEY      || '',  // test key
-  stripeLiveSecretKey:  process.env.STRIPE_LIVE_SECRET_KEY || '',  // live key
-  stripeWebhookSecret:  process.env.STRIPE_WEBHOOK_SECRET  || '',
+  stripeSecretKey:          process.env.STRIPE_SECRET_KEY          || '',  // test key
+  stripeLiveSecretKey:      process.env.STRIPE_LIVE_SECRET_KEY     || '',  // live key
+  stripeWebhookSecret:      process.env.STRIPE_WEBHOOK_SECRET      || '',  // test webhook secret
+  stripeLiveWebhookSecret:  process.env.STRIPE_LIVE_WEBHOOK_SECRET || '',  // live webhook secret
   pdfBucket,
   pdfPrefix,
   sesFromEmail:         process.env.SES_FROM_EMAIL         || 'hello@securebydezign.com',
