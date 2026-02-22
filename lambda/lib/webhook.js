@@ -63,30 +63,19 @@ async function getPdfFromS3(key) {
 /**
  * Handle checkout.session.completed: email customer with all bundle PDFs attached.
  */
-export async function handleWebhook(rawBody, signature, skipSignatureCheck = false) {
-  console.log('[webhook] handleWebhook called', { rawBodyLen: rawBody?.length, hasSecret: !!config.stripeWebhookSecret, skipSignatureCheck });
-  if (!config.stripeWebhookSecret && !skipSignatureCheck) {
+export async function handleWebhook(rawBody, signature) {
+  if (!config.stripeWebhookSecret) {
     console.error('STRIPE_WEBHOOK_SECRET not set');
     return { statusCode: 500, body: JSON.stringify({ error: 'Webhook not configured' }) };
   }
 
   let event;
-  if (skipSignatureCheck) {
-    try {
-      event = JSON.parse(rawBody);
-    } catch (e) {
-      console.error('Test mode: invalid JSON body', e.message);
-      return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) };
-    }
-  } else {
-    try {
-      event = Stripe.webhooks.constructEvent(rawBody, signature, config.stripeWebhookSecret);
-    } catch (err) {
-      console.error('Stripe webhook signature verification failed:', err.message);
-      return { statusCode: 400, body: JSON.stringify({ error: err.message }) };
-    }
+  try {
+    event = Stripe.webhooks.constructEvent(rawBody, signature, config.stripeWebhookSecret);
+  } catch (err) {
+    console.error('Stripe webhook signature verification failed:', err.message);
+    return { statusCode: 400, body: JSON.stringify({ error: err.message }) };
   }
-  console.log('[webhook] event type', event.type);
 
   if (event.type !== 'checkout.session.completed') {
     return { statusCode: 200, body: JSON.stringify({ received: true }) };
