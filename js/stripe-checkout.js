@@ -15,8 +15,13 @@
   };
 
   var LIVE = {
-    // Populated after running: STRIPE_KEY=sk_live_... node stripe-setup.mjs live
-    // e.g. 'supply-chain-ai': 'https://buy.stripe.com/...',
+    'supply-chain-ai':     'https://buy.stripe.com/cNi5kCevogac5YQdCVb7y01',
+    'llm-red-teaming':     'https://buy.stripe.com/4gM4gy5YSbTWfzqgP7b7y02',
+    'api-security':        'https://buy.stripe.com/9B65kCaf8e24af6fL3b7y03',
+    'data-poisoning':      'https://buy.stripe.com/fZu8wOevo0be9b256pb7y04',
+    'model-inversion':     'https://buy.stripe.com/fZufZg8704ru72U2Yhb7y05',
+    'prompt-injection':    'https://buy.stripe.com/4gM6oG2MG4rubja1Udb7y06',
+    'agentic-ai-security': 'https://buy.stripe.com/bJeeVc8702jm2MEgP7b7y07',
   };
 
   var useTest = window.location.hostname === 'localhost' ||

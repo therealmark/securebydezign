@@ -1,7 +1,6 @@
-/** Env-based config. Set these in Lambda environment (or .env for local). */
+/** Env-based config. Set these in Lambda environment. */
 
-// Maps Stripe price IDs → PDF filename.
-// Add live price IDs here once live products are created.
+// Maps Stripe price IDs → PDF filename (test + live)
 export const PRICE_PDF_MAP = {
   // ── TEST ──────────────────────────────────────────────────────────────────
   'price_1T3hMKBSD7Ij1cUSBOknTQ4t': 'supply-chain-ai.pdf',
@@ -13,10 +12,16 @@ export const PRICE_PDF_MAP = {
   'price_1T3hMQBSD7Ij1cUSrlDQSOGn': 'agentic-ai-security.pdf',
 
   // ── LIVE ──────────────────────────────────────────────────────────────────
-  // Populated after live products are created (see stripe-setup.mjs live run)
+  'price_1T3hSEB50TQ4M7eDLwmSbW3y': 'supply-chain-ai.pdf',
+  'price_1T3hSFB50TQ4M7eDuTnw7AIY': 'llm-red-teaming.pdf',
+  'price_1T3hSGB50TQ4M7eD5MC83ZtW': 'api-security.pdf',
+  'price_1T3hSHB50TQ4M7eDYsT86ymz': 'data-poisoning.pdf',
+  'price_1T3hSHB50TQ4M7eDrUTZxNHT': 'model-inversion.pdf',
+  'price_1T3hSIB50TQ4M7eDya2ws2sO': 'pinjection.pdf',
+  'price_1T3hSJB50TQ4M7eDqd926TEt': 'agentic-ai-security.pdf',
 };
 
-// PDF titles for email attachments (filename → display name)
+// PDF display names for email
 export const PDF_TITLES = {
   'supply-chain-ai.pdf':    'AI Supply Chain Security',
   'llm-red-teaming.pdf':    'AI Red Teaming: Enterprise LLM Security Playbook 2026',
@@ -41,11 +46,17 @@ function parsePdfBucketEnv() {
 const { bucket: pdfBucket, prefix: pdfPrefix } = parsePdfBucketEnv();
 
 export const config = {
-  stripeSecretKey:      process.env.STRIPE_SECRET_KEY || '',
-  stripeWebhookSecret:  process.env.STRIPE_WEBHOOK_SECRET || '',
+  stripeSecretKey:      process.env.STRIPE_SECRET_KEY      || '',  // test key
+  stripeLiveSecretKey:  process.env.STRIPE_LIVE_SECRET_KEY || '',  // live key
+  stripeWebhookSecret:  process.env.STRIPE_WEBHOOK_SECRET  || '',
   pdfBucket,
   pdfPrefix,
-  sesFromEmail:         process.env.SES_FROM_EMAIL || 'hello@securebydezign.com',
-  sesRegion:            process.env.AWS_REGION || 'us-east-1',
+  sesFromEmail:         process.env.SES_FROM_EMAIL         || 'hello@securebydezign.com',
+  sesRegion:            process.env.AWS_REGION             || 'us-east-1',
   presignExpirySeconds: Number(process.env.PRESIGN_EXPIRY_SECONDS) || 300,
 };
+
+/** Returns the correct Stripe secret key for a given session/event (test vs live). */
+export function stripeKeyFor(isLive) {
+  return isLive ? (config.stripeLiveSecretKey || config.stripeSecretKey) : config.stripeSecretKey;
+}

@@ -6,9 +6,7 @@
 import Stripe from 'stripe';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { config, PRICE_PDF_MAP, PDF_TITLES } from '../config.js';
-
-const stripe = new Stripe(config.stripeSecretKey);
+import { config, PRICE_PDF_MAP, PDF_TITLES, stripeKeyFor } from '../config.js';
 const s3 = new S3Client({});
 
 const CORS = {
@@ -26,6 +24,10 @@ export async function handleSession(sessionId) {
   if (!sessionId || !sessionId.startsWith('cs_')) {
     return json(400, { error: 'Invalid session_id' });
   }
+
+  // Pick key based on session mode (cs_test_ = test, cs_live_ = live)
+  const isLive = sessionId.startsWith('cs_live_');
+  const stripe = new Stripe(stripeKeyFor(isLive));
 
   let session;
   try {

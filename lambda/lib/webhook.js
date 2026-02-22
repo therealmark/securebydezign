@@ -5,9 +5,7 @@
 import Stripe from 'stripe';
 import { SESClient, SendRawEmailCommand } from '@aws-sdk/client-ses';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
-import { config, PRICE_PDF_MAP, PDF_TITLES } from '../config.js';
-
-const stripe = new Stripe(config.stripeSecretKey);
+import { config, PRICE_PDF_MAP, PDF_TITLES, stripeKeyFor } from '../config.js';
 const ses = new SESClient({ region: config.sesRegion });
 const s3 = new S3Client({});
 
@@ -69,6 +67,9 @@ export async function handleWebhook(rawBody, signature) {
   if (event.type !== 'checkout.session.completed') {
     return { statusCode: 200, body: JSON.stringify({ received: true }) };
   }
+
+  // Pick key based on event mode
+  const stripe = new Stripe(stripeKeyFor(event.livemode));
 
   const session = event.data.object;
   const customerEmail = session.customer_details?.email || session.customer_email;
