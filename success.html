@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="canonical" href="https://www.securebydezign.com/success.html">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <!-- API Gateway base URL for /api/session and /webhooks/stripe (no trailing slash) -->
+  <script>window.SECUREBYDEZIGN_API = 'https://YOUR_API_ID.execute-api.YOUR_REGION.amazonaws.com/prod';</script>
 </head>
 <body class="bg-zinc-950 text-zinc-200">
   <nav class="border-b border-zinc-800 bg-zinc-950 sticky top-0 z-50">
@@ -68,6 +70,7 @@
 
     <div id="session-message" class="text-center hidden mb-6">
       <p id="session-email" class="text-zinc-400"></p>
+      <p id="session-debug" class="text-xs text-zinc-500 mt-2 font-mono hidden"></p>
     </div>
     <div class="text-center">
       <p class="text-zinc-500 mb-4">Enjoy the guides! For questions or support, email <a href="mailto:hello@securebydezign.com" class="text-emerald-400 hover:underline">hello@securebydezign.com</a>.</p>
@@ -83,23 +86,46 @@
 
   <script>
     (function() {
-      // Set if your API is on a different origin (e.g. API Gateway URL). Leave unset if /api is same origin.
+      // Set to your API Gateway URL (no trailing slash). e.g. https://abc123.execute-api.us-east-1.amazonaws.com/prod
       var apiBase = window.SECUREBYDEZIGN_API || '';
 
       var urlParams = new URLSearchParams(window.location.search);
       var sessionId = urlParams.get('session_id');
-      if (!sessionId) return;
 
       var sessionMessage = document.getElementById('session-message');
       var sessionEmail = document.getElementById('session-email');
+      var sessionDebug = document.getElementById('session-debug');
 
-      fetch(apiBase + '/api/session?session_id=' + encodeURIComponent(sessionId), { credentials: 'include' })
+      function showDebug(msg) {
+        sessionDebug.textContent = msg;
+        sessionDebug.classList.remove('hidden');
+      }
+
+      if (!sessionId) {
+        sessionMessage.classList.remove('hidden');
+        sessionEmail.textContent = "No session ID in URL. After checkout, Stripe should redirect here with ?session_id=cs_xxx. Check your Payment Link's success URL in Stripe Dashboard.";
+        showDebug('Current URL: ' + window.location.href);
+        return;
+      }
+
+      if (!apiBase) {
+        sessionMessage.classList.remove('hidden');
+        sessionEmail.textContent = "API URL not set. Add: window.SECUREBYDEZIGN_API = 'https://z01mzuzo05.execute-api.us-east-1.amazonaws.com/prod'; before this script.";
+        showDebug('Session ID from URL: ' + sessionId);
+        return;
+      }
+
+      var apiUrl = apiBase + '/api/session?session_id=' + encodeURIComponent(sessionId);
+      showDebug('Calling: ' + apiUrl);
+
+      fetch(apiUrl, { credentials: 'include' })
         .then(function(r) {
-          if (!r.ok) throw new Error('Session invalid');
+          if (!r.ok) throw new Error(r.status + ' ' + r.statusText);
           return r.json();
         })
         .then(function(data) {
           sessionMessage.classList.remove('hidden');
+          sessionDebug.classList.add('hidden');
           if (data.email) {
             sessionEmail.textContent = "We've emailed your guides to " + data.email + ". Your downloads are starting.";
           } else {
@@ -117,9 +143,10 @@
             }, i * 800);
           });
         })
-        .catch(function() {
+        .catch(function(err) {
           sessionMessage.classList.remove('hidden');
-          sessionEmail.textContent = "Thanks for your purchase. If you don't see your download, check your email or contact hello@securebydezign.com.";
+          sessionEmail.textContent = "Could not verify purchase. Check the message below or try the download links above.";
+          showDebug('Session: ' + sessionId + ' — Error: ' + err.message);
         });
     })();
   </script>

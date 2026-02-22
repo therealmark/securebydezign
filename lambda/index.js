@@ -34,15 +34,15 @@ export const handler = async (event) => {
     };
   }
 
-  // POST /webhooks/stripe
-  if (path === '/webhooks/stripe' && method === 'POST') {
+  // POST /webhooks/stripe (path may include stage prefix, e.g. /prod/webhooks/stripe)
+  if ((path === '/webhooks/stripe' || path.endsWith('/webhooks/stripe')) && method === 'POST') {
     const rawBody = typeof event.body === 'string' ? event.body : (event.body && Buffer.from(event.body).toString('utf8')) || '';
     const signature = event.headers?.Stripe-Signature ?? event.headers?.['stripe-signature'] ?? '';
     return handleWebhook(rawBody, signature);
   }
 
-  // GET /api/session
-  if (path === '/api/session' && method === 'GET') {
+  // GET /api/session (path may include stage prefix, e.g. /prod/api/session)
+  if ((path === '/api/session' || path.endsWith('/api/session')) && method === 'GET') {
     const query = getQuery(event);
     const sessionId = query.session_id ?? query['session_id'];
     return handleSession(sessionId);
