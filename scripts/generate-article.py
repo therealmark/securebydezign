@@ -21,6 +21,17 @@ SITE_BASE_URL   = "https://www.securebydezign.com"
 ANTHROPIC_KEY   = os.environ.get("ANTHROPIC_API_KEY", "")
 OPENAI_KEY      = os.environ.get("OPENAI_API_KEY", "")
 
+# Load local secrets (never committed, never synced to S3)
+_env_local = WORKSPACE / ".env.local"
+if _env_local.exists():
+    for line in _env_local.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            os.environ.setdefault(k.strip(), v.strip())
+
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
+
 PST = timezone(timedelta(hours=-8))
 
 def log(msg): print(f"[generate-article] {msg}", flush=True)
