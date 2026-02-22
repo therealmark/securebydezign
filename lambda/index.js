@@ -20,42 +20,66 @@ function getQuery(event) {
 export const handler = async (event) => {
   const path = getPath(event);
   const method = getMethod(event);
+  console.log('[Lambda] invoked', { path, method, hasBody: !!event.body, isBase64: !!event.isBase64Encoded });
 
-  // CORS preflight
-  if (method === 'OPTIONS') {
+  try {
+    // CORS preflight
+    if (method === 'OPTIONS') {
+      return {
+        statusCode: 204,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Stripe-Signature',
+        },
+        body: '',
+      };
+    }
+
+    // POST /webhooks/stripe (path may include stage prefix, e.g. /prod/webhooks/stripe)
+    if ((path === '/webhooks/stripe' || path.endsWith('/webhooks/stripe')) && method === 'POST') {
+      let rawBody;
+      if (event.isBase64Encoded && event.body) {
+        rawBody = Buffer.from(event.body, 'base64').toString('utf8');
+      } else {
+        rawBody = typeof event.body === 'string' ? event.body : (event.body && Buffer.from(event.body).toString('utf8')) || '';
+      }
+      const signature = event.headers?.Stripe-Signature ?? event.headers?.['stripe-signature'] ?? '';
+      const isTestRun = event.headers?.['x-stripe-webhook-test'] === 'true' || event.headers?.['X-Stripe-Webhook-Test'] === 'true';
+      console.log('[Lambda] webhook', { bodyLen: rawBody?.length, hasSig: !!signature, isTestRun });
+      const result = await handleWebhook(rawBody, signature, isTestRun);
+      return ensureResponse(result);
+    }
+
+    // GET /api/session (path may include stage prefix, e.g. /prod/api/session)
+    if ((path === '/api/session' || path.endsWith('/api/session')) && method === 'GET') {
+      const query = getQuery(event);
+      const sessionId = query.session_id ?? query['session_id'];
+      const result = await handleSession(sessionId);
+      return ensureResponse(result);
+    }
+
     return {
-      statusCode: 204,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Stripe-Signature',
-      },
-      body: '',
+      statusCode: 404,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Not found' }),
+    };
+  } catch (err) {
+    console.error('[Lambda] unhandled error', err);
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Internal server error' }),
     };
   }
-
-  // POST /webhooks/stripe (path may include stage prefix, e.g. /prod/webhooks/stripe)
-  if ((path === '/webhooks/stripe' || path.endsWith('/webhooks/stripe')) && method === 'POST') {
-    let rawBody;
-    if (event.isBase64Encoded && event.body) {
-      rawBody = Buffer.from(event.body, 'base64').toString('utf8');
-    } else {
-      rawBody = typeof event.body === 'string' ? event.body : (event.body && Buffer.from(event.body).toString('utf8')) || '';
-    }
-    const signature = event.headers?.Stripe-Signature ?? event.headers?.['stripe-signature'] ?? '';
-    return handleWebhook(rawBody, signature);
-  }
-
-  // GET /api/session (path may include stage prefix, e.g. /prod/api/session)
-  if ((path === '/api/session' || path.endsWith('/api/session')) && method === 'GET') {
-    const query = getQuery(event);
-    const sessionId = query.session_id ?? query['session_id'];
-    return handleSession(sessionId);
-  }
-
-  return {
-    statusCode: 404,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ error: 'Not found' }),
-  };
 };
+
+function ensureResponse(result) {
+  if (!result || typeof result.statusCode !== 'number') {
+    return { statusCode: 500, body: JSON.stringify({ error: 'Invalid response' }) };
+  }
+  return {
+    ...result,
+    body: typeof result.body === 'string' ? result.body : JSON.stringify(result.body || {}),
+  };
+}

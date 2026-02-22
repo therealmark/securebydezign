@@ -1,0 +1,10 @@
+{
+  "httpMethod": "POST",
+  "path": "/webhooks/stripe",
+  "headers": {
+    "Stripe-Signature": "v0,fake",
+    "X-Stripe-Webhook-Test": "true"
+  },
+  "body": "{\"id\":\"evt_1T3YEHBSD7Ij1cUSgctQ1eTu\",\"object\":\"event\",\"api_version\":\"2026-01-28.clover\",\"created\":1771749689,\"data\":{\"object\":{\"id\":\"cs_test_a1yoQ3S8ekl3JANaKCNMu6JMiXc816XUm70N6tXTGjVIC7zP1el9ajBjRM\",\"object\":\"checkout.session\",\"customer_details\":{\"email\":\"markstevenfranklin@gmail.com\",\"name\":\"Mark Franklin\"},\"customer_email\":null,\"payment_status\":\"paid\",\"status\":\"complete\"}},\"livemode\":false,\"pending_webhooks\":1,\"type\":\"checkout.session.completed\"}",
+  "isBase64Encoded": false
+}
