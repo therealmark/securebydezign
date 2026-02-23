@@ -33,7 +33,7 @@
     <div class="article-meta text-emerald-400 text-sm mb-8">21 Feb 2026 • 14 min read</div>
     <h1>Securing LLM APIs – Complete Best Practices & Checklist 2026</h1>
 
-    <p class="lead">LLM APIs are the gateway to your AI models. Without proper security they become the easiest attack surface for <span class="ref-term">prompt injection<span class="ref-popover" role="tooltip"><strong class="ref-popover-title">OWASP LLM01:2025 — Prompt Injection</strong><span class="ref-popover-def">A vulnerability where user-supplied content manipulates an LLM's behavior in unintended ways, potentially bypassing safety controls, leaking confidential instructions, or triggering unauthorized actions.</span><a href="https://genai.owasp.org/llmrisk/llm012025-prompt-injection/" target="_blank" rel="noopener noreferrer" class="ref-popover-link">Read official definition ↗</a></span></span>, data exfiltration, and abuse. This guide gives you a production-ready checklist and patterns used by teams running LLM APIs at scale.</p>
+    <p class="lead">LLM APIs are the gateway to your AI models. Without proper security they become the easiest attack surface for prompt injection, data exfiltration, and abuse. This guide gives you a production-ready checklist and patterns used by teams running LLM APIs at scale.</p>
 
     <figure class="article-fig">
       <div class="diagram-wrap">
@@ -67,7 +67,7 @@
 
     <h2 class="with-icon"><i class="fas fa-circle-exclamation section-icon" aria-hidden="true"></i> Why LLM API Security Matters in 2026</h2>
     <p>Every major breach involving AI in the past year started with an exposed or poorly protected API endpoint. Attackers use stolen or leaked API keys to abuse models, extract training data, or pivot into internal systems. Regulations (e.g. GDPR, DORA) and customer contracts increasingly require documented controls over AI access and data. Securing your LLM API is non-negotiable for production.</p>
-    <p><strong>Attack vectors in practice:</strong> Exposed or weak API keys lead to credential stuffing and key leakage (e.g. in logs or client-side code). Without rate limits, attackers can exhaust quotas, drive up cost, or use your API for abuse at scale. Missing input validation allows prompt injection and <span class="ref-term">jailbreaks<span class="ref-popover" role="tooltip"><strong class="ref-popover-title">OWASP LLM01:2025 — Jailbreaking</strong><span class="ref-popover-def">Techniques that bypass an LLM's safety training and operational constraints, causing it to produce outputs that violate its usage policies — including harmful content, restricted information, or disallowed behaviors.</span><a href="https://genai.owasp.org/llmrisk/llm012025-prompt-injection/" target="_blank" rel="noopener noreferrer" class="ref-popover-link">Read official definition ↗</a></span></span>; missing output filtering leaks PII or internal instructions. Logging gaps make breaches and abuse hard to detect and forensically trace. Addressing each of these in the checklist below reduces both likelihood and impact of incidents.</p>
+    <p><strong>Attack vectors in practice:</strong> Exposed or weak API keys lead to credential stuffing and key leakage (e.g. in logs or client-side code). Without rate limits, attackers can exhaust quotas, drive up cost, or use your API for abuse at scale. Missing input validation allows prompt injection and jailbreaks; missing output filtering leaks PII or internal instructions. Logging gaps make breaches and abuse hard to detect and forensically trace. Addressing each of these in the checklist below reduces both likelihood and impact of incidents.</p>
     <div class="pdf-only">
       <h3>Example attack code (for defensive awareness)</h3>
       <p class="code-caption">Using a stolen or leaked API key to call the LLM API (e.g. from logs or client-side leak).</p>
@@ -145,6 +145,5 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
   </article>
   <script src="../js/stripe-checkout.js"></script>
   <script src="../js/owner-unlock.js"></script>
-  <script src="../js/article-refs.js"></script>
 </body>
 </html>
