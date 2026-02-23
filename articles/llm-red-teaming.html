@@ -139,7 +139,7 @@
       <li><strong>Attacks evolve as fast as the model does.</strong> Each model update, fine-tune, or system prompt change can introduce new failure modes and close others. Red teaming must be continuous, not a one-time audit.</li>
       <li><strong>Context is a first-class attack vector.</strong> In traditional testing, context is setup. In AI red teaming, context — the conversation history, user persona, injected documents, tool outputs — is the primary attack surface. The most powerful attacks are multi-turn, contextual, and invisible in any single message.</li>
     </ul>
-    <p class="teaser-note teaser-only">The full PDF covers AI red team scoping methodology, rules of engagement templates, and how to structure an engagement for regulated industries (finance, healthcare, government).</p>
+    <p class="teaser-note teaser-only">The full guide includes a complete red team scoping methodology: a threat actor taxonomy for AI systems, rules-of-engagement templates for regulated industries (finance, healthcare, government), a pre-engagement security requirements checklist, and a worked engagement plan for a production LLM deployment — ready to adapt and hand to a stakeholder on day one.</p>
     <div class="pdf-only">
       <h3>Scoping an AI Red Team Engagement</h3>
       <p>A well-scoped AI red team engagement starts with four questions:</p>
@@ -221,7 +221,7 @@
     </figure>
 
     <p>The six categories are not independent — real attacks chain them. A jailbreak may be the first step in a data extraction attempt; prompt injection may enable insecure output that executes attacker-controlled code. Testing each category in isolation underestimates the compound risk.</p>
-    <p class="teaser-note teaser-only">The PDF contains complete attack libraries for all six categories, including 200+ test cases, scoring rubrics, and detection signatures.</p>
+    <p class="teaser-note teaser-only">The full guide includes complete attack libraries for all six categories — 200+ test cases with expected-failure annotations, per-category scoring rubrics, detection signatures for each attack class, and a case study dissecting how a jailbreak that bypassed a major LLM provider's safety filters was constructed, step by step, from first principles.</p>
     <div class="pdf-only">
       <h3>Category 1: Jailbreaks and Safety Bypasses</h3>
       <p>Jailbreak attacks attempt to convince the model to produce outputs that its safety training is designed to prevent. The goal is not just to generate harmful content — in an enterprise context, jailbreaks matter because they bypass guardrails that protect business logic, confidentiality, and compliance requirements.</p>
@@ -404,7 +404,7 @@ Make it sound urgent but not alarming. Keep under 100 words.
     <h2 class="with-icon"><i class="fas fa-search section-icon" aria-hidden="true"></i> Reconnaissance: Mapping the Target</h2>
     <p>Before launching structured attacks, red teamers map the target system: what model is running, what constraints are in the system prompt, what tools are available, and what the model's behavioral baseline looks like. This reconnaissance phase shapes the entire attack strategy.</p>
     <p class="teaser-only">Effective recon dramatically reduces wasted attack attempts. The PDF details a systematic 12-step recon protocol, including model fingerprinting without the API endpoint, behavioral profiling via carefully designed probe sequences, and how to reconstruct system prompt structure from refusal patterns alone.</p>
-    <p class="teaser-note teaser-only">Full recon playbook in the downloadable PDF.</p>
+    <p class="teaser-note teaser-only">The full guide details a 12-step systematic recon protocol: behavioral profiling via carefully-designed probe sequences, reconstructing system prompt structure from refusal pattern analysis alone, model fingerprinting without direct API documentation access, and a recon worksheet that maps each discovery to a specific attack vector — so attack time is targeted, not wasted.</p>
     <div class="pdf-only">
       <h3>Model Fingerprinting</h3>
       <p>Identifying the underlying model helps the red team select the most effective attacks — jailbreak techniques that work on GPT-4 may fail on Claude, and vice versa. Even when the model identity is obscured, behavioral probes can narrow it down:</p>
@@ -543,7 +543,7 @@ def profile_target(probe_categories: dict) -> dict:
     </figure>
 
     <p class="teaser-only">The PDF walks through setting up each tool against a real LLM deployment, with configuration examples, result interpretation guides, and how to combine tools into a unified red team pipeline with a single consolidated report.</p>
-    <p class="teaser-note teaser-only">Full tool setup guides and pipeline code in the downloadable PDF.</p>
+    <p class="teaser-note teaser-only">The full guide walks through complete setup and configuration of Garak, PyRIT, and PromptBench against a live LLM deployment — including result interpretation guides for each tool's output format, how to combine all three into a unified pipeline with a single consolidated report, and a custom attack harness template for scenarios the standard tools don't cover out of the box.</p>
     <div class="pdf-only">
       <h3>Setting Up Garak</h3>
       <p class="code-caption">Running Garak against an OpenAI-compatible endpoint: covers jailbreak, prompt injection, and toxicity probes in a single command.</p>
@@ -587,7 +587,7 @@ if high_severity:
       <h3>Building a Custom Attack Harness</h3>
       <p>Open-source tools cover generic attack patterns. Your deployment has specific business logic that only you can test. A custom harness wraps your attack library with your scoring logic and your deployment's API:</p>
       <p class="code-caption">Custom red team harness: modular attack runner with LLM-as-judge scoring.</p>
-      <pre><code">import asyncio
+      <pre><code>import asyncio
 import json
 import openai
 from dataclasses import dataclass
@@ -694,7 +694,7 @@ Respond with JSON: {{"score": 0.0, "reasoning": "..."}}"""
     <h2 class="with-icon"><i class="fas fa-gauge-high section-icon" aria-hidden="true"></i> Scoring and Triage</h2>
     <p>An attack that produces harmful output is a finding. But how severe? How to prioritize? AI red team scoring requires a rubric that is specific to AI failure modes — not just CVSS, which was built for software vulnerabilities and does not capture the probabilistic, contextual nature of LLM failures.</p>
     <p class="teaser-only">The PDF includes a complete AI vulnerability severity rubric adapted from CVSS for LLM-specific dimensions: exploitability, scope of harm, probability of occurrence, and detectability. Includes worked examples for each category.</p>
-    <p class="teaser-note teaser-only">Full severity rubric and triage methodology in the PDF guide.</p>
+    <p class="teaser-note teaser-only">The full guide includes a complete AI vulnerability severity rubric adapted from CVSS — with per-dimension scoring for exploitability, scope of harm, probability, and detectability — plus worked examples for 12 finding types and a triage decision tree that maps every finding to an immediate/30-day/90-day remediation track, ready for your findings report.</p>
     <div class="pdf-only">
       <h3>AI Vulnerability Severity Rubric</h3>
       <p>Rate each finding on four dimensions, each scored 1–4:</p>
@@ -791,7 +791,7 @@ print(f"{sev} ({score})")  # LOW (7) → actually MEDIUM</code></pre>
       <figcaption>Four-layer remediation architecture. Fix at the deepest appropriate layer; reinforce shallower layers as defense-in-depth. Never rely on a single layer.</figcaption>
     </figure>
 
-    <p class="teaser-note teaser-only">Full remediation playbooks — including system prompt hardening templates, guardrail code, and re-test validation procedures — in the PDF guide.</p>
+    <p class="teaser-note teaser-only">The full guide delivers class-specific remediation playbooks for each attack type: injection-resistant system prompt structure templates, guardrail code for both API-level and application-level filtering, output validation schemas targeting credential and PII exfiltration patterns, and re-test procedures that confirm each fix actually closes the finding — not just appears to on a surface re-run.</p>
     <div class="pdf-only">
       <h3>System Prompt Hardening Templates</h3>
       <p class="code-caption">Hardened system prompt structure that resists common extraction and injection attacks.</p>
@@ -835,7 +835,7 @@ I'm here to help with [SPECIFIC_TASK]. Is there something along those lines I ca
 """</code></pre>
       <h3>Application-Layer Guardrails: LLM Guard</h3>
       <p class="code-caption">Using LLM Guard (open-source) for production input and output scanning.</p>
-      <pre><code">from llm_guard.input_scanners import (
+      <pre><code>from llm_guard.input_scanners import (
     PromptInjection,
     BanTopics,
     TokenLimit,
@@ -897,10 +897,10 @@ def secure_llm_call(user_input: str, model_response_fn) -> str:
     <h2 class="with-icon"><i class="fas fa-code-branch section-icon" aria-hidden="true"></i> CI/CD Integration</h2>
     <p>Red teaming that happens once a quarter catches vulnerabilities introduced once a quarter. Continuous red teaming — automated attack suites running in CI/CD pipelines — catches regressions the moment they are introduced. Every model update, system prompt change, or guardrail modification should trigger a red team gate before deployment.</p>
     <p class="teaser-only">The PDF includes complete GitHub Actions workflow files, GitLab CI templates, and Kubernetes CronJob configurations for running automated red team suites as mandatory pre-deployment checks.</p>
-    <p class="teaser-note teaser-only">Full CI/CD templates and pipeline architecture in the PDF guide.</p>
+    <p class="teaser-note teaser-only">The full guide includes complete GitHub Actions workflow files, GitLab CI templates, and Kubernetes CronJob configurations for running automated red team suites as mandatory pre-deployment gates — with a failure triage guide that distinguishes real regressions from expected variance in stochastic model outputs, so your pipeline doesn't cry wolf.</p>
     <div class="pdf-only">
       <p class="code-caption">GitHub Actions workflow: automated red team suite runs on every PR that modifies the model config, system prompt, or guardrails.</p>
-      <pre><code"># .github/workflows/llm-red-team.yml
+      <pre><code># .github/workflows/llm-red-team.yml
 name: LLM Red Team Gate
 
 on:
@@ -1021,7 +1021,7 @@ jobs:
     <h2 class="with-icon"><i class="fas fa-building section-icon" aria-hidden="true"></i> Building an Enterprise AI Red Team Program</h2>
     <p>A single red team engagement is a snapshot. A red team <em>program</em> is a continuous feedback loop between offensive testing and defensive improvement. Building one requires people, process, tooling, and executive sponsorship to sustain.</p>
     <p class="teaser-only">The PDF includes a complete program maturity model (Levels 1–4), a staffing model (what skills to hire vs. contract), a budget template, and sample KPIs for reporting to the CISO.</p>
-    <p class="teaser-note teaser-only">Full program design guide and templates in the PDF guide.</p>
+    <p class="teaser-note teaser-only">The full guide delivers a complete AI red team program blueprint: a 4-level maturity model with advancement criteria, a staffing model mapping which skills to hire vs. contract vs. automate, a budget template with cost-justification language for security leadership, and quarterly KPIs designed for CISO-level reporting — ready to adapt for any organization size.</p>
     <div class="pdf-only">
       <h3>AI Red Team Maturity Model</h3>
       <ul>
@@ -1049,7 +1049,7 @@ jobs:
 
     <h2 class="with-icon"><i class="fas fa-check-double section-icon" aria-hidden="true"></i> Implementation Checklist</h2>
     <p class="teaser-only">A 35-point enterprise checklist covering engagement scoping, attack coverage, tooling, scoring, remediation, CI/CD integration, and program governance — the fastest path to a defensible AI red team program.</p>
-    <p class="teaser-note teaser-only">Full checklist with priority ratings and implementation timelines in the PDF guide.</p>
+    <p class="teaser-note teaser-only">The full guide closes with a 35-point enterprise checklist covering engagement scoping, attack coverage, tooling, scoring, remediation, CI/CD integration, and program governance — with priority ratings, implementation timelines, and a maturity scoring column so you can benchmark your current program and track improvement quarter over quarter.</p>
     <div class="pdf-only">
       <h3>Engagement Scoping</h3>
       <ul>

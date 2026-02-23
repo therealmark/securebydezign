@@ -106,7 +106,7 @@ for i in range(50):
 
     <h2 class="with-icon"><i class="fas fa-newspaper section-icon" aria-hidden="true"></i> Real 2025 Incidents</h2>
     <p class="teaser-only">Real-world cases from image classifier backdoors to LLM fine-tuning and supply-chain poisoning show how quickly models can be compromised when training data is untrusted. The full guide breaks down each incident and what to learn from it.</p>
-    <p class="teaser-note teaser-only">Full incident details and lessons learned are in the downloadable PDF.</p>
+    <p class="teaser-note teaser-only">The full guide dissects each incident in technical depth — including a 2024 image classifier backdoor that survived three model audits before detection, an LLM fine-tuning attack that inserted persistent false beliefs into a customer service model through only 0.1% data contamination, and a PyPI supply-chain poisoning that compromised training pipelines at two Fortune 500s — with root cause analysis and control gap mapping for each.</p>
     <div class="pdf-only">
       <ul>
         <li><strong>Image classifier backdoor</strong> — Researchers demonstrated backdoors in vision models trained on poisoned public datasets; a specific trigger pattern (e.g. a small patch or texture) caused misclassification to a chosen class. The poisoned data was a tiny fraction of the training set; the model’s overall accuracy stayed high, so the backdoor went unnoticed until trigger-based tests were run. <em>Lesson:</em> Always run targeted backdoor tests on any model trained on external or unvetted data.</li>
@@ -139,7 +139,7 @@ def tamper_dataset(dataset_path):
 
     <h2 class="with-icon"><i class="fas fa-shield-halved section-icon" aria-hidden="true"></i> 5-Layer Protection Strategy That Actually Works</h2>
     <p class="teaser-only">A defense-in-depth approach that works: dataset provenance and hashing, automated anomaly detection, robust training techniques (e.g. differential privacy), continuous validation, and canary and honeypot data. The PDF walks through each layer with implementation guidance.</p>
-    <p class="teaser-note teaser-only">All five layers explained in detail in the full PDF guide.</p>
+    <p class="teaser-note teaser-only">The full guide delivers production implementations for all five layers: SHA-256 provenance hashing with SLSA provenance attestation, a statistical anomaly detection pipeline (IQR + isolation forest) for training data integrity checks, DP-SGD with calibrated epsilon budgets for common architectures, a canary data injection framework with automated exfiltration detection, and differential-privacy validation procedures — all with configuration templates and worked examples.</p>
     <figure class="article-fig pdf-only">
       <div class="diagram-wrap">
         <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -171,7 +171,7 @@ def tamper_dataset(dataset_path):
 
     <h2 class="with-icon"><i class="fas fa-lightbulb section-icon" aria-hidden="true"></i> Practical Takeaways</h2>
     <p class="teaser-only">How to apply the five layers in proportion to risk, combine technical controls with process, and when to tighten controls for high-stakes or safety-critical models.</p>
-    <p class="teaser-note teaser-only">Complete takeaways and checklists in the PDF guide.</p>
+    <p class="teaser-note teaser-only">The full guide closes with a 20-point pre-training security checklist covering dataset provenance, pipeline integrity, and training environment isolation — plus a risk-tiering framework that maps control investment to model impact classification, so you can prioritize defenses proportional to what's actually at stake rather than applying the same controls to every model regardless of sensitivity.</p>
     <div class="callout pdf-only">
       <strong>Key point:</strong> Assume that any data you did not fully curate and control can be poisoned. Apply the five layers in proportion to risk.
     </div>

@@ -137,7 +137,7 @@
     <h2 class="with-icon"><i class="fas fa-exclamation-triangle section-icon" aria-hidden="true"></i> The Problem Isn't AI — It's Ungoverned AI</h2>
     <p>The boardroom wants AI adoption. Business units are already using it — with or without security's blessing. A recent wave of enterprise surveys consistently finds the same pattern: a significant fraction of employees are using AI tools that IT has never approved, processing data that security has never classified, in workflows that compliance has never reviewed. This is shadow AI, and it is the enterprise's most pressing ungoverned risk category today.</p>
     <p>The security problem is not that AI is inherently dangerous. It is that the adoption outpaces governance, the threat models are missing, and the controls that worked for traditional software are poorly mapped to AI's actual failure modes. Firewalls don't stop prompt injection. DLP doesn't catch model inversion. Endpoint agents don't see what happens inside a third-party API call.</p>
-    <p class="teaser-note teaser-only">The full PDF covers each attack vector with technical depth, enterprise-specific mitigations, and implementation code.</p>
+    <p class="teaser-note teaser-only">The full guide walks through each enterprise attack vector — shadow AI data exfiltration, third-party AI API supply chain compromise, LLM-integrated SaaS blast radius analysis, and AI-generated code vulnerability patterns — with MITRE ATLAS technique mappings, enterprise-specific mitigations, and detection rules formatted for Splunk and Elastic SIEM ingestion.</p>
     <div class="pdf-only">
       <h3>What "Shadow AI" Actually Looks Like in Enterprise</h3>
       <p>Shadow AI is not just employees using ChatGPT. It manifests across three layers that security teams systematically miss:</p>
@@ -218,7 +218,7 @@
     </figure>
 
     <p>The trust boundary diagram above describes what security architects should design. What most enterprises have deployed looks nothing like it: agents with unrestricted internet access, credentials stored in plaintext environment variables, no validation of tool responses before passing them back to the LLM, and no audit log of what actions the agent actually took.</p>
-    <p class="teaser-note teaser-only">The full PDF includes architectural implementation guidance, policy templates, and enforcement patterns for each trust boundary layer.</p>
+    <p class="teaser-note teaser-only">The full guide delivers a complete zero-trust AI architecture blueprint: trust tier definitions for agents and model classes, OPA policy-as-code enforcement patterns, per-boundary logging specifications with SIEM integration, and a 12-question security architecture review checklist for evaluating any new AI system before it touches production data.</p>
     <div class="pdf-only">
       <h3>The Five Properties That Make Agentic Systems Uniquely Risky</h3>
       <ol>
@@ -310,7 +310,7 @@
     </figure>
 
     <p>The NHI problem is structural. Traditional PAM (Privileged Access Management) tools were built for human accounts — they assume a named owner, a provisioning request, and an offboarding process. AI agent credentials don't arrive through ServiceNow. They get created in a Jupyter notebook at 11pm by a data scientist who needed the pipeline to work.</p>
-    <p class="teaser-note teaser-only">NHI governance frameworks, tooling recommendations, and policy templates are in the full PDF.</p>
+    <p class="teaser-note teaser-only">The full guide includes a complete NHI governance framework: a credential classification taxonomy for AI service accounts, an automated discovery playbook for surfacing undocumented AI credentials across AWS, Azure, and GCP environments, rotation policy templates for each credential class, and a CISO-ready risk dashboard specification for NHI visibility — the fastest-growing and least-managed attack surface in the modern enterprise.</p>
     <div class="pdf-only">
       <h3>NHI Governance Framework for AI Deployments</h3>
       <p>An effective NHI program for AI environments requires five controls:</p>
@@ -447,7 +447,7 @@
     </figure>
 
     <p>The matrix is useful as a prioritization tool, but it flattens nuance that matters operationally. LLM01 (Prompt Injection) and LLM08 (Excessive Agency) are both critical — but they require fundamentally different mitigations. Prompt Injection is primarily an input validation and sandboxing problem. Excessive Agency is primarily an authorization and architecture problem.</p>
-    <p class="teaser-note teaser-only">Detailed enterprise mitigation playbook for each of the OWASP LLM Top 10 items is in the full PDF.</p>
+    <p class="teaser-note teaser-only">The full guide maps each OWASP LLM Top 10 item to its enterprise blast radius, delivers a detection rule for each (Splunk SPL and Elastic EQL included), and provides a mitigation playbook with acceptance criteria for each control — formatted for a standard security controls assessment and audit evidence package.</p>
     <div class="pdf-only">
       <h3>Enterprise Mitigation Mapping: Critical Tier</h3>
       <p><strong>LLM01 — Prompt Injection:</strong> Separate system instructions from user data at the architecture layer, not just in the prompt. Use structured input schemas that reject free-text in positions that influence agent behavior. Deploy a secondary LLM or rule-based filter as an "injection detection" layer on all inputs before they reach the primary model. For agentic systems, treat every retrieved document, tool response, and external API result as potentially adversarial — never embed them directly in the system prompt context.</p>
@@ -557,7 +557,7 @@ if findings:
     </figure>
 
     <p>The most common AI RMF implementation failure is skipping GOVERN and jumping straight to MEASURE. Security teams want to run red team exercises and produce metrics. But if there is no AI use policy, no risk tolerance definition, and no accountable owner for AI risk at the executive level, the metrics go nowhere. GOVERN is the prerequisite.</p>
-    <p class="teaser-note teaser-only">Full AI RMF implementation guide with control templates and RACI models for each function is in the PDF.</p>
+    <p class="teaser-note teaser-only">The full guide delivers a complete AI RMF implementation kit: a RACI model template for all four functions, 35 control implementation templates with audit evidence requirements, a self-assessment scoring worksheet, and an executive-ready dashboard for communicating AI risk posture to the board — all formatted for immediate use in a real program.</p>
     <div class="pdf-only">
       <h3>Practical GOVERN Implementation for Enterprises</h3>
       <p>The GOVERN function requires three foundational artifacts before anything else:</p>
@@ -651,7 +651,7 @@ if findings:
     </figure>
 
     <p>The gates are the critical element. Most enterprises have SDLC documentation with security phases but no actual enforcement. An AI system can skip the threat model because the sprint is ending. The SAIDLC gates must be enforced in your CI/CD pipeline — automated checks that block deployment when criteria are not met, not advisory warnings that developers click through.</p>
-    <p class="teaser-note teaser-only">SAIDLC implementation guide with CI/CD integration scripts, gate configuration templates, and red team methodology for AI systems is in the full PDF.</p>
+    <p class="teaser-note teaser-only">The full guide delivers a complete SAIDLC integration kit: GitHub Actions workflow templates for AI security gates (model card validation, SBOM generation, adversarial robustness testing), threat modeling templates specific to AI systems, and a 15-scenario AI red team methodology — designed to integrate into your existing SDLC in a single sprint with no new tooling required.</p>
     <div class="pdf-only">
       <h3>AI-Specific SAST: What to Add to Your Pipeline</h3>
       <p>Standard SAST tools (Semgrep, SonarQube, Checkmarx) have limited coverage for AI-specific vulnerabilities. Augment them with these checks:</p>

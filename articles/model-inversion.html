@@ -290,7 +290,7 @@ class BlackBoxModelInversion:
 <p>The real-world impact extends beyond academic proof-of-concepts. In healthcare, model inversion has reconstructed patient facial images from diagnostic models, violating HIPAA privacy guarantees. Financial models trained on transaction data can leak customer spending patterns. Perhaps most concerning, facial recognition systems deployed at scale represent high-value targets where reconstructing enrolled identities enables downstream attacks from identity theft to surveillance evasion.</p>
 
 <div class="teaser-note teaser-only">
-  <i class="fas fa-file-pdf"></i> The full guide includes detailed case studies of production attacks, attack complexity analysis by model architecture, and a decision tree for assessing your exposure based on deployment model and data sensitivity classification.
+  <i class="fas fa-file-pdf"></i> The full guide dissects three real model inversion attacks in technical depth: a white-box face reconstruction attack against a commercial emotion recognition API achieving 91% similarity with 4,000 queries; a black-box federated learning inversion that recovered healthcare training records despite privacy-preserving aggregation; and a gradient leakage attack against a fine-tuned LLM that reconstructed verbatim PII from model outputs. Each case includes attacker methodology, query count, architecture vulnerability analysis, and a detection window timeline — plus a decision tree for assessing your own exposure by deployment model and data sensitivity.
 </div>
 
 <div class="pdf-only">
@@ -423,7 +423,7 @@ class GradientInversionAttack:
 <p>Differential privacy (DP) remains the gold standard for provable privacy guarantees. By adding calibrated noise during training—either to gradients (DP-SGD) or to the objective function—you bound the influence any individual training sample can have on model outputs. This directly limits what inversion attacks can reconstruct. However, DP introduces a privacy-utility tradeoff: stronger privacy (lower ε) degrades model accuracy. Production deployments typically target ε values between 1 and 10, accepting modest accuracy drops for meaningful privacy.</p>
 
 <div class="teaser-note teaser-only">
-  <i class="fas fa-file-pdf"></i> The complete guide provides production-ready implementations of DP-SGD, confidence score rounding, query rate limiting, and architectural defenses including the MixUp training protocol and knowledge distillation for privacy.
+  <i class="fas fa-file-pdf"></i> The full guide delivers production implementations for every defense layer: DP-SGD with calibrated epsilon/delta budgets for transformer, CNN, and MLP architectures; confidence score rounding with bucketing thresholds and empirical privacy gain measurements; adaptive query rate limiting with anomaly detection for systematic probing; and architectural defenses including MixUp training and knowledge distillation — each with implementation code, a before/after information leakage measurement methodology, and configuration templates for common ML frameworks (PyTorch, TensorFlow, JAX).
 </div>
 
 <div class="pdf-only">
