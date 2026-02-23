@@ -39,6 +39,15 @@ python3 /Users/pax/.openclaw/workspace/scripts/check-credits.py
 - Falls back: Anthropic → OpenAI → xAI. Aborts if all exhausted.
 - xAI is routed through the **Lambda proxy** (`/prod/proxy/xai`) — bypasses Cloudflare ASN block on residential IP
 
+## Social Media — @SecureByDeZign (X/Twitter)
+
+- **Account:** @SecureByDeZign (brand account, not tied to Mark)
+- **Posting script:** `scripts/social-post-article.py <slug>` — generates 3-tweet thread via Claude Haiku, posts via X API
+- **Standalone post script:** `scripts/post-twitter.py "text"` — direct single tweet or thread
+- **Keys:** All 5 X API credentials stored in `.env.local` (X_API_KEY, X_API_SECRET, X_BEARER_TOKEN, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET)
+- **Pipeline:** social-post-article.py runs as Step 5 of 4AM cron after publish
+- **TODO:** LinkedIn company page setup pending (Mark needs to create page + get API access)
+
 ## Known Issues / Watch-outs
 
 - **OpenAI embeddings quota exhausted** — memory_search is unavailable. Need to top up or switch embedding provider. (Noticed 2026-02-21)
@@ -86,6 +95,28 @@ python3 /Users/pax/.openclaw/workspace/scripts/check-credits.py
 - **Key lesson:** Always use stack-based section tracking (not depth counters) for correct nested-div parsing. First-occurrence-globally fails when hidden index boxes list all terms before visible paragraphs.
 - **Strip approach:** Remove `<span class="ref-popover[^"]*">.*?</span>` first, then bare `<span class="ref-term">` openers — handles any content between them including inline tags
 
+## Definitions Search Feature (live as of 2026-02-22)
+
+- **URL:** `https://www.securebydezign.com/definitions.html`
+- **145 definitions** (81 original seed + 39 from article audit + 25 foundational concepts tier)
+- **Lambda endpoint:** `GET /api/search-defs?q=...` — OpenAI `text-embedding-3-small` cosine similarity search
+- **Floating widget:** `js/definitions-widget.js` — FAB button on all articles → search overlay → detail modal
+- **Data files:** `data/definitions-meta.json` (metadata), `data/definitions-embeddings.json` (1536d vectors), `data/definitions-seed.json`
+- **Lambda env:** `OPENAI_API_KEY` added (2026-02-23)
+- **Access model:** Fully public
+- **Weekly refresh cron:** NOT YET SET UP — needs cron job to pull fresh OWASP/MITRE/NIST data + re-embed new entries
+- **Git commit:** `d82f0ed` (latest — foundational concepts tier)
+
+## WAF (Lambda-native, OWASP CRS-inspired)
+
+- **Implementation:** `lambda/lib/waf.js` + integrated in `lambda/index.js`
+- **Git commit:** `0e5faad`
+- **Rules:** SQLi (942xxx), XSS (941xxx), Path Traversal (930xxx), Command Injection (932xxx), SSRF (934xxx), Prompt Injection (960xxx), Scanner fingerprints (913xxx), Oversized payload (920xxx)
+- **Logs:** `/aws/lambda/emailer` — structured JSON with `"waf":true` flag
+- **IAM:** Added `AWSLambdaBasicExecutionRole` to Lambda role (CloudWatch Logs access)
+- **Stripe exemption:** Stripe webhooks bypass WAF (signature verification requires unmodified payload)
+- **Nightly report cron:** `bd81753e-2bcb-4574-8612-1aa1b6231ef5` — runs 9PM PST daily, queries CloudWatch Logs Insights, sends Telegram report to 6677080412
+
 ## Active Projects
 
 ### Daily 4AM PST Cron — securebydezign.com Content Pipeline
@@ -103,6 +134,26 @@ Every morning at 4AM PST, run the full content publishing pipeline:
   - Practical guidance
 - Convert HTML → PDF (this is the paid deliverable — **$27**)
 - Add article link to `index.html` and update `sitemap.xml`
+
+**⛔ VALIDATE HTML BEFORE STEP 2 — NO EXCEPTIONS:**
+Run the validator on the generated article. Zero unclosed tags, zero unexpected close tags. If it fails, fix it before proceeding.
+```bash
+python3 -c "
+from html.parser import HTMLParser
+class C(HTMLParser):
+    VOID={'area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr'}
+    def __init__(self): super().__init__(); self.stack=[]; self.errors=[]
+    def handle_starttag(self,t,a):
+        if t not in self.VOID: self.stack.append((t,self.getpos()[0]))
+    def handle_endtag(self,t):
+        if t in self.VOID: return
+        if self.stack and self.stack[-1][0]==t: self.stack.pop()
+        else: self.errors.append(f'Line {self.getpos()[0]}: unexpected </{t}>')
+import sys; html=open(sys.argv[1]).read(); c=C(); c.feed(html)
+print('Errors:',c.errors[:5] or 'NONE'); print('Unclosed:',[(t,l) for t,l in c.stack[-5:]] or 'NONE')
+" articles/SLUG.html
+```
+**Both "Errors: NONE" and "Unclosed: NONE" required before continuing.**
 
 **Step 2 — Create Stripe Products (REQUIRED for each new article)**
 
@@ -124,7 +175,7 @@ Then:
 4. Rebuild Lambda zip and redeploy: `zip -r ../lambda-deploy.zip . && aws lambda update-function-code --function-name emailer --zip-file fileb://../lambda-deploy.zip --region us-east-1`
 5. Push all changes to GitHub + sync to S3
 
-**Pre-publish HTML validation (REQUIRED):** Before pushing any article, run:
+**Pre-publish HTML validation (REQUIRED — NO EXCEPTIONS):** Every article must pass the validator before any git commit or S3 sync. Zero unclosed tags, zero unexpected close tags. This is non-negotiable — broken HTML silently breaks Safari/iOS rendering. Before pushing any article, run:
 ```bash
 python3 -c "
 from html.parser import HTMLParser
@@ -171,6 +222,7 @@ Catches malformed SVG `<text>` tags and other unclosed elements that silently br
 | prompt-injection | pinjection.pdf | price_1T3hMPBSD7Ij1cUS4xAZnY3u | price_1T3hSIB50TQ4M7eDya2ws2sO |
 | agentic-ai-security | agentic-ai-security.pdf | price_1T3hMQBSD7Ij1cUSrlDQSOGn | price_1T3hSJB50TQ4M7eDqd926TEt |
 | enterprise-agentic-security | enterprise-agentic-security.pdf | price_1T3jN4BSD7Ij1cUSs4Bkug3E | price_1T3jN8B50TQ4M7eD6YQppz0e |
+| rag-security | rag-security.pdf | (TBD) | (TBD) |
 
 ## Tiered Memory Storage
 
@@ -243,3 +295,4 @@ After any significant session, write a summary to `memory/YYYY-MM-DD.md` — the
 - Always HTML-escape code examples in articles before publishing — the LLM red teaming article had a live `<script>` tag that redirected visitors to attacker.com
 - `stripe-checkout.js` drives all Buy button URLs — per-article, per-mode (test/live)
 - Lambda key selection is automatic: `cs_test_` → test key, `cs_live_` → live key
+- **HTML VALIDATION IS MANDATORY** — run the validator on every article before committing. rag-security.html shipped with a truncated unclosed `<p>` tag. Never again. No exceptions, no shortcuts. Validate first, commit second.
