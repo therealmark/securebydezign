@@ -29,34 +29,65 @@
     .browse-card { cursor: pointer; transition: all 0.15s; }
     .browse-card:hover { border-color: rgba(16,185,129,0.4); }
     .detail-panel { transition: all 0.2s; }
+    /* Skip nav link */
+    .skip-link {
+      position: absolute; top: -100%; left: 1rem; z-index: 9999;
+      background: #10b981; color: #000; padding: .5rem 1.25rem;
+      border-radius: 0 0 .5rem .5rem; font-weight: 700; font-size: .875rem;
+      text-decoration: none; transition: top .15s ease;
+    }
+    .skip-link:focus { top: 0; outline: 2px solid #000; outline-offset: 2px; }
+    /* Visible focus rings */
+    :focus-visible { outline: 2px solid #10b981; outline-offset: 3px; border-radius: 3px; }
+    :focus:not(:focus-visible) { outline: none; }
+    /* Language switcher */
+    .lang-switcher {
+      appearance: none; -webkit-appearance: none;
+      background: #18181b url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2371717a'/%3E%3C/svg%3E") no-repeat right .5rem center;
+      background-size: 8px; border: 1px solid #3f3f46; border-radius: .5rem;
+      color: #a1a1aa; cursor: pointer; font-size: .75rem; font-weight: 600;
+      padding: .25rem 1.75rem .25rem .5rem; transition: border-color .15s, color .15s;
+    }
+    .lang-switcher:hover, .lang-switcher:focus { border-color: #10b981; color: #10b981; }
   </style>
 </head>
 <body class="bg-zinc-950 text-zinc-200 min-h-screen">
 
+  <!-- Skip navigation -->
+  <a href="#main-content" class="skip-link" data-i18n="skip_to_main">Skip to main content</a>
+
   <!-- Nav -->
-  <nav class="border-b border-zinc-800 bg-zinc-950 sticky top-0 z-50">
+  <nav role="navigation" aria-label="Main navigation" data-i18n-aria-label="main_navigation"
+       class="border-b border-zinc-800 bg-zinc-950 sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
-      <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition">
-        <i class="fas fa-shield-alt text-3xl text-emerald-500"></i>
-        <span class="text-2xl font-bold tracking-tight">Secure by DeZign</span>
+      <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition" aria-label="Secure by DeZign — Home">
+        <i class="fas fa-shield-alt text-3xl text-emerald-500" aria-hidden="true"></i>
+        <span class="text-2xl font-bold tracking-tight" data-i18n="site_name">Secure by DeZign</span>
       </a>
-      <div class="space-x-8 text-sm font-medium">
-        <a href="index.html" class="hover:text-emerald-400">Home</a>
-        <a href="definitions.html" class="text-emerald-400">Definitions</a>
+      <div class="flex items-center gap-6 text-sm font-medium">
+        <a href="index.html" class="hover:text-emerald-400" data-i18n="nav_home">Home</a>
+        <a href="definitions.html" class="text-emerald-400" aria-current="page" data-i18n="nav_definitions">Definitions</a>
+        <select id="lang-switcher" class="lang-switcher"
+                aria-label="Select language" data-i18n-aria-label="language_switcher">
+          <option value="en">🇺🇸 EN</option>
+          <option value="es">🇪🇸 ES</option>
+        </select>
       </div>
     </div>
   </nav>
 
   <!-- Hero -->
-  <header class="max-w-4xl mx-auto px-6 pt-16 pb-10 text-center">
+  <header role="banner" class="max-w-4xl mx-auto px-6 pt-16 pb-10 text-center">
     <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/25 rounded-full px-4 py-1.5 text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-6">
-      <i class="fas fa-database text-xs"></i> Attack Definition Database
+      <i class="fas fa-database text-xs" aria-hidden="true"></i> <span data-i18n="def_database_label">Attack Definition Database</span>
     </div>
-    <h1 class="text-5xl font-bold tracking-tight mb-4">AI &amp; ML Security Glossary</h1>
+    <h1 class="text-5xl font-bold tracking-tight mb-4" data-i18n="def_page_title">AI &amp; ML Security Glossary</h1>
     <p class="text-zinc-400 text-lg max-w-2xl mx-auto">
-      Semantic search across <span id="def-count" class="text-emerald-400 font-semibold">—</span> attack techniques, OWASP risks, MITRE ATLAS TTPs, privacy attacks, and defensive frameworks. Ask in plain English.
+      Semantic search across <span id="def-count" class="text-emerald-400 font-semibold" aria-live="polite">—</span> attack techniques, OWASP risks, MITRE ATLAS TTPs, privacy attacks, and defensive frameworks. Ask in plain English.
     </p>
   </header>
+
+  <main id="main-content" role="main">
 
   <!-- Search -->
   <div class="max-w-3xl mx-auto px-6 pb-10">
@@ -72,9 +103,14 @@
         class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl pl-14 pr-16 py-5 text-base text-zinc-100 placeholder-zinc-500 outline-none search-glow transition"
         autocomplete="off"
         spellcheck="false"
+        aria-label="Search AI/ML security definitions"
+        data-i18n-aria-label="search_definitions"
+        role="searchbox"
+        aria-controls="results-grid browse-grid"
       >
-      <button id="clear-btn" class="absolute inset-y-0 right-0 pr-5 hidden items-center text-zinc-500 hover:text-zinc-300">
-        <i class="fas fa-times"></i>
+      <button id="clear-btn" class="absolute inset-y-0 right-0 pr-5 hidden items-center text-zinc-500 hover:text-zinc-300"
+              aria-label="Clear search" data-i18n-aria-label="close">
+        <i class="fas fa-times" aria-hidden="true"></i>
       </button>
     </div>
 
@@ -96,11 +132,12 @@
     <div id="results-section" class="hidden">
       <div class="flex items-center justify-between mb-6">
         <p class="text-sm text-zinc-500" id="results-summary"></p>
-        <button id="back-btn" class="text-sm text-zinc-400 hover:text-emerald-400 flex items-center gap-2 transition">
-          <i class="fas fa-arrow-left text-xs"></i> Browse all
+        <button id="back-btn" class="text-sm text-zinc-400 hover:text-emerald-400 flex items-center gap-2 transition"
+              aria-label="Browse all definitions" data-i18n-aria-label="def_browse_all">
+          <i class="fas fa-arrow-left text-xs" aria-hidden="true"></i> <span data-i18n="def_browse_all">Browse all</span>
         </button>
       </div>
-      <div id="results-grid" class="grid gap-4"></div>
+      <div id="results-grid" class="grid gap-4" aria-live="polite" aria-atomic="false"></div>
     </div>
 
     <!-- Browse all (visible by default) -->
@@ -112,19 +149,22 @@
     </div>
 
     <!-- Detail panel (modal overlay) -->
-    <div id="detail-overlay" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div id="detail-overlay" class="fixed inset-0 bg-zinc-950/90 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"
+         role="dialog" aria-modal="true" aria-labelledby="detail-title">
       <div id="detail-panel" class="bg-zinc-900 border border-zinc-700 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-8 relative detail-panel">
-        <button id="detail-close" class="absolute top-5 right-5 text-zinc-500 hover:text-zinc-200 transition text-xl">
-          <i class="fas fa-times"></i>
+        <button id="detail-close" class="absolute top-5 right-5 text-zinc-500 hover:text-zinc-200 transition text-xl"
+                aria-label="Close definition detail" data-i18n-aria-label="close_detail">
+          <i class="fas fa-times" aria-hidden="true"></i>
         </button>
         <div id="detail-content"></div>
       </div>
     </div>
   </div>
+  </main>
 
   <!-- Footer -->
-  <footer class="border-t border-zinc-800 py-8 text-center text-zinc-500 text-sm">
-    <p>Updated weekly from OWASP, MITRE ATLAS, NIST, and security research. <a href="index.html" class="text-emerald-400 hover:underline">← Back to articles</a></p>
+  <footer role="contentinfo" class="border-t border-zinc-800 py-8 text-center text-zinc-500 text-sm">
+    <p>Updated weekly from OWASP, MITRE ATLAS, NIST, and security research. <a href="index.html" class="text-emerald-400 hover:underline"><i class="fas fa-arrow-left text-xs" aria-hidden="true"></i> <span data-i18n="nav_back_home">Back to Home</span></a></p>
   </footer>
 
   <script>
@@ -209,7 +249,7 @@
       return `
         <div class="mb-5">
           <span class="category-badge ${cs.bg} ${cs.text} border ${cs.border} mb-3 inline-flex">${escHtml(d.category)}</span>
-          <h2 class="text-2xl font-bold text-zinc-100 leading-tight">${escHtml(d.term)}</h2>
+          <h2 id="detail-title" class="text-2xl font-bold text-zinc-100 leading-tight">${escHtml(d.term)}</h2>
           <p class="text-emerald-400 mt-2 text-sm font-medium">${escHtml(d.source)}</p>
         </div>
         <div class="bg-zinc-800/60 border border-zinc-700 rounded-xl p-5 mb-5">
@@ -282,14 +322,23 @@
       });
     }
 
+    let _lastFocused = null;
+
     function openDetail(id) {
       const d = allDefs.find(x => x.id === id);
       if (!d) return;
+      _lastFocused = document.activeElement;
       document.getElementById('detail-content').innerHTML = defDetail(d);
       const overlay = document.getElementById('detail-overlay');
+      overlay.setAttribute('aria-label', d.term);
       overlay.classList.remove('hidden');
       overlay.classList.add('flex');
       document.body.style.overflow = 'hidden';
+      // Move focus to close button
+      requestAnimationFrame(() => {
+        const closeBtn = document.getElementById('detail-close');
+        if (closeBtn) closeBtn.focus();
+      });
     }
 
     function closeDetail() {
@@ -297,6 +346,8 @@
       overlay.classList.add('hidden');
       overlay.classList.remove('flex');
       document.body.style.overflow = '';
+      // Return focus to previously focused element
+      if (_lastFocused) { _lastFocused.focus(); _lastFocused = null; }
     }
 
     document.getElementById('detail-close').addEventListener('click', closeDetail);
@@ -394,5 +445,6 @@
 
     loadMeta();
   </script>
+  <script src="/js/i18n.js" defer></script>
 </body>
 </html>

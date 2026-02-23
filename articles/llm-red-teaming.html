@@ -23,16 +23,32 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"AI Red Teaming: The Enterprise LLM Security Testing Playbook 2026","description":"Enterprise AI red teaming methodology 2026: structured adversarial testing for LLMs, jailbreaks, prompt injection, data extraction, and CI/CD integration. Full playbook with code.","image":"https://www.securebydezign.com/images/prompt-injection.jpg","datePublished":"2026-02-22","dateModified":"2026-02-22","author":{"@type":"Organization","name":"Secure by DeZign"},"publisher":{"@type":"Organization","name":"Secure by DeZign","logo":{"@type":"ImageObject","url":"https://www.securebydezign.com/logo.svg"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.securebydezign.com/articles/llm-red-teaming.html"}}</script>
 </head>
 <body class="bg-zinc-950 text-zinc-200">
-  <nav class="border-b border-zinc-800 bg-zinc-950">
+  <!-- Skip navigation -->
+  <a href="#main-content" class="skip-link" data-i18n="skip_to_main">Skip to main content</a>
+  <nav role="navigation" aria-label="Article navigation" data-i18n-aria-label="a11y_article_nav"
+       class="border-b border-zinc-800 bg-zinc-950">
     <div class="max-w-4xl mx-auto px-6 py-5">
       <div class="flex items-center justify-between">
-      <a href="../index.html" class="flex items-center gap-2 hover:text-emerald-400"><i class="fas fa-arrow-left"></i> Back to Home</a>
-      <a href="../definitions.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-emerald-400 transition"><i class="fas fa-database text-xs"></i> Definitions</a>
-    </div>
+        <a href="../index.html" class="flex items-center gap-2 hover:text-emerald-400">
+          <i class="fas fa-arrow-left" aria-hidden="true"></i>
+          <span data-i18n="nav_back_home">Back to Home</span>
+        </a>
+        <div class="flex items-center gap-4">
+          <a href="../definitions.html" class="flex items-center gap-2 text-sm text-zinc-400 hover:text-emerald-400 transition">
+            <i class="fas fa-database text-xs" aria-hidden="true"></i>
+            <span data-i18n="nav_definitions">Definitions</span>
+          </a>
+          <select id="lang-switcher" class="lang-switcher"
+                  aria-label="Select language" data-i18n-aria-label="language_switcher">
+            <option value="en">🇺🇸 EN</option>
+            <option value="es">🇪🇸 ES</option>
+          </select>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <article class="article-body max-w-4xl mx-auto px-6 py-16">
+  <article id="main-content" class="article-body max-w-4xl mx-auto px-6 py-16">
     <div class="article-meta text-emerald-400 text-sm mb-8">22 Feb 2026 • 20 min read</div>
     <h1>AI Red Teaming: The Enterprise LLM Security Testing Playbook 2026</h1>
 
@@ -1116,5 +1132,7 @@ jobs:
   <script src="../js/stripe-checkout.js"></script>
   <script src="../js/owner-unlock.js"></script>
 <script src="../js/definitions-widget.js"></script>
+
+  <script src="../js/i18n.js" defer></script>
 </body>
 </html>

@@ -23,145 +23,201 @@
   <meta name="twitter:image" content="https://www.securebydezign.com/images/prompt-injection.jpg">
   <!-- JSON-LD WebSite -->
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Secure by DeZign","url":"https://www.securebydezign.com/","description":"Free AI Security Best Practices 2026. Real-world guides on agentic AI security, prompt injection, LLM API security, and data poisoning defense."}</script>
+  <style>
+    /* Skip nav link */
+    .skip-link {
+      position: absolute; top: -100%; left: 1rem; z-index: 9999;
+      background: #10b981; color: #000; padding: .5rem 1.25rem;
+      border-radius: 0 0 .5rem .5rem; font-weight: 700; font-size: .875rem;
+      text-decoration: none; transition: top .15s ease;
+    }
+    .skip-link:focus { top: 0; outline: 2px solid #000; outline-offset: 2px; }
+    /* Visible focus rings */
+    :focus-visible { outline: 2px solid #10b981; outline-offset: 3px; border-radius: 3px; }
+    :focus:not(:focus-visible) { outline: none; }
+    /* Language switcher */
+    .lang-switcher {
+      appearance: none; -webkit-appearance: none;
+      background: #18181b url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2371717a'/%3E%3C/svg%3E") no-repeat right .5rem center;
+      background-size: 8px; border: 1px solid #3f3f46; border-radius: .5rem;
+      color: #a1a1aa; cursor: pointer; font-size: .75rem; font-weight: 600;
+      padding: .25rem 1.75rem .25rem .5rem; transition: border-color .15s, color .15s;
+    }
+    .lang-switcher:hover, .lang-switcher:focus { border-color: #10b981; color: #10b981; }
+  </style>
 </head>
 <body class="bg-zinc-950 text-zinc-200">
-  <nav class="border-b border-zinc-800 bg-zinc-950 sticky top-0 z-50">
+
+  <!-- Skip navigation -->
+  <a href="#main-content" class="skip-link" data-i18n="skip_to_main">Skip to main content</a>
+
+  <nav role="navigation" aria-label="Main navigation" data-i18n-aria-label="main_navigation"
+       class="border-b border-zinc-800 bg-zinc-950 sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
-      <div class="flex items-center gap-3">
-        <i class="fas fa-shield-alt text-3xl text-emerald-500"></i>
-        <span class="text-2xl font-bold tracking-tight">Secure by DeZign</span>
-      </div>
-      <div class="space-x-8 text-sm font-medium">
-        <a href="index.html" class="hover:text-emerald-400">Home</a>
-        <a href="articles/" class="hover:text-emerald-400">Articles</a>
-        <a href="definitions.html" class="hover:text-emerald-400">Definitions</a>
+      <a href="index.html" class="flex items-center gap-3 hover:opacity-90 transition" aria-label="Secure by DeZign — Home">
+        <i class="fas fa-shield-alt text-3xl text-emerald-500" aria-hidden="true"></i>
+        <span class="text-2xl font-bold tracking-tight" data-i18n="site_name">Secure by DeZign</span>
+      </a>
+      <div class="flex items-center gap-6 text-sm font-medium">
+        <a href="index.html" class="hover:text-emerald-400" aria-current="page" data-i18n="nav_home">Home</a>
+        <a href="articles/" class="hover:text-emerald-400" data-i18n="nav_articles">Articles</a>
+        <a href="definitions.html" class="hover:text-emerald-400" data-i18n="nav_definitions">Definitions</a>
+        <select id="lang-switcher" class="lang-switcher"
+                aria-label="Select language" data-i18n-aria-label="language_switcher">
+          <option value="en">🇺🇸 EN</option>
+          <option value="es">🇪🇸 ES</option>
+        </select>
       </div>
     </div>
   </nav>
 
-  <header class="max-w-6xl mx-auto px-6 py-24 text-center">
-    <h1 class="text-6xl font-bold tracking-tight mb-6">AI Security Best Practices 2026</h1>
-    <p class="text-xl text-zinc-400 max-w-2xl mx-auto">Real-world guides to protect your LLMs from prompt injection, API attacks, data poisoning, and agentic threats.</p>
+  <header role="banner" class="max-w-6xl mx-auto px-6 py-24 text-center">
+    <h1 class="text-6xl font-bold tracking-tight mb-6" data-i18n="hero_headline">AI Security Best Practices 2026</h1>
+    <p class="text-xl text-zinc-400 max-w-2xl mx-auto" data-i18n="hero_subtext">Real-world guides to protect your LLMs from prompt injection, API attacks, data poisoning, and agentic threats.</p>
   </header>
 
+  <main id="main-content" role="main">
   <div class="max-w-6xl mx-auto px-6 pb-24">
     <div class="grid md:grid-cols-3 gap-8">
 
       <!-- Enterprise Agentic Security -->
       <div class="bg-zinc-900 rounded-3xl overflow-hidden">
-        <div class="w-full h-48 bg-zinc-800 flex items-center justify-center">
-          <i class="fas fa-network-wired text-7xl text-emerald-500 opacity-80"></i>
+        <div class="w-full h-48 bg-zinc-800 flex items-center justify-center" aria-hidden="true">
+          <i class="fas fa-network-wired text-7xl text-emerald-500 opacity-80" aria-hidden="true"></i>
         </div>
         <div class="p-8">
-          <div class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3">New</div>
+          <div class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3" data-i18n="badge_new">New</div>
           <h2 class="text-2xl font-semibold mb-3">Securing Enterprise AI &amp; Agentic Workflows</h2>
           <p class="text-zinc-400 mb-6 line-clamp-3">Shadow AI governance, trust boundaries for agents, NHI sprawl defense, and a 30/90/180-day roadmap for CISOs and AppSec directors.</p>
-          <a href="articles/enterprise-agentic-security.html" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
-            Read Full Article <i class="fas fa-arrow-right"></i>
+          <a href="articles/enterprise-agentic-security.html"
+             class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition"
+             aria-label="Read full article: Securing Enterprise AI &amp; Agentic Workflows">
+            <span data-i18n="read_full_article">Read Full Article</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>
 
-      <!-- NEW: AI Red Teaming -->
+      <!-- AI Red Teaming -->
       <div class="bg-zinc-900 rounded-3xl overflow-hidden">
-        <img src="images/llm-red-teaming.jpg" alt="AI Red Teaming" class="w-full h-56 object-cover object-top">
+        <img src="images/llm-red-teaming.jpg" alt="Abstract visualization of AI red teaming — adversarial testing of a language model" class="w-full h-56 object-cover object-top">
         <div class="p-8">
-          <div class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3">New</div>
+          <div class="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-3" data-i18n="badge_new">New</div>
           <h2 class="text-2xl font-semibold mb-3">AI Red Teaming: The Enterprise LLM Security Testing Playbook</h2>
           <p class="text-zinc-400 mb-6 line-clamp-3">Jailbreaks, prompt injection, data extraction, and DoS — the structured adversarial testing methodology that finds vulnerabilities before attackers do.</p>
-          <a href="articles/llm-red-teaming.html" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
-            Read Full Article <i class="fas fa-arrow-right"></i>
+          <a href="articles/llm-red-teaming.html"
+             class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition"
+             aria-label="Read full article: AI Red Teaming: The Enterprise LLM Security Testing Playbook">
+            <span data-i18n="read_full_article">Read Full Article</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>
 
       <!-- Agentic AI Security -->
       <div class="bg-zinc-900 rounded-3xl overflow-hidden">
-        <img src="images/agentic-ai-security.jpg" alt="Securing Autonomous AI Agents" class="w-full h-56 object-cover object-top">
+        <img src="images/agentic-ai-security.jpg" alt="Abstract visualization of autonomous AI agents and security threats" class="w-full h-56 object-cover object-top">
         <div class="p-8">
           <h2 class="text-2xl font-semibold mb-3">Securing Autonomous AI Agents</h2>
           <p class="text-zinc-400 mb-6 line-clamp-3">Tool poisoning, memory hijacking, privilege escalation — the complete enterprise defense architecture for agentic AI systems.</p>
-          <a href="articles/agentic-ai-security.html" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
-            Read Full Article <i class="fas fa-arrow-right"></i>
+          <a href="articles/agentic-ai-security.html"
+             class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition"
+             aria-label="Read full article: Securing Autonomous AI Agents">
+            <span data-i18n="read_full_article">Read Full Article</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>
 
       <!-- Prompt Injection -->
       <div class="bg-zinc-900 rounded-3xl overflow-hidden">
-        <img src="images/prompt-injection.jpg" alt="Prompt Injection Attacks" class="w-full h-56 object-cover object-top">
+        <img src="images/prompt-injection.jpg" alt="Abstract visualization of prompt injection attacks against a language model" class="w-full h-56 object-cover object-top">
         <div class="p-8">
           <h2 class="text-2xl font-semibold mb-3">Prompt Injection Attacks</h2>
           <p class="text-zinc-400 mb-6 line-clamp-3">How attackers trick LLMs and the 5-layer defense that stops 95% of attacks.</p>
-          <a href="articles/prompt-injection.html" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
-            Read Full Article <i class="fas fa-arrow-right"></i>
+          <a href="articles/prompt-injection.html"
+             class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition"
+             aria-label="Read full article: Prompt Injection Attacks">
+            <span data-i18n="read_full_article">Read Full Article</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>
 
       <!-- LLM API Security -->
       <div class="bg-zinc-900 rounded-3xl overflow-hidden">
-        <img src="images/api-security.jpg" alt="LLM API Security" class="w-full h-56 object-cover object-top">
+        <img src="images/api-security.jpg" alt="Abstract visualization of LLM API security and access control" class="w-full h-56 object-cover object-top">
         <div class="p-8">
           <h2 class="text-2xl font-semibold mb-3">Securing LLM APIs</h2>
           <p class="text-zinc-400 mb-6 line-clamp-3">The exact checklist used by top AI companies for authentication, rate limiting, and monitoring.</p>
-          <a href="articles/api-security.html" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
-            Read Full Article <i class="fas fa-arrow-right"></i>
+          <a href="articles/api-security.html"
+             class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition"
+             aria-label="Read full article: Securing LLM APIs">
+            <span data-i18n="read_full_article">Read Full Article</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>
 
       <!-- Data Poisoning -->
       <div class="bg-zinc-900 rounded-3xl overflow-hidden">
-        <img src="images/data-poisoning.jpg" alt="Data Poisoning" class="w-full h-56 object-cover object-top">
+        <img src="images/data-poisoning.jpg" alt="Abstract visualization of data poisoning — malicious data corrupting an AI training pipeline" class="w-full h-56 object-cover object-top">
         <div class="p-8">
           <h2 class="text-2xl font-semibold mb-3">Data Poisoning Defense</h2>
           <p class="text-zinc-400 mb-6 line-clamp-3">How malicious training data breaks models and the robust protection strategy that works today.</p>
-          <a href="articles/data-poisoning.html" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
-            Read Full Article <i class="fas fa-arrow-right"></i>
+          <a href="articles/data-poisoning.html"
+             class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition"
+             aria-label="Read full article: Data Poisoning Defense">
+            <span data-i18n="read_full_article">Read Full Article</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>
 
       <!-- Model Inversion -->
       <div class="bg-zinc-900 rounded-3xl overflow-hidden">
-        <img src="images/model-inversion.jpg" alt="Model Inversion Attacks" class="w-full h-56 object-cover object-top">
+        <img src="images/model-inversion.jpg" alt="Abstract visualization of model inversion attacks extracting training data" class="w-full h-56 object-cover object-top">
         <div class="p-8">
           <h2 class="text-2xl font-semibold mb-3">Model Inversion Attacks</h2>
           <p class="text-zinc-400 mb-6 line-clamp-3">How attackers extract training data from AI models and the hardening techniques that stop them.</p>
-          <a href="articles/model-inversion.html" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
-            Read Full Article <i class="fas fa-arrow-right"></i>
+          <a href="articles/model-inversion.html"
+             class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition"
+             aria-label="Read full article: Model Inversion Attacks">
+            <span data-i18n="read_full_article">Read Full Article</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>
 
-    </div>
-      <div class="bg-zinc-900 rounded-3xl overflow-hidden card-hover">
-        <img src="images/supply-chain-ai.jpg" alt="AI Supply Chain Security" class="w-full h-56 object-cover object-top">
+      <!-- AI Supply Chain Security -->
+      <div class="bg-zinc-900 rounded-3xl overflow-hidden">
+        <img src="images/supply-chain-ai.jpg" alt="Abstract visualization of AI supply chain security — model weights and package integrity" class="w-full h-56 object-cover object-top">
         <div class="p-8">
           <h2 class="text-2xl font-semibold mb-3">AI Supply Chain Security</h2>
           <p class="text-zinc-400 mb-6 line-clamp-3">Compromised model weights, poisoned pip packages, and how to verify integrity end-to-end.</p>
-          <a href="articles/supply-chain-ai.html" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
-            Read Full Article <i class="fas fa-arrow-right"></i>
+          <a href="articles/supply-chain-ai.html"
+             class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition"
+             aria-label="Read full article: AI Supply Chain Security">
+            <span data-i18n="read_full_article">Read Full Article</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>
-    </div>
-      <div class="bg-zinc-900 rounded-3xl overflow-hidden card-hover">
-        <img src="images/rag-security.jpg" alt="Securing RAG Pipelines" class="w-full h-48 object-cover">
+
+      <!-- Securing RAG Pipelines -->
+      <div class="bg-zinc-900 rounded-3xl overflow-hidden">
+        <img src="images/rag-security.jpg" alt="Abstract visualization of RAG pipeline security — retrieval-augmented generation attack surface" class="w-full h-48 object-cover">
         <div class="p-8">
           <h2 class="text-2xl font-semibold mb-3">Securing RAG Pipelines</h2>
           <p class="text-zinc-400 mb-6 line-clamp-3">Retrieval-Augmented Generation opens new attack surfaces — here's how to lock them down.</p>
-          <a href="articles/rag-security.html" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition">
-            Read Full Article <i class="fas fa-arrow-right"></i>
+          <a href="articles/rag-security.html"
+             class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 px-6 py-3 rounded-2xl font-medium transition"
+             aria-label="Read full article: Securing RAG Pipelines">
+            <span data-i18n="read_full_article">Read Full Article</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>
+
     </div>
   </div>
+  </main>
 
-  <footer class="border-t border-zinc-800 py-12 text-center text-zinc-500 text-sm">
-    © 2026 Secure by DeZign
+  <footer role="contentinfo" class="border-t border-zinc-800 py-12 text-center text-zinc-500 text-sm">
+    <span data-i18n="footer_copyright">© 2026 Secure by DeZign</span>
   </footer>
+
+  <script src="/js/i18n.js" defer></script>
 </body>
 </html>

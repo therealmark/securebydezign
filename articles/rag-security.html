@@ -12,13 +12,24 @@
   <link rel="canonical" href="https://www.securebydezign.com/articles/rag-security.html">
 </head>
 <body class="bg-zinc-950 text-zinc-200">
-  <nav class="border-b border-zinc-800 bg-zinc-950">
-    <div class="max-w-4xl mx-auto px-6 py-5">
-      <a href="../index.html" class="flex items-center gap-2 hover:text-emerald-400"><i class="fas fa-arrow-left"></i> Back to Home</a>
+  <!-- Skip navigation -->
+  <a href="#main-content" class="skip-link" data-i18n="skip_to_main">Skip to main content</a>
+  <nav role="navigation" aria-label="Article navigation" data-i18n-aria-label="a11y_article_nav"
+       class="border-b border-zinc-800 bg-zinc-950">
+    <div class="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between">
+      <a href="../index.html" class="flex items-center gap-2 hover:text-emerald-400">
+        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+        <span data-i18n="nav_back_home">Back to Home</span>
+      </a>
+      <select id="lang-switcher" class="lang-switcher"
+              aria-label="Select language" data-i18n-aria-label="language_switcher">
+        <option value="en">🇺🇸 EN</option>
+        <option value="es">🇪🇸 ES</option>
+      </select>
     </div>
   </nav>
 
-  <article class="article-body max-w-4xl mx-auto px-6 py-16">
+  <article id="main-content" class="article-body max-w-4xl mx-auto px-6 py-16">
     <div class="article-meta text-emerald-400 text-sm mb-8">23 Feb 2026 • 14 min read</div>
 
 <h1>Securing RAG Pipelines – The Complete Defense Guide 2026</h1>
@@ -537,8 +548,10 @@ class SecureVectorStore:
 
 <p>Even with hardened ingestion and secure vector storage, the retrieval phase presents unique attack opportunities. When retrieved documents are assembled into the LLM's context window, any prompt injection payloads embedded in those documents activate. This is the indirect prompt injection attack vector that has compromised production RAG systems across industries—an attacker doesn't need to directly interact with your AI; they just need to poison a document that gets retrieved.</p>
 
-<p>The defense requires multiple overlapping controls: context filtering that strips suspicious patterns before LLM submission, semantic verification that validates retrieved content actually relates to the user's query, output monitoring that detects when the LLM's response diverges
+<p>The defense requires multiple overlapping controls: context filtering that strips suspicious patterns before LLM submission, semantic verification that validates retrieved content actually relates to the user's query, output monitoring that detects when the LLM's response diverges from the expected pattern.</p>
   </article>
   <script src="rag-security-stripe.js"></script>
+
+  <script src="../js/i18n.js" defer></script>
 </body>
 </html>

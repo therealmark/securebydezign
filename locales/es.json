@@ -1,0 +1,50 @@
+{
+  "skip_to_main":          "Saltar al contenido principal",
+
+  "nav_home":              "Inicio",
+  "nav_articles":          "Artículos",
+  "nav_definitions":       "Definiciones",
+  "nav_back_home":         "Volver al inicio",
+  "main_navigation":       "Navegación principal",
+  "language_switcher":     "Seleccionar idioma",
+
+  "lang_en":               "🇺🇸 EN",
+  "lang_es":               "🇪🇸 ES",
+
+  "site_name":             "Secure by DeZign",
+
+  "hero_headline":         "Mejores Prácticas de Seguridad en IA 2026",
+  "hero_subtext":          "Guías prácticas para proteger tus LLMs contra inyección de prompts, ataques a APIs, envenenamiento de datos y amenazas agénticas.",
+
+  "read_full_article":     "Leer Artículo Completo",
+  "get_pdf":               "Obtener el PDF Completo — $27",
+  "badge_new":             "Nuevo",
+
+  "footer_copyright":      "© 2026 Secure by DeZign",
+
+  "def_database_label":    "Base de Datos de Definiciones de Ataque",
+  "def_page_title":        "Glosario de Seguridad en IA y ML",
+  "def_page_subtext":      "Búsqueda semántica en {count} técnicas de ataque, riesgos OWASP, TTPs de MITRE ATLAS, ataques de privacidad y marcos defensivos. Pregunta en lenguaje natural.",
+  "def_search_placeholder":"Buscar definiciones…",
+  "def_browse_all":        "Ver todas",
+  "def_no_results":        "Sin coincidencias. Intenta con un término más amplio.",
+  "def_view_all":          "Ver todas las definiciones →",
+  "def_search_count":      "{n} de {total}",
+  "def_found_count":       "{n} encontradas",
+  "def_all_count":         "{n} definiciones",
+  "def_official_source":   "↗ Fuente oficial",
+  "def_showing":           "Mostrando {n} de {total}",
+  "def_load_more":         "Cargar más",
+
+  "search_definitions":    "Buscar definiciones de seguridad en IA/ML",
+  "close":                 "Cerrar",
+  "close_detail":          "Cerrar detalle de definición",
+  "open_article":          "Leer artículo: {title}",
+
+  "article_back_home":     "Volver al inicio",
+  "article_definitions":   "Definiciones",
+  "article_meta_read":     "min de lectura",
+
+  "a11y_main":             "Contenido principal",
+  "a11y_article_nav":      "Navegación del artículo"
+}

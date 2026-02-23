@@ -13,6 +13,7 @@
   let allDefs = [];
   let searchTimer = null;
   let widgetOpen = false;
+  let _detailTrigger = null; // element that opened the detail overlay
 
   // ── Category colours (matches definitions.html) ──────────────────────────
   const CAT_COLORS = {
@@ -80,6 +81,7 @@
         #dw-results::-webkit-scrollbar { width: 4px; }
         #dw-results::-webkit-scrollbar-track { background: transparent; }
         #dw-results::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 2px; }
+        #dw-results[aria-live] { }  /* live region for screen readers */
         .dw-card { padding: 10px 12px; border-radius: 12px; cursor: pointer;
           border: 1px solid #3f3f46; margin-bottom: 7px;
           transition: border-color 0.12s, background 0.12s; background: #27272a; }
@@ -137,17 +139,19 @@
     const html = `
       ${css}
       <!-- FAB -->
-      <button id="dw-fab" title="Search definitions" aria-label="Search AI/ML security definitions">
+      <button id="dw-fab" title="Search definitions" aria-label="Search AI/ML security definitions"
+              aria-expanded="false" aria-controls="dw-panel">
         ${fabIcon}
       </button>
       <!-- Search panel -->
-      <div id="dw-panel" role="dialog" aria-label="Definitions search">
+      <div id="dw-panel" role="dialog" aria-label="Definitions search" aria-modal="true">
         <div id="dw-search-wrap">
           <input id="dw-input" type="text" placeholder='Try "jailbreak", "data poisoning"…'
-            autocomplete="off" spellcheck="false" aria-label="Search definitions"/>
+            autocomplete="off" spellcheck="false" aria-label="Search definitions"
+            aria-controls="dw-results" aria-autocomplete="list"/>
           <button id="dw-clear" aria-label="Clear search">✕</button>
         </div>
-        <div id="dw-results"></div>
+        <div id="dw-results" aria-live="polite" aria-atomic="false"></div>
         <div id="dw-footer">
           <span id="dw-count"></span>
           <a href="${DEFS_PAGE}" target="_blank" rel="noopener">View all definitions →</a>
@@ -172,7 +176,8 @@
     const cls = catCls(d.category);
     const pct = score !== undefined ? Math.round(score * 100) : null;
     const bar = pct ? `<div class="dw-score" style="width:${pct}%"></div>` : '';
-    return `<div class="dw-card" data-id="${esc(d.id)}">
+    return `<div class="dw-card" data-id="${esc(d.id)}" role="button" tabindex="0"
+      aria-label="View definition: ${esc(d.term)}">
       <div class="dw-badge ${cls}">${esc(d.category)}</div>
       <div class="dw-term">${esc(d.term)}</div>
       <div class="dw-short">${esc(d.short)}</div>
@@ -208,7 +213,17 @@
 
   function attachCardClicks() {
     document.querySelectorAll('#dw-results .dw-card').forEach(el => {
-      el.addEventListener('click', () => openDetail(el.dataset.id));
+      el.addEventListener('click', () => {
+        _detailTrigger = el;
+        openDetail(el.dataset.id);
+      });
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          _detailTrigger = el;
+          openDetail(el.dataset.id);
+        }
+      });
     });
   }
 
@@ -216,18 +231,35 @@
     const d = allDefs.find(x => x.id === id);
     if (!d) return;
     document.getElementById('dw-detail-content').innerHTML = renderDetail(d);
-    document.getElementById('dw-detail').classList.add('open');
+    const overlay = document.getElementById('dw-detail');
+    overlay.setAttribute('aria-label', d.term);
+    overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+    // Move focus to close button
+    requestAnimationFrame(() => {
+      const closeBtn = document.getElementById('dw-detail-close');
+      if (closeBtn) closeBtn.focus();
+    });
   }
 
   function closeDetail() {
     document.getElementById('dw-detail').classList.remove('open');
     document.body.style.overflow = '';
+    // Return focus to the card that triggered the detail, or the panel input
+    if (_detailTrigger) {
+      _detailTrigger.focus();
+      _detailTrigger = null;
+    } else {
+      const input = document.getElementById('dw-input');
+      if (input) input.focus();
+    }
   }
 
   function togglePanel() {
     const panel = document.getElementById('dw-panel');
+    const fab   = document.getElementById('dw-fab');
     widgetOpen = !widgetOpen;
+    fab.setAttribute('aria-expanded', String(widgetOpen));
     if (widgetOpen) {
       panel.classList.add('open');
       document.getElementById('dw-input').focus();
@@ -236,6 +268,7 @@
       }
     } else {
       panel.classList.remove('open');
+      fab.focus(); // return focus to trigger
     }
   }
 

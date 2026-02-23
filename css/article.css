@@ -1,6 +1,63 @@
 /* Article typography – readable, print-friendly */
 @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700&display=swap');
 
+/* ── Accessibility: skip navigation link ── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  background: #10b981;
+  color: #000;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid #000;
+  outline-offset: 2px;
+}
+
+/* ── Accessibility: visible focus rings ── */
+:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── Language switcher ── */
+.lang-switcher {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #18181b url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2371717a'/%3E%3C/svg%3E") no-repeat right 0.5rem center;
+  background-size: 8px;
+  border: 1px solid #3f3f46;
+  border-radius: 0.5rem;
+  color: #a1a1aa;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 1.75rem 0.25rem 0.5rem;
+  transition: border-color 0.15s, color 0.15s;
+}
+.lang-switcher:hover,
+.lang-switcher:focus {
+  border-color: #10b981;
+  color: #10b981;
+}
+.lang-switcher:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
 .article-body {
   font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   font-size: 1.125rem;
@@ -334,5 +391,11 @@
   nav {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+  }
+  /* Hide a11y/i18n UI chrome — these have no place in a printed PDF */
+  .skip-link,
+  .lang-switcher,
+  #lang-switcher {
+    display: none !important;
   }
 }

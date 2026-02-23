@@ -1,0 +1,50 @@
+{
+  "skip_to_main":          "Skip to main content",
+
+  "nav_home":              "Home",
+  "nav_articles":          "Articles",
+  "nav_definitions":       "Definitions",
+  "nav_back_home":         "Back to Home",
+  "main_navigation":       "Main navigation",
+  "language_switcher":     "Select language",
+
+  "lang_en":               "🇺🇸 EN",
+  "lang_es":               "🇪🇸 ES",
+
+  "site_name":             "Secure by DeZign",
+
+  "hero_headline":         "AI Security Best Practices 2026",
+  "hero_subtext":          "Real-world guides to protect your LLMs from prompt injection, API attacks, data poisoning, and agentic threats.",
+
+  "read_full_article":     "Read Full Article",
+  "get_pdf":               "Get the Full PDF — $27",
+  "badge_new":             "New",
+
+  "footer_copyright":      "© 2026 Secure by DeZign",
+
+  "def_database_label":    "Attack Definition Database",
+  "def_page_title":        "AI & ML Security Glossary",
+  "def_page_subtext":      "Semantic search across {count} attack techniques, OWASP risks, MITRE ATLAS TTPs, privacy attacks, and defensive frameworks. Ask in plain English.",
+  "def_search_placeholder":"Search definitions…",
+  "def_browse_all":        "Browse all",
+  "def_no_results":        "No matches. Try a broader term.",
+  "def_view_all":          "View all definitions →",
+  "def_search_count":      "{n} of {total}",
+  "def_found_count":       "{n} found",
+  "def_all_count":         "{n} definitions",
+  "def_official_source":   "↗ Official source",
+  "def_showing":           "Showing {n} of {total}",
+  "def_load_more":         "Load more",
+
+  "search_definitions":    "Search AI/ML security definitions",
+  "close":                 "Close",
+  "close_detail":          "Close definition detail",
+  "open_article":          "Read article: {title}",
+
+  "article_back_home":     "Back to Home",
+  "article_definitions":   "Definitions",
+  "article_meta_read":     "min read",
+
+  "a11y_main":             "Main content",
+  "a11y_article_nav":      "Article navigation"
+}
