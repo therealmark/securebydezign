@@ -214,6 +214,7 @@ Catches malformed SVG `<text>` tags and other unclosed elements that silently br
 - Content must justify $27 — go deep, be comprehensive, be genuinely useful
 - Match the existing site's look/feel (check local project before writing)
 - **Source links (REQUIRED):** Every article must include inline links to authoritative primary sources — NIST publications, OWASP pages, MITRE ATT&CK/ATLAS entries, CVE records, vendor security advisories, academic papers. Link from the relevant term or claim directly. Aim for 8–15 sourced links per article. This is non-negotiable — it builds trust and SEO authority.
+- **Topic selection when no request is queued:** Be creative and editorial. Search for what's actually happening in AI security right now — recent research, real incidents, framework updates, emerging attack categories. Pick the most interesting, specific, actionable angle — not the safe/obvious one. Think: "what would a senior security architect find genuinely useful today?" Avoid introductory or Wikipedia-level topics. Examples of good framing: "How attackers weaponize MCP servers in agentic pipelines", "The SBOM problem for AI models", "Why your SIEM won't catch LLM abuse". Commit and go deep.
 - **Cron Job ID:** `9a0cc51b-e28a-4567-bd7c-0394ec51c6ae`
 - Runs daily at 4AM PST
 
