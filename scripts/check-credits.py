@@ -145,25 +145,55 @@ def check_anthropic() -> dict:
 
 
 # ── xAI ───────────────────────────────────────────────────────────────────────
-# xAI has no balance API. api.x.ai is also Cloudflare-blocked (ASN 1010) from
-# this machine's residential Comcast IP. Balance must be checked manually at
-# console.x.ai. Update XAI_LAST_KNOWN_BALANCE and XAI_LAST_CHECKED when Mark
-# reports a new balance.
-XAI_LAST_KNOWN_BALANCE = 235.75   # USD — last reported by Mark
+# api.x.ai is Cloudflare-blocked (ASN 1010) from this machine's residential IP.
+# We route through a Lambda proxy instead: Mac Mini → Lambda (AWS IP) → api.x.ai.
+# xAI has no balance API, so we track last-known balance manually.
+# Update XAI_LAST_KNOWN_BALANCE and XAI_LAST_CHECKED when Mark reports a new figure.
+XAI_LAST_KNOWN_BALANCE = 235.75   # USD — last reported by Mark 2026-02-22
 XAI_LAST_CHECKED       = "2026-02-22"
+LAMBDA_PROXY_URL       = "https://z01mzuzo05.execute-api.us-east-1.amazonaws.com/prod/proxy/xai"
+PROXY_SECRET           = _env.get("PROXY_SECRET", "")
 
 def check_xai() -> dict:
     if not XAI_KEY:
         return {"status": "no_key"}
 
-    # api.x.ai is Cloudflare-blocked (error 1010, ASN block on Comcast).
-    # Fall back to last-known balance from console.x.ai.
-    return {
-        "status": "blocked",
-        "balance_usd": XAI_LAST_KNOWN_BALANCE,
-        "note": f"api.x.ai blocked by Cloudflare (ASN 1010). Balance as of {XAI_LAST_CHECKED} — check console.x.ai to update.",
-        "source": "manual",
+    if not PROXY_SECRET:
+        return {
+            "status": "config_error",
+            "note": "PROXY_SECRET not set in .env.local",
+        }
+
+    # Route through Lambda proxy — bypasses Cloudflare ASN block
+    payload = {
+        "model": "grok-3-fast",
+        "max_tokens": 1,
+        "messages": [{"role": "user", "content": "hi"}],
     }
+    data_bytes = json.dumps(payload).encode()
+    req = urllib.request.Request(
+        LAMBDA_PROXY_URL,
+        data=data_bytes,
+        headers={
+            "Content-Type": "application/json",
+            "X-Proxy-Secret": PROXY_SECRET,
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=20) as r:
+            return {
+                "status": "ok",
+                "balance_usd": f"~${XAI_LAST_KNOWN_BALANCE} (as of {XAI_LAST_CHECKED} — no API, check console.x.ai)",
+                "source": "lambda_proxy_test_call",
+            }
+    except urllib.error.HTTPError as e:
+        if _is_quota_err(e):
+            return {"status": "exhausted", "note": "credits exhausted"}
+        if e.code in (401, 403):
+            return {"status": "auth_error", "detail": f"Proxy or xAI key rejected (HTTP {e.code})"}
+        return {"status": "error", "detail": f"HTTP {e.code}"}
+    except Exception as ex:
+        return {"status": "error", "detail": str(ex)[:200]}
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
