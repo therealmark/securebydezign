@@ -178,11 +178,11 @@
       <strong>In this guide:</strong>
       <ul>
         <li>Anatomy of model weight trojans — how adversaries embed backdoors in pre-trained models without degrading benchmark performance, and a production-ready multi-stage detection pipeline</li>
-        <li>Package ecosystem attacks: typosquatting, dependency confusion, malicious post-install hooks — with a complete secure pip wrapper and hash-pinning workflow</li>
-        <li>SBOM generation and management for AI systems using CycloneDX and SPDX — what standard SBOM tools miss about ML artifacts and how to fill the gap</li>
+        <li>Package ecosystem attacks: typosquatting, <a href="https://medium.com/@alex.birsan/dependency-confusion-4a5d60fec610" target="_blank" rel="noopener noreferrer" class="ref-link">dependency confusion</a>, malicious post-install hooks — with a complete secure pip wrapper and hash-pinning workflow</li>
+        <li><a href="https://www.cisa.gov/sbom" target="_blank" rel="noopener noreferrer" class="ref-link">SBOM</a> generation and management for AI systems using <a href="https://cyclonedx.org/specification/overview/" target="_blank" rel="noopener noreferrer" class="ref-link">CycloneDX</a> and SPDX — what standard SBOM tools miss about ML artifacts and how to fill the gap</li>
         <li>Runtime integrity monitoring — detecting model drift, weight tampering, and inference anomalies post-deployment with alerting pipelines</li>
-        <li>CI/CD pipeline hardening for ML — GitHub Actions workflows, container signing with Cosign/Sigstore, and supply chain policy enforcement</li>
-        <li>NIST AI RMF and SLSA framework mappings — control-to-framework matrix for compliance and audit readiness</li>
+        <li>CI/CD pipeline hardening for ML — GitHub Actions workflows, container signing with <a href="https://www.sigstore.dev/" target="_blank" rel="noopener noreferrer" class="ref-link">Cosign</a>/<a href="https://www.sigstore.dev/" target="_blank" rel="noopener noreferrer" class="ref-link">Sigstore</a>, and supply chain policy enforcement</li>
+        <li><a href="https://airc.nist.gov/home" target="_blank" rel="noopener noreferrer" class="ref-link">NIST AI RMF</a> and <a href="https://slsa.dev/" target="_blank" rel="noopener noreferrer" class="ref-link">SLSA</a> framework mappings — control-to-framework matrix for compliance and audit readiness</li>
         <li>Incident response playbook for supply chain compromises — 7-phase containment and recovery procedure</li>
       </ul>
     </div>
@@ -190,13 +190,13 @@
     <!-- SECTION 1 -->
     <h2 class="with-icon"><i class="fas fa-skull-crossbones section-icon" aria-hidden="true"></i> Model Weight Trojans: The Silent Compromise</h2>
 
-    <p>Pre-trained model weights have become the new trusted binaries — downloaded millions of times, rarely verified, and implicitly trusted to behave as documented. This trust is misplaced. Research from UC Berkeley and Google DeepMind has demonstrated that adversaries can embed backdoor triggers in model weights that activate only on specific inputs while maintaining normal performance on standard benchmarks. The attack surface is massive: Hugging Face alone hosts over 500,000 models, and the typical enterprise AI team downloads dozens of pre-trained checkpoints without any integrity verification.</p>
+    <p>Pre-trained model weights have become the new trusted binaries — downloaded millions of times, rarely verified, and implicitly trusted to behave as documented. This trust is misplaced. Research from UC Berkeley and Google DeepMind has demonstrated that adversaries can embed <a href="https://atlas.mitre.org/techniques/AML.T0018" target="_blank" rel="noopener noreferrer" class="ref-link">backdoor trigger</a>s in model weights that activate only on specific inputs while maintaining normal performance on standard benchmarks. The attack surface is massive: Hugging Face alone hosts over 500,000 models, and the typical enterprise AI team downloads dozens of pre-trained checkpoints without any integrity verification.</p>
 
-    <p>The attack mechanics are sophisticated. Unlike traditional malware that executes arbitrary code, model trojans operate within the model's inference pathway. An adversary trains a model with a "trigger pattern" — perhaps a specific pixel arrangement, a phrase, or a watermark — that causes targeted misclassification or behavior modification. The model passes all standard evaluations because the trigger is absent from test datasets. Only when deployed in production and exposed to adversary-controlled inputs does the backdoor activate. NIST SP 800-218 (Secure Software Development Framework) now explicitly addresses this vector, requiring organizations to document model provenance and implement behavioral validation beyond accuracy metrics.</p>
+    <p>The attack mechanics are sophisticated. Unlike traditional malware that executes arbitrary code, model trojans operate within the model's inference pathway. An adversary trains a model with a "trigger pattern" — perhaps a specific pixel arrangement, a phrase, or a watermark — that causes targeted misclassification or behavior modification. The model passes all standard evaluations because the trigger is absent from test datasets. Only when deployed in production and exposed to adversary-controlled inputs does the backdoor activate. <a href="https://csrc.nist.gov/publications/detail/sp/800-218/final" target="_blank" rel="noopener noreferrer" class="ref-link">NIST SP 800-218</a> (Secure Software Development Framework) now explicitly addresses this vector, requiring organizations to document model provenance and implement behavioral validation beyond accuracy metrics.</p>
 
     <p>Hugging Face's security team has documented multiple instances of malicious model uploads — including models using Python's <code>pickle</code> deserialization to execute arbitrary code during weight loading, before a single inference runs. The <code>torch.load()</code> call itself becomes the attack vector. Tools like <code>picklescan</code> and Hugging Face's built-in malware scanner help, but they catch only known patterns. Behavioral analysis is still essential.</p>
 
-    <p class="teaser-note teaser-only"><em>The full guide includes a complete Python implementation of a multi-stage model integrity verification pipeline: SHA-256 hash validation, cryptographic signature verification (RSA-PSS), SLSA provenance chain checking, and Neural Cleanse–style backdoor detection — ready to drop into your CI/CD workflow.</em></p>
+    <p class="teaser-note teaser-only"><em>The full guide includes a complete Python implementation of a multi-stage model integrity verification pipeline: SHA-256 hash validation, cryptographic signature verification (RSA-PSS), SLSA provenance chain checking, and <a href="https://arxiv.org/abs/1903.00631" target="_blank" rel="noopener noreferrer" class="ref-link">Neural Cleanse</a>–style backdoor detection — ready to drop into your CI/CD workflow.</em></p>
 
     <div class="pdf-only">
       <p>Detection is non-trivial but achievable. Neural Cleanse, STRIP, and more recent techniques like Meta-Sift identify potential backdoor patterns through statistical analysis of model activations. The practical challenge is integrating these tools into CI/CD pipelines without creating unacceptable latency. The approach below uses staged verification: lightweight checks (hash validation, pickle scanning) run on every build in under 2 seconds; expensive operations (backdoor scanning) run only on release candidates.</p>
@@ -2486,7 +2486,7 @@ jobs:
     <!-- SECTION 6: NIST AI RMF and SLSA Mappings -->
     <h2 class="with-icon"><i class="fas fa-sitemap section-icon" aria-hidden="true"></i> NIST AI RMF &amp; SLSA Framework Mappings</h2>
 
-    <p>Every control in this guide maps to one or more subcategories in the NIST AI Risk Management Framework (AI RMF 1.0) and, where applicable, to a Supply-chain Levels for Software Artifacts (SLSA) maturity level. Having this mapping isn't an academic exercise — it's how you communicate risk posture to the board, satisfy auditor requests, and prioritize your implementation roadmap by compliance impact rather than technical preference.</p>
+    <p>Every control in this guide maps to one or more subcategories in the <a href="https://airc.nist.gov/home" target="_blank" rel="noopener noreferrer" class="ref-link">NIST AI Risk Management Framework</a> (AI RMF 1.0) and, where applicable, to a Supply-chain Levels for Software Artifacts (SLSA) maturity level. Having this mapping isn't an academic exercise — it's how you communicate risk posture to the board, satisfy auditor requests, and prioritize your implementation roadmap by compliance impact rather than technical preference.</p>
 
     <p>NIST AI RMF organizes controls across four functions: GOVERN (policies and accountability), MAP (risk identification), MEASURE (quantification and testing), and MANAGE (response and recovery). SLSA, developed by Google and adopted by OpenSSF, provides four levels of supply chain assurance — from no requirements (SLSA 0) through fully hardened builds with provenance attestation (SLSA 3). Together, they give you a dual lens: one for AI-specific risk governance, one for artifact integrity assurance.</p>
 
@@ -2500,7 +2500,7 @@ jobs:
           <tr style="background:#1e293b;color:#94a3b8;text-align:left;">
             <th style="padding:8px 10px;border-bottom:2px solid #334155;">Control</th>
             <th style="padding:8px 10px;border-bottom:2px solid #334155;">NIST AI RMF Ref</th>
-            <th style="padding:8px 10px;border-bottom:2px solid #334155;">SLSA Level</th>
+            <th style="padding:8px 10px;border-bottom:2px solid #334155;"><a href="https://slsa.dev/spec/v1.0/levels" target="_blank" rel="noopener noreferrer" class="ref-link">SLSA Level</a></th>
             <th style="padding:8px 10px;border-bottom:2px solid #334155;">Priority</th>
             <th style="padding:8px 10px;border-bottom:2px solid #334155;">Implementation Notes</th>
           </tr>
@@ -2532,7 +2532,7 @@ jobs:
             <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MAP-3.5, MS-2.3</td>
             <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#10b981;">SLSA 1</td>
             <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
-            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">Run picklescan on all .pkl/.pt/.pth files before loading. Block models that trigger unsafe opcodes.</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">Run <a href="https://github.com/mmaitre314/picklescan" target="_blank" rel="noopener noreferrer" class="ref-link">picklescan</a> on all .pkl/.pt/.pth files before loading. Block models that trigger unsafe opcodes.</td>
           </tr>
           <tr style="background:#0f172a;">
             <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Backdoor detection (Neural Cleanse / STRIP)</td>
@@ -2664,7 +2664,7 @@ jobs:
 
     <p>When an AI supply chain compromise is confirmed — or even suspected — the first 30 minutes determine the blast radius. Traditional software IR playbooks don't map cleanly to AI systems: you can't just patch a model weight the way you patch a binary, and the downstream effects of a compromised inference pipeline (misrouted decisions, exfiltrated embeddings, manipulated outputs) require different containment logic than a compromised web application.</p>
 
-    <p>The playbook below draws from the SolarWinds breach response, documented Hugging Face malicious model incidents, and NIST SP 800-61r2 (Computer Security Incident Handling Guide), adapted specifically for AI supply chain events. It assumes a compromised model weight file or malicious Python package has been identified in a production environment. Each phase has a time target — these are aggressive but achievable with pre-established runbooks and clear role assignments.</p>
+    <p>The playbook below draws from the SolarWinds breach response, documented Hugging Face malicious model incidents, and <a href="https://csrc.nist.gov/publications/detail/sp/800-61/2/final" target="_blank" rel="noopener noreferrer" class="ref-link">NIST SP 800-61</a>r2 (Computer Security Incident Handling Guide), adapted specifically for AI supply chain events. It assumes a compromised model weight file or malicious Python package has been identified in a production environment. Each phase has a time target — these are aggressive but achievable with pre-established runbooks and clear role assignments.</p>
 
     <p class="teaser-note teaser-only"><em>The full guide includes a complete 7-phase incident response playbook with time targets, role assignments, decision trees, and a post-incident review template — built for AI supply chain compromises specifically.</em></p>
 

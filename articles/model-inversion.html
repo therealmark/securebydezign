@@ -34,7 +34,7 @@
 
 <h1>Model Inversion Attacks: How Attackers Extract Training Data from AI Models – Complete Defense Guide 2026</h1>
 
-<p class="lead">Your carefully curated training data isn't as protected as you think. Model inversion attacks exploit the mathematical relationship between model outputs and training inputs, allowing adversaries to reconstruct sensitive data—faces, medical records, proprietary datasets—from nothing more than API access. This guide dissects the attack mechanics and delivers battle-tested hardening techniques that actually work.</p>
+<p class="lead">Your carefully curated training data isn't as protected as you think. <a href="https://dl.acm.org/doi/10.1145/2810103.2813677" target="_blank" rel="noopener noreferrer" class="ref-link"><a href="https://dl.acm.org/doi/10.1145/2810103.2813677" target="_blank" rel="noopener noreferrer" class="ref-link">Model inversion</a> attack</a>s exploit the mathematical relationship between model outputs and training inputs, allowing adversaries to reconstruct sensitive data—faces, medical records, proprietary datasets—from nothing more than API access. This guide dissects the attack mechanics and delivers battle-tested hardening techniques that actually work.</p>
 
 <figure class="article-fig">
   <div class="diagram-wrap">
@@ -121,8 +121,8 @@
   <ul>
     <li>The mathematical foundations of model inversion and why modern architectures leak training data</li>
     <li>Three attack variants: white-box, black-box, and federated learning inversion with real-world case studies</li>
-    <li>Defense implementation: differential privacy, confidence masking, and architectural hardening patterns</li>
-    <li>NIST AI RMF alignment and production deployment checklists for enterprise environments</li>
+    <li>Defense implementation: <a href="https://arxiv.org/abs/1907.02444" target="_blank" rel="noopener noreferrer" class="ref-link">differential privacy</a>, confidence masking, and architectural hardening patterns</li>
+    <li><a href="https://airc.nist.gov/home" target="_blank" rel="noopener noreferrer" class="ref-link">NIST AI RMF</a> alignment and production deployment checklists for enterprise environments</li>
   </ul>
 </div>
 
@@ -139,7 +139,7 @@
   
   <p><strong>L(x̂) = -log f(x̂)_y + λR(x̂)</strong></p>
   
-  <p>Where <em>f(x̂)_y</em> is the predicted probability for target class <em>y</em>, and <em>R(x̂)</em> is a regularization term encoding prior knowledge about valid inputs (e.g., total variation for images, perplexity for text). The regularizer prevents convergence to adversarial examples that maximize confidence without resembling real data.</p>
+  <p>Where <em>f(x̂)_y</em> is the predicted probability for target class <em>y</em>, and <em>R(x̂)</em> is a regularization term encoding prior knowledge about valid inputs (e.g., total variation for images, perplexity for text). The regularizer prevents convergence to <a href="https://atlas.mitre.org/techniques/AML.T0043" target="_blank" rel="noopener noreferrer" class="ref-link">adversarial example</a>s that maximize confidence without resembling real data.</p>
 
   <span class="code-caption">White-Box Model Inversion Attack Implementation</span>
   <pre><code>import torch
@@ -290,7 +290,7 @@ class BlackBoxModelInversion:
 <p>The real-world impact extends beyond academic proof-of-concepts. In healthcare, model inversion has reconstructed patient facial images from diagnostic models, violating HIPAA privacy guarantees. Financial models trained on transaction data can leak customer spending patterns. Perhaps most concerning, facial recognition systems deployed at scale represent high-value targets where reconstructing enrolled identities enables downstream attacks from identity theft to surveillance evasion.</p>
 
 <div class="teaser-note teaser-only">
-  <i class="fas fa-file-pdf"></i> The full guide dissects three real model inversion attacks in technical depth: a white-box face reconstruction attack against a commercial emotion recognition API achieving 91% similarity with 4,000 queries; a black-box federated learning inversion that recovered healthcare training records despite privacy-preserving aggregation; and a gradient leakage attack against a fine-tuned LLM that reconstructed verbatim PII from model outputs. Each case includes attacker methodology, query count, architecture vulnerability analysis, and a detection window timeline — plus a decision tree for assessing your own exposure by deployment model and data sensitivity.
+  <i class="fas fa-file-pdf"></i> The full guide dissects three real model inversion attacks in technical depth: a white-box face reconstruction attack against a commercial emotion recognition API achieving 91% similarity with 4,000 queries; a black-box federated learning inversion that recovered healthcare training records despite privacy-preserving aggregation; and a <a href="https://arxiv.org/abs/1906.08935" target="_blank" rel="noopener noreferrer" class="ref-link">gradient leakage</a> attack against a fine-tuned LLM that reconstructed verbatim PII from model outputs. Each case includes attacker methodology, query count, architecture vulnerability analysis, and a detection window timeline — plus a decision tree for assessing your own exposure by deployment model and data sensitivity.
 </div>
 
 <div class="pdf-only">
@@ -420,7 +420,7 @@ class GradientInversionAttack:
 
 <p>Effective defense against model inversion requires layered controls addressing multiple attack surfaces. No single technique provides complete protection; the goal is defense-in-depth that raises attack cost beyond adversary resources while maintaining model utility. The primary defensive categories include differential privacy during training, output perturbation at inference, architectural modifications, and access controls.</p>
 
-<p>Differential privacy (DP) remains the gold standard for provable privacy guarantees. By adding calibrated noise during training—either to gradients (DP-SGD) or to the objective function—you bound the influence any individual training sample can have on model outputs. This directly limits what inversion attacks can reconstruct. However, DP introduces a privacy-utility tradeoff: stronger privacy (lower ε) degrades model accuracy. Production deployments typically target ε values between 1 and 10, accepting modest accuracy drops for meaningful privacy.</p>
+<p>Differential privacy (DP) remains the gold standard for provable privacy guarantees. By adding calibrated noise during training—either to gradients (<a href="https://arxiv.org/abs/1607.00133" target="_blank" rel="noopener noreferrer" class="ref-link">DP-SGD</a>) or to the objective function—you bound the influence any individual training sample can have on model outputs. This directly limits what inversion attacks can reconstruct. However, DP introduces a privacy-utility tradeoff: stronger privacy (lower ε) degrades model accuracy. Production deployments typically target ε values between 1 and 10, accepting modest accuracy drops for meaningful privacy.</p>
 
 <div class="teaser-note teaser-only">
   <i class="fas fa-file-pdf"></i> The full guide delivers production implementations for every defense layer: DP-SGD with calibrated epsilon/delta budgets for transformer, CNN, and MLP architectures; confidence score rounding with bucketing thresholds and empirical privacy gain measurements; adaptive query rate limiting with anomaly detection for systematic probing; and architectural defenses including MixUp training and knowledge distillation — each with implementation code, a before/after information leakage measurement methodology, and configuration templates for common ML frameworks (PyTorch, TensorFlow, JAX).
@@ -486,7 +486,7 @@ class GradientInversionAttack:
     <!-- SECTION 4: NIST AI RMF Alignment and Deployment Checklists -->
     <h2 class="with-icon"><i class="fas fa-balance-scale section-icon" aria-hidden="true"></i> NIST AI RMF Alignment &amp; Production Deployment Checklists</h2>
 
-    <p>Model inversion risk doesn't exist in isolation — it has to be addressed within your broader AI governance framework. The NIST AI Risk Management Framework (AI RMF 1.0) provides the governance structure; mapping model inversion controls to it gives you the audit trail, stakeholder communication artifacts, and prioritization logic that a standalone technical guide can't provide on its own.</p>
+    <p>Model inversion risk doesn't exist in isolation — it has to be addressed within your broader AI governance framework. The <a href="https://airc.nist.gov/home" target="_blank" rel="noopener noreferrer" class="ref-link">NIST AI Risk Management Framework</a> (AI RMF 1.0) provides the governance structure; mapping model inversion controls to it gives you the audit trail, stakeholder communication artifacts, and prioritization logic that a standalone technical guide can't provide on its own.</p>
 
     <p>The controls in this guide map primarily to the MAP and MEASURE functions of the AI RMF — identifying where model inversion risk exists in your AI portfolio and quantifying it. GOVERN and MANAGE complete the picture: ensuring accountability structures are in place and response procedures are defined before you need them.</p>
 
@@ -548,7 +548,7 @@ class GradientInversionAttack:
             <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
           </tr>
           <tr style="background:#0f1a2e;">
-            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Quantify privacy leakage: run membership inference and reconstruction tests</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Quantify privacy leakage: run <a href="https://arxiv.org/abs/1610.05820" target="_blank" rel="noopener noreferrer" class="ref-link">membership inference</a> and reconstruction tests</td>
             <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#10b981;">MEASURE</td>
             <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MS-2.5</td>
             <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>

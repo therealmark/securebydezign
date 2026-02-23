@@ -90,7 +90,7 @@
         <li><strong>Memory and RAG hijacking</strong> — poisoning vector stores to plant persistent backdoors across sessions.</li>
         <li><strong>Privilege escalation via tool chaining</strong> — multi-step attack patterns that turn read access into full system compromise.</li>
         <li><strong>Enterprise defense architecture</strong> — a layered control framework with implementation guidance.</li>
-        <li><strong>NIST AI RMF alignment</strong> — mapping controls to Govern, Map, Measure, and Manage functions.</li>
+        <li><strong><a href="https://airc.nist.gov/home" target="_blank" rel="noopener noreferrer" class="ref-link">NIST AI RMF</a> alignment</strong> — mapping controls to Govern, Map, Measure, and Manage functions.</li>
         <li><strong>Implementation checklist</strong> — 30 actionable controls for enterprise deployment teams.</li>
       </ul>
     </div>
@@ -114,7 +114,7 @@
       <h3>Threat Modeling Agentic Systems</h3>
       <p>Standard STRIDE does not fully capture agentic threats. Extend your threat model with these agent-specific categories:</p>
       <ul>
-        <li><strong>Planner Hijack:</strong> Attacker manipulates the agent's goal or next-action decision. Surfaces: system prompt injection, malicious tool descriptions, poisoned memory retrieval.</li>
+        <li><strong>Planner Hijack:</strong> Attacker manipulates the agent's goal or next-action decision. Surfaces: system <a href="https://genai.owasp.org/llmrisk/llm012025-prompt-injection/" target="_blank" rel="noopener noreferrer" class="ref-link">prompt injection</a>, malicious tool descriptions, poisoned memory retrieval.</li>
         <li><strong>Tool Weaponization:</strong> Agent is made to invoke a benign tool in a malicious way (e.g., using a "send email" tool to exfiltrate data, using a "search" tool to trigger SSRF).</li>
         <li><strong>Credential Harvesting:</strong> Agent's access to secrets or session tokens is extracted through crafted tool responses or memory reads.</li>
         <li><strong>State Persistence:</strong> Attacker plants instructions in the agent's memory store that survive the current session and influence future runs.</li>
@@ -123,7 +123,7 @@
     </div>
 
     <h2 class="with-icon"><i class="fas fa-plug section-icon" aria-hidden="true"></i> Tool Poisoning &amp; MCP Exploitation</h2>
-    <p>The Model Context Protocol (MCP) and similar tool-calling frameworks let agents discover and call external capabilities at runtime. This extensibility is also an attack surface: a malicious or compromised MCP server can return tool definitions or responses that redirect the agent's behavior entirely — a technique called <em>tool poisoning</em>.</p>
+    <p>The <a href="https://modelcontextprotocol.io/introduction" target="_blank" rel="noopener noreferrer" class="ref-link">Model Context Protocol</a> (MCP) and similar tool-calling frameworks let agents discover and call external capabilities at runtime. This extensibility is also an attack surface: a malicious or compromised MCP server can return tool definitions or responses that redirect the agent's behavior entirely — a technique called <em>tool poisoning</em>.</p>
     <p class="teaser-only">Tool poisoning attacks embed instructions in tool metadata or responses that the agent treats as legitimate directives, bypassing system-prompt-level controls. The PDF details real attack patterns, malicious MCP server construction, and defensive tool validation architectures.</p>
     <p class="teaser-note teaser-only">The full guide includes working exploit code for tool poisoning via injected MCP server metadata — plus a defensive tool validation architecture with per-tool JSON schema enforcement, cryptographic tool descriptor signing, and anomaly-scoring middleware that flags unexpected tool call sequences before they execute.</p>
     <div class="pdf-only">
@@ -443,7 +443,7 @@ class ToolCallInterceptor:
     </div>
 
     <h2 class="with-icon"><i class="fas fa-scale-balanced section-icon" aria-hidden="true"></i> NIST AI RMF Alignment</h2>
-    <p>The NIST AI Risk Management Framework (AI RMF 1.0) provides a vendor-neutral governance structure for managing AI risk across four functions: <strong>Govern, Map, Measure, and Manage</strong>. Agentic systems introduce novel risks in each function that organizations deploying enterprise AI must explicitly address.</p>
+    <p>The <a href="https://airc.nist.gov/home" target="_blank" rel="noopener noreferrer" class="ref-link">NIST AI Risk Management Framework</a> (AI RMF 1.0) provides a vendor-neutral governance structure for managing AI risk across four functions: <strong>Govern, Map, Measure, and Manage</strong>. Agentic systems introduce novel risks in each function that organizations deploying enterprise AI must explicitly address.</p>
     <p class="teaser-only">The PDF maps each agentic security control to the corresponding NIST AI RMF function and subcategory, providing a governance-ready artifact for enterprise security programs and audit readiness.</p>
     <p class="teaser-note teaser-only">The full guide includes a 40-control NIST AI RMF mapping table spanning all four functions (GOVERN, MAP, MEASURE, MANAGE), with per-control audit evidence requirements, implementation priority ratings, and a maturity scoring worksheet — ready to attach to your AI risk assessment or board-level security report.</p>
     <div class="pdf-only">
