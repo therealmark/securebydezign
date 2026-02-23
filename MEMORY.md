@@ -77,6 +77,15 @@ python3 /Users/pax/.openclaw/workspace/scripts/check-credits.py
 - Shows floating 🔓 Unlock PDF button → direct PDF link, no payment needed
 - Implemented in `js/owner-unlock.js`, loaded in all articles
 
+## Reference Popovers — Current State (as of 2026-02-22)
+
+- **Commit:** `1c11a0b` — all 8 articles have working visible popovers
+- **Script:** `/tmp/build_popovers_v3.py` (not in repo — recreate from REFS list if needed)
+- **Coverage:** 30 visible + 19 pdf-only across all 8 articles; 43 terms in REFS list
+- **Logic:** Stack-based two-pass processor — visible pass skips `teaser-only`+`pdf-only`, pdf pass targets `pdf-only` only
+- **Key lesson:** Always use stack-based section tracking (not depth counters) for correct nested-div parsing. First-occurrence-globally fails when hidden index boxes list all terms before visible paragraphs.
+- **Strip approach:** Remove `<span class="ref-popover[^"]*">.*?</span>` first, then bare `<span class="ref-term">` openers — handles any content between them including inline tags
+
 ## Active Projects
 
 ### Daily 4AM PST Cron — securebydezign.com Content Pipeline
