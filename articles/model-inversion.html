@@ -482,6 +482,152 @@ class GradientInversionAttack:
     </div>
   </figure>
 </div>
+
+    <!-- SECTION 4: NIST AI RMF Alignment and Deployment Checklists -->
+    <h2 class="with-icon"><i class="fas fa-balance-scale section-icon" aria-hidden="true"></i> NIST AI RMF Alignment &amp; Production Deployment Checklists</h2>
+
+    <p>Model inversion risk doesn't exist in isolation — it has to be addressed within your broader AI governance framework. The NIST AI Risk Management Framework (AI RMF 1.0) provides the governance structure; mapping model inversion controls to it gives you the audit trail, stakeholder communication artifacts, and prioritization logic that a standalone technical guide can't provide on its own.</p>
+
+    <p>The controls in this guide map primarily to the MAP and MEASURE functions of the AI RMF — identifying where model inversion risk exists in your AI portfolio and quantifying it. GOVERN and MANAGE complete the picture: ensuring accountability structures are in place and response procedures are defined before you need them.</p>
+
+    <p class="teaser-note teaser-only">The full guide includes a complete NIST AI RMF control mapping for model inversion risk (20 controls across all four functions), a pre-deployment security checklist covering every inversion attack surface, and a risk tiering framework for prioritizing defenses by model type and data sensitivity — ready to present to a CISO or auditor.</p>
+
+    <div class="pdf-only">
+      <h3>NIST AI RMF Control Mapping: Model Inversion Risk</h3>
+
+      <table style="width:100%;border-collapse:collapse;font-size:0.85em;margin:1.5em 0;">
+        <thead>
+          <tr style="background:#1e293b;color:#94a3b8;text-align:left;">
+            <th style="padding:8px 10px;border-bottom:2px solid #334155;">Control</th>
+            <th style="padding:8px 10px;border-bottom:2px solid #334155;">AI RMF Function</th>
+            <th style="padding:8px 10px;border-bottom:2px solid #334155;">Subcategory</th>
+            <th style="padding:8px 10px;border-bottom:2px solid #334155;">Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#0f172a;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Document model inversion risk in AI system risk register</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#60a5fa;">GOVERN</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">GV-1.3</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
+          </tr>
+          <tr style="background:#0f1a2e;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Assign AI Risk Owner for each model with PII/PHI training data</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#60a5fa;">GOVERN</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">GV-4.2</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
+          </tr>
+          <tr style="background:#0f172a;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Establish API access policy for model inference endpoints</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#60a5fa;">GOVERN</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">GV-6.2</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
+          </tr>
+          <tr style="background:#0f1a2e;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Classify AI systems by training data sensitivity and output risk</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#f59e0b;">MAP</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MAP-1.1</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
+          </tr>
+          <tr style="background:#0f172a;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Identify and document all model inversion attack surfaces per system</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#f59e0b;">MAP</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MAP-3.5</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
+          </tr>
+          <tr style="background:#0f1a2e;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Document training data provenance and PII/PHI content inventory</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#f59e0b;">MAP</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MAP-1.5</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
+          </tr>
+          <tr style="background:#0f172a;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Conduct model inversion risk assessment before each production deployment</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#10b981;">MEASURE</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MS-2.3</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
+          </tr>
+          <tr style="background:#0f1a2e;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Quantify privacy leakage: run membership inference and reconstruction tests</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#10b981;">MEASURE</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MS-2.5</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
+          </tr>
+          <tr style="background:#0f172a;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Measure query-budget exhaustion rate and confidence distribution for anomaly baseline</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#10b981;">MEASURE</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MS-4.1</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#f59e0b;font-weight:600;">High</td>
+          </tr>
+          <tr style="background:#0f1a2e;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Validate differential privacy epsilon/delta budget against threat model</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#10b981;">MEASURE</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MS-2.7</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#f59e0b;font-weight:600;">High</td>
+          </tr>
+          <tr style="background:#0f172a;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Define and enforce query rate limits and per-client budget policies</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#a855f7;">MANAGE</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MG-2.2</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
+          </tr>
+          <tr style="background:#0f1a2e;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Deploy real-time anomaly detection for systematic probing patterns</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#a855f7;">MANAGE</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MG-2.2, MS-4.1</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
+          </tr>
+          <tr style="background:#0f172a;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Define and test incident response procedure for suspected model inversion attacks</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#a855f7;">MANAGE</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MG-3.1</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Critical</td>
+          </tr>
+          <tr style="background:#0f1a2e;">
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#e2e8f0;font-weight:600;">Conduct post-incident review and update defenses after any confirmed inversion event</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#a855f7;">MANAGE</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#94a3b8;">MG-4.1</td>
+            <td style="padding:8px 10px;border-bottom:1px solid #1e293b;color:#f59e0b;font-weight:600;">High</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Pre-Deployment Security Checklist</h3>
+      <p>Run this checklist for every model that handles PII, PHI, financial data, or proprietary business data before it goes to production. No model should go live with open findings on Critical items.</p>
+
+      <h4 style="color:#ef4444;margin-top:1.5em;">Training-Time Controls</h4>
+      <ul>
+        <li>☐ <strong>[Critical]</strong> Training data audit completed: PII/PHI content inventoried and documented.</li>
+        <li>☐ <strong>[Critical]</strong> Differential privacy applied if training data contains sensitive records: DP-SGD with ε ≤ 8 for high-sensitivity data, ε ≤ 2 for healthcare/finance.</li>
+        <li>☐ <strong>[High]</strong> MixUp or label smoothing applied to reduce memorization in classification models.</li>
+        <li>☐ <strong>[High]</strong> Knowledge distillation from teacher model considered as privacy-preserving alternative for consumer-facing deployments.</li>
+        <li>☐ <strong>[Medium]</strong> Training environment isolated from production; training data not accessible from inference runtime.</li>
+      </ul>
+
+      <h4 style="color:#f59e0b;margin-top:1.5em;">Inference API Controls</h4>
+      <ul>
+        <li>☐ <strong>[Critical]</strong> Confidence scores rounded or bucketed: top-k only (k ≤ 5), no raw logit values exposed in API responses.</li>
+        <li>☐ <strong>[Critical]</strong> Per-client query rate limiting enforced: hard limit defined, enforced at API gateway, not just application layer.</li>
+        <li>☐ <strong>[Critical]</strong> Per-client query budget enforced: daily/weekly cap with automatic suspension on breach.</li>
+        <li>☐ <strong>[High]</strong> Anomaly detection active: baseline established, alerts configured for query patterns with high reconstruction potential (many queries with small input perturbations).</li>
+        <li>☐ <strong>[High]</strong> Authentication required for all inference API calls: no unauthenticated access to any model output.</li>
+        <li>☐ <strong>[Medium]</strong> Output caching implemented where semantically safe: reduces information per unique query for repeated inputs.</li>
+      </ul>
+
+      <h4 style="color:#10b981;margin-top:1.5em;">Monitoring and Response</h4>
+      <ul>
+        <li>☐ <strong>[Critical]</strong> Query log retention enabled: minimum 90 days, queryable by client ID and timestamp.</li>
+        <li>☐ <strong>[Critical]</strong> Incident response runbook defined and assigned: who gets paged on inversion alert, what actions they take, escalation path.</li>
+        <li>☐ <strong>[High]</strong> Privacy leakage measurement baseline established: membership inference test result documented pre-deployment.</li>
+        <li>☐ <strong>[High]</strong> Regulatory notification obligations assessed: GDPR Article 33/34, HIPAA Breach Notification Rule, applicable state laws — assessed for breach scenario.</li>
+        <li>☐ <strong>[Medium]</strong> Periodic re-assessment scheduled: model inversion risk assessment repeated on each model version update or training data change.</li>
+      </ul>
+
+      <div class="callout">
+        <strong>Risk tiering principle:</strong> Not all models carry equal inversion risk. A model trained on public web data poses minimal risk. A model fine-tuned on employee HR records or patient health records poses extreme risk. Calibrate your control investment to the sensitivity classification of training data — apply the full checklist above to Tier 1 (PII/PHI/financial), a simplified version to Tier 2 (internal business data), and minimal controls to Tier 3 (public or synthetic data only).
+      </div>
+    </div>
+
   </article>
   <script src="model-inversion-stripe.js"></script>
   <script src="../js/stripe-checkout.js"></script>

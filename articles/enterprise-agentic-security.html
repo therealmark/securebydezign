@@ -218,7 +218,7 @@
     </figure>
 
     <p>The trust boundary diagram above describes what security architects should design. What most enterprises have deployed looks nothing like it: agents with unrestricted internet access, credentials stored in plaintext environment variables, no validation of tool responses before passing them back to the LLM, and no audit log of what actions the agent actually took.</p>
-    <p class="teaser-note teaser-only">The full guide delivers a complete zero-trust AI architecture blueprint: trust tier definitions for agents and model classes, OPA policy-as-code enforcement patterns, per-boundary logging specifications with SIEM integration, and a 12-question security architecture review checklist for evaluating any new AI system before it touches production data.</p>
+    <p class="teaser-note teaser-only">The full guide details the five properties that make agentic systems uniquely risky — autonomy without oversight, credential accumulation, instruction ambiguity, memory persistence, and tool chaining amplification — plus a complete STRIDE-LM threat modeling extension with four agentic-specific threat categories (Planner Subversion, Tool Weaponization, Persistence Implant, Cascading Authorization) and a worked threat model for a production RAG-based agent deployment.</p>
     <div class="pdf-only">
       <h3>The Five Properties That Make Agentic Systems Uniquely Risky</h3>
       <ol>
@@ -236,6 +236,133 @@
         <li><strong>Persistence Implant (PI):</strong> Attacker plants instructions or data in the agent's memory store that persist across sessions. Vectors: memory poisoning, RAG index poisoning. Impact: persistent backdoor that survives session termination.</li>
         <li><strong>Cascading Authorization (CA):</strong> Agent uses its legitimate credentials to authorize subsequent actions that exceed intended scope. Vectors: over-privileged IAM roles, ambiguous authorization scope. Impact: privilege escalation through the agent as proxy.</li>
       </ul>
+    </div>
+
+
+    <!-- SECTION 3: Trust Architecture for AI Systems -->
+    <h2 class="with-icon"><i class="fas fa-shield-alt section-icon" aria-hidden="true"></i> Trust Architecture for AI Systems</h2>
+
+    <p>The trust boundary diagram in the previous section describes the target state. Getting there requires deliberate architecture decisions: which components sit in which trust zone, what validation happens at each boundary crossing, and how credentials flow (or don't) between zones. Most enterprises deploy agentic systems with no trust zoning at all — every component implicitly trusted, credentials freely shared, tool outputs passed directly back to the LLM without inspection.</p>
+
+    <p>Zero-trust principles apply to AI systems just as they apply to network architecture: never trust, always verify, enforce least privilege at every boundary. The implementation is different because the "boundary" is often a function call or a prompt, not a network packet — but the discipline is identical.</p>
+
+    <p class="teaser-note teaser-only">The full guide delivers a complete zero-trust AI architecture blueprint: trust tier definitions for every agent and model class, OPA policy-as-code enforcement patterns with Rego examples, per-boundary logging specifications with SIEM field mappings, and a 12-question security architecture review template for evaluating any new AI system before it touches production data.</p>
+
+    <div class="pdf-only">
+      <h3>The Four Trust Zones and Their Enforcement Requirements</h3>
+      <p>Every component in an agentic system falls into one of four trust zones. Zone assignment determines what validation is required before the component can interact with components in other zones.</p>
+
+      <table style="width:100%;border-collapse:collapse;font-size:0.875em;margin:1.5em 0;">
+        <thead>
+          <tr style="background:#1e293b;color:#94a3b8;text-align:left;">
+            <th style="padding:8px 12px;border-bottom:2px solid #334155;">Zone</th>
+            <th style="padding:8px 12px;border-bottom:2px solid #334155;">Components</th>
+            <th style="padding:8px 12px;border-bottom:2px solid #334155;">Trust Level</th>
+            <th style="padding:8px 12px;border-bottom:2px solid #334155;">Boundary Enforcement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#0f172a;">
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#10b981;font-weight:600;">Protected</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#e2e8f0;">Secrets, API keys, PII, system prompt, memory store</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#e2e8f0;">Unconditional</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;">No outbound data flow. Credential broker only. Encryption at rest + in transit. Append-only access log.</td>
+          </tr>
+          <tr style="background:#0f1a2e;">
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#60a5fa;font-weight:600;">Trusted</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#e2e8f0;">Agent runtime, orchestrator, planner, LLM inference endpoint</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#e2e8f0;">Conditional</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;">Verify integrity at startup. Authenticate all outbound calls. Log all tool invocations with full parameters.</td>
+          </tr>
+          <tr style="background:#0f172a;">
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#f59e0b;font-weight:600;">Semi-Trusted</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#e2e8f0;">Tool layer: APIs, MCP servers, RAG/vector DB, code executor, webhooks</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#e2e8f0;">Verify per call</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;">Validate all responses before passing to agent. JSON schema enforcement. Instruction-detection classifier on all retrieved content. Allowlist of approved tool endpoints.</td>
+          </tr>
+          <tr style="background:#0f1a2e;">
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#ef4444;font-weight:600;">Untrusted</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#e2e8f0;">User input, external data, third-party model responses, attacker-controlled content</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#e2e8f0;">Never trust</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #1e293b;color:#94a3b8;">Sanitize before any zone crossing. Run injection classifier. Enforce length and encoding limits. Never allow direct LLM context injection without validation.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>OPA Policy Enforcement: Trust Zone Boundary Control</h3>
+      <p>Open Policy Agent (OPA) with Rego lets you express trust zone enforcement as code that's reviewable, testable, and auditable. The following policy enforces the key invariants: no raw credentials in tool calls, no unvalidated untrusted content injected into agent context, and required logging for all Protected zone access.</p>
+
+      <p class="code-caption">trust_zones.rego — OPA policy enforcing AI system trust boundary invariants</p>
+      <pre><code>package ai.trust_zones
+
+import future.keywords.in
+
+# ── Protected Zone: credentials must never appear in tool call parameters ──
+deny[msg] {
+    input.action == "tool_call"
+    tool_param := input.parameters[_]
+    is_credential_pattern(tool_param)
+    msg := sprintf("VIOLATION: Credential pattern detected in tool call parameter '%v'. Use credential broker.", [tool_param])
+}
+
+is_credential_pattern(val) {
+    val_str := sprintf("%v", [val])
+    patterns := ["sk-", "api_key=", "secret=", "token=", "password=", "Bearer ", "AWS_SECRET"]
+    pattern := patterns[_]
+    contains(lower(val_str), lower(pattern))
+}
+
+# ── Semi-Trusted Zone: all retrieved content must be scanned before injection ──
+deny[msg] {
+    input.action == "inject_retrieved_content"
+    not input.metadata.injection_scan_passed == true
+    msg := "VIOLATION: Retrieved content must pass injection classifier before LLM context injection."
+}
+
+# ── Protected Zone: all access must be logged ──
+deny[msg] {
+    input.action in ["read_secret", "access_pii", "read_system_prompt", "read_memory"]
+    not input.metadata.audit_logged == true
+    msg := sprintf("VIOLATION: Protected zone access '%v' must be audit-logged before execution.", [input.action])
+}
+
+# ── Untrusted Zone: user input must be sanitized before any zone crossing ──
+deny[msg] {
+    input.source == "user_input"
+    not input.metadata.sanitized == true
+    input.action != "receive_raw_input"  # Raw receive is always allowed; subsequent use is not
+    msg := "VIOLATION: Unsanitized user input cannot cross trust zone boundary."
+}
+
+# ── Trusted Zone: all outbound tool calls must be to the approved allowlist ──
+deny[msg] {
+    input.action == "tool_call"
+    not input.tool_endpoint in data.approved_tool_endpoints
+    msg := sprintf("VIOLATION: Tool endpoint '%v' is not in the approved allowlist.", [input.tool_endpoint])
+}
+
+# Policy is satisfied when no violations
+allow {
+    count(deny) == 0
+}
+</code></pre>
+
+      <h3>Security Architecture Review: 12-Question Checklist</h3>
+      <p>Before any agentic system touches production data, it must pass this architecture review. Each question maps to a specific trust zone enforcement requirement. A "No" answer on any question is a blocking finding — it must be resolved before deployment.</p>
+      <ol>
+        <li><strong>Trust zone assignment:</strong> Has every component in the system been explicitly assigned to a trust zone (Protected / Trusted / Semi-Trusted / Untrusted)?</li>
+        <li><strong>Credential isolation:</strong> Are all secrets accessed through a credential broker (Vault, AWS Secrets Manager, GCP Secret Manager)? Are raw credentials absent from environment variables, logs, and agent context?</li>
+        <li><strong>Tool endpoint allowlist:</strong> Is there a defined, reviewed allowlist of all external endpoints the agent is permitted to call? Is calling an unlisted endpoint blocked at the infrastructure layer?</li>
+        <li><strong>Tool response validation:</strong> Are all tool responses validated against a JSON schema before being passed to the agent? Does validation include an instruction-detection classifier for retrieved content?</li>
+        <li><strong>Input sanitization:</strong> Does all untrusted input (user messages, external documents, API responses) pass through a sanitization layer before any trust zone crossing?</li>
+        <li><strong>Memory store access control:</strong> Is the vector/memory store on a separate access control boundary from the agent runtime? Are writes to the memory store authenticated and logged?</li>
+        <li><strong>Audit logging:</strong> Is every Protected zone access (secret read, PII access, memory write) logged to an append-only, tamper-evident store with agent identity and timestamp?</li>
+        <li><strong>Human escalation path:</strong> Is there a defined set of high-consequence actions that require human approval before execution? Is the escalation mechanism tested?</li>
+        <li><strong>Kill switch:</strong> Is there a mechanism to immediately terminate all running agent instances and freeze their credential access? Has it been tested in the last 90 days?</li>
+        <li><strong>Blast radius analysis:</strong> Has a blast radius analysis been conducted for the worst-case compromise scenario (agent fully controlled by attacker)? Is the outcome acceptable?</li>
+        <li><strong>Threat model:</strong> Has a threat model been completed using the STRIDE-LM extension? Are all identified threats either mitigated or accepted with documented rationale?</li>
+        <li><strong>Policy-as-code enforcement:</strong> Are trust zone boundary invariants expressed as OPA/Rego policies that are tested in CI and enforced at runtime?</li>
+      </ol>
     </div>
 
     <h2 class="with-icon"><i class="fas fa-id-badge section-icon" aria-hidden="true"></i> Non-Human Identity Sprawl: The Fastest-Growing Attack Surface</h2>
