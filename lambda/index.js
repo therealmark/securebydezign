@@ -4,6 +4,7 @@
  */
 import { handleWebhook } from './lib/webhook.js';
 import { handleSession } from './lib/session.js';
+import { handleXaiProxy } from './lib/xai-proxy.js';
 
 function getPath(event) {
   return event.path ?? event.rawPath ?? event.requestContext?.http?.path ?? '';
@@ -55,6 +56,12 @@ export const handler = async (event) => {
       const query = getQuery(event);
       const sessionId = query.session_id ?? query['session_id'];
       const result = await handleSession(sessionId);
+      return ensureResponse(result);
+    }
+
+    // POST /proxy/xai — proxies to api.x.ai bypassing Cloudflare ASN block
+    if ((path === '/proxy/xai' || path.endsWith('/proxy/xai')) && method === 'POST') {
+      const result = await handleXaiProxy(event);
       return ensureResponse(result);
     }
 
