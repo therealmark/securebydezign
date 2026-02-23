@@ -117,6 +117,12 @@ python3 /Users/pax/.openclaw/workspace/scripts/check-credits.py
 - **Stripe exemption:** Stripe webhooks bypass WAF (signature verification requires unmodified payload)
 - **Nightly report cron:** `bd81753e-2bcb-4574-8612-1aa1b6231ef5` — runs 9PM PST daily, queries CloudWatch Logs Insights, sends Telegram report to 6677080412
 
+## Queued Article Topics
+
+| Date | Topic | Notes |
+|------|-------|-------|
+| 2026-02-24 | Zero Trust Architecture for AI/LLM Systems | Mark's request — center on ZT principles applied to AI adoption: never trust/always verify for agents, microsegmentation for AI workloads, NIST SP 800-207, BeyondCorp applied to LLM APIs, identity-first for NHIs |
+
 ## Active Projects
 
 ### Daily 4AM PST Cron — securebydezign.com Content Pipeline
@@ -207,6 +213,7 @@ Catches malformed SVG `<text>` tags and other unclosed elements that silently br
 **Notes:**
 - Content must justify $27 — go deep, be comprehensive, be genuinely useful
 - Match the existing site's look/feel (check local project before writing)
+- **Source links (REQUIRED):** Every article must include inline links to authoritative primary sources — NIST publications, OWASP pages, MITRE ATT&CK/ATLAS entries, CVE records, vendor security advisories, academic papers. Link from the relevant term or claim directly. Aim for 8–15 sourced links per article. This is non-negotiable — it builds trust and SEO authority.
 - **Cron Job ID:** `9a0cc51b-e28a-4567-bd7c-0394ec51c6ae`
 - Runs daily at 4AM PST
 
@@ -296,3 +303,4 @@ After any significant session, write a summary to `memory/YYYY-MM-DD.md` — the
 - `stripe-checkout.js` drives all Buy button URLs — per-article, per-mode (test/live)
 - Lambda key selection is automatic: `cs_test_` → test key, `cs_live_` → live key
 - **HTML VALIDATION IS MANDATORY** — run the validator on every article before committing. rag-security.html shipped with a truncated unclosed `<p>` tag. Never again. No exceptions, no shortcuts. Validate first, commit second.
+- **Source links in every article** — link to primary sources (NIST, OWASP, MITRE, CVEs, papers) inline from relevant claims. 8–15 per article minimum. Increases credibility and SEO authority. Mark's explicit direction (2026-02-23).
