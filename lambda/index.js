@@ -6,6 +6,7 @@ import { handleWebhook } from './lib/webhook.js';
 import { handleSession } from './lib/session.js';
 import { handleXaiProxy } from './lib/xai-proxy.js';
 import { handleSearchDefs } from './lib/search-defs.js';
+import { wafCheck } from './lib/waf.js';
 
 function getPath(event) {
   return event.path ?? event.rawPath ?? event.requestContext?.http?.path ?? '';
@@ -25,7 +26,7 @@ export const handler = async (event) => {
   console.log('[Lambda] invoked', { path, method, hasBody: !!event.body, isBase64: !!event.isBase64Encoded });
 
   try {
-    // CORS preflight
+    // CORS preflight (skip WAF — no payload to inspect)
     if (method === 'OPTIONS') {
       return {
         statusCode: 204,
@@ -36,6 +37,14 @@ export const handler = async (event) => {
         },
         body: '',
       };
+    }
+
+    // WAF — inspect all non-OPTIONS requests before routing
+    // Stripe webhook is exempted: payload must reach signature verification intact
+    const isStripeWebhook = (path === '/webhooks/stripe' || path.endsWith('/webhooks/stripe')) && method === 'POST';
+    if (!isStripeWebhook) {
+      const wafBlock = wafCheck(event);
+      if (wafBlock) return wafBlock;
     }
 
     // POST /webhooks/stripe (path may include stage prefix, e.g. /prod/webhooks/stripe)
