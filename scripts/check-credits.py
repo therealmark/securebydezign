@@ -145,30 +145,25 @@ def check_anthropic() -> dict:
 
 
 # ── xAI ───────────────────────────────────────────────────────────────────────
+# xAI has no balance API. api.x.ai is also Cloudflare-blocked (ASN 1010) from
+# this machine's residential Comcast IP. Balance must be checked manually at
+# console.x.ai. Update XAI_LAST_KNOWN_BALANCE and XAI_LAST_CHECKED when Mark
+# reports a new balance.
+XAI_LAST_KNOWN_BALANCE = 235.75   # USD — last reported by Mark
+XAI_LAST_CHECKED       = "2026-02-22"
+
 def check_xai() -> dict:
     if not XAI_KEY:
         return {"status": "no_key"}
 
-    data, err = _post(
-        "https://api.x.ai/v1/chat/completions",
-        {"Authorization": f"Bearer {XAI_KEY}"},
-        {
-            "model": "grok-3-fast",
-            "max_tokens": 1,
-            "messages": [{"role": "user", "content": "hi"}],
-        },
-    )
-    if data is not None:
-        return {
-            "status": "ok",
-            "balance_usd": "unknown (no billing API)",
-            "source": "test_call_ok",
-        }
-    if _is_quota_err(err):
-        return {"status": "exhausted", "note": "credits exhausted or rate-limited"}
-    if isinstance(err, urllib.error.HTTPError) and err.code in (401, 403):
-        return {"status": "auth_error", "detail": f"HTTP {err.code}"}
-    return {"status": "error", "detail": str(err)[:200]}
+    # api.x.ai is Cloudflare-blocked (error 1010, ASN block on Comcast).
+    # Fall back to last-known balance from console.x.ai.
+    return {
+        "status": "blocked",
+        "balance_usd": XAI_LAST_KNOWN_BALANCE,
+        "note": f"api.x.ai blocked by Cloudflare (ASN 1010). Balance as of {XAI_LAST_CHECKED} — check console.x.ai to update.",
+        "source": "manual",
+    }
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -179,7 +174,8 @@ def main():
         "xai":       check_xai(),
     }
 
-    # At least one usable?
+    # At least one usable? (blocked ≠ exhausted — xAI is blocked at network level,
+    # not out of credits, so don't count it against usability)
     usable = [p for p, r in results.items() if r.get("status") == "ok"]
     results["_summary"] = {
         "usable_providers": usable,
