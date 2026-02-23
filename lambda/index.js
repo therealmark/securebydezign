@@ -5,6 +5,7 @@
 import { handleWebhook } from './lib/webhook.js';
 import { handleSession } from './lib/session.js';
 import { handleXaiProxy } from './lib/xai-proxy.js';
+import { handleSearchDefs } from './lib/search-defs.js';
 
 function getPath(event) {
   return event.path ?? event.rawPath ?? event.requestContext?.http?.path ?? '';
@@ -56,6 +57,23 @@ export const handler = async (event) => {
       const query = getQuery(event);
       const sessionId = query.session_id ?? query['session_id'];
       const result = await handleSession(sessionId);
+      return ensureResponse(result);
+    }
+
+    // GET|POST /api/search-defs — semantic search over attack definition database
+    if (path === '/api/search-defs' || path.endsWith('/api/search-defs')) {
+      if (method === 'OPTIONS') {
+        return {
+          statusCode: 204,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type',
+          },
+          body: '',
+        };
+      }
+      const result = await handleSearchDefs(event);
       return ensureResponse(result);
     }
 

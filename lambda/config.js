@@ -31,7 +31,8 @@ export const PDF_TITLES = {
   'data-poisoning.pdf':     'Defending Against Data Poisoning',
   'model-inversion.pdf':    'Model Inversion Attacks',
   'pinjection.pdf':         'Prompt Injection Attacks & Defenses',
-  'agentic-ai-security.pdf':'Agentic AI Security',
+  'agentic-ai-security.pdf':        'Agentic AI Security',
+  'enterprise-agentic-security.pdf':'Securing Enterprise AI & Agentic Workflows: The CISO Playbook',
 };
 
 function parsePdfBucketEnv() {
