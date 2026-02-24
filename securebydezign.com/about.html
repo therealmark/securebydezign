@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Secure by DeZign is a daily AI security publication led by Pax — covering zero trust, agentic AI, and enterprise-ready defensive playbooks.">
+  <title>About • Secure by DeZign</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="canonical" href="https://www.securebydezign.com/about.html">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.securebydezign.com/about.html">
+  <meta property="og:title" content="About • Secure by DeZign">
+  <meta property="og:description" content="Meet Pax and the Secure by DeZign mission: daily AI security research for defenders and builders.">
+  <meta property="og:image" content="https://www.securebydezign.com/images/agentic-ai-security.jpg">
+  <meta property="og:site_name" content="Secure by DeZign">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About • Secure by DeZign">
+  <meta name="twitter:description" content="Meet Pax and the Secure by DeZign mission: daily AI security research for defenders and builders.">
+  <meta name="twitter:image" content="https://www.securebydezign.com/images/agentic-ai-security.jpg">
+  <style>
+    .skip-link {
+      position: absolute; top: -100%; left: 1rem; z-index: 9999;
+      background: #10b981; color: #000; padding: .5rem 1.25rem;
+      border-radius: 0 0 .5rem .5rem; font-weight: 700; font-size: .875rem;
+      text-decoration: none; transition: top .15s ease;
+    }
+    .skip-link:focus { top: 0; outline: 2px solid #000; outline-offset: 2px; }
+    :focus-visible { outline: 2px solid #10b981; outline-offset: 3px; border-radius: 3px; }
+    :focus:not(:focus-visible) { outline: none; }
+    .lang-switcher {
+      appearance: none; -webkit-appearance: none;
+      background: #18181b url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2371717a'/%3E%3C/svg%3E") no-repeat right .5rem center;
+      background-size: 8px; border: 1px solid #3f3f46; border-radius: .5rem;
+      color: #a1a1aa; cursor: pointer; font-size: .75rem; font-weight: 600;
+      padding: .25rem 1.75rem .25rem .5rem; transition: border-color .15s, color .15s;
+    }
+    .lang-switcher:hover, .lang-switcher:focus { border-color: #10b981; color: #10b981; }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-200">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <nav role="navigation" aria-label="Main navigation" class="border-b border-zinc-800 bg-zinc-950 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-3 hover:opacity-90 transition" aria-label="Secure by DeZign — Home">
+        <i class="fas fa-shield-alt text-3xl text-emerald-500" aria-hidden="true"></i>
+        <span class="text-2xl font-bold tracking-tight">Secure by DeZign</span>
+      </a>
+      <div class="flex items-center gap-6 text-sm font-medium">
+        <a href="index.html" class="hover:text-emerald-400">Home</a>
+        <a href="definitions.html" class="hover:text-emerald-400">Definitions</a>
+        <a href="about.html" class="text-emerald-400 font-semibold" aria-current="page">About</a>
+        <select id="lang-switcher" class="lang-switcher" aria-label="Select language">
+          <option value="en">🇺🇸 EN</option>
+          <option value="es">🇪🇸 ES</option>
+        </select>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content" role="main" class="min-h-screen">
+    <section class="max-w-4xl mx-auto px-6 py-20 text-center">
+      <p class="text-sm tracking-[0.2em] uppercase text-emerald-400 mb-4">About Secure by DeZign</p>
+      <h1 class="text-5xl font-bold tracking-tight mb-6">Operational AI security, written for people who actually defend things.</h1>
+      <p class="text-lg text-zinc-400 leading-relaxed">
+        Secure by DeZign is the daily research stream from Pax — a career security architect obsessed with giving AI and security leaders
+        the playbooks they need to ship and defend real systems. Zero trust for agents, LLM abuse cases, resilient pipelines, and the
+        tradecraft that bridges board expectations with builder reality.
+      </p>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-10 pb-20">
+      <div class="bg-zinc-900 rounded-3xl p-10 shadow-[0_0_40px_rgba(16,185,129,0.08)] border border-zinc-800">
+        <h2 class="text-2xl font-semibold mb-4">What we publish</h2>
+        <ul class="space-y-3 text-zinc-300">
+          <li class="flex gap-3"><i class="fas fa-check text-emerald-400 mt-1" aria-hidden="true"></i><span>Enterprise-ready defensive architectures for agentic AI, RAG, and LLM APIs.</span></li>
+          <li class="flex gap-3"><i class="fas fa-check text-emerald-400 mt-1" aria-hidden="true"></i><span>Incident-caliber playbooks for prompt injection, data poisoning, model theft, and supply-chain compromise.</span></li>
+          <li class="flex gap-3"><i class="fas fa-check text-emerald-400 mt-1" aria-hidden="true"></i><span>Source-linked guidance grounded in NIST, OWASP, MITRE ATLAS, and real operator experience.</span></li>
+        </ul>
+      </div>
+      <div class="bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-400/30 rounded-3xl p-10">
+        <h2 class="text-2xl font-semibold mb-3">Who is Pax?</h2>
+        <p class="text-zinc-200 leading-relaxed">
+          Pax runs point on research, writing, and architecture reviews. Two decades in enterprise security, zero tolerance for fluff.
+          The goal: bring ruthless clarity to AI adoption so CISOs, AppSec leads, and platform teams can act with confidence.
+        </p>
+        <div class="grid sm:grid-cols-2 gap-4 mt-8 text-center">
+          <div class="bg-zinc-950/60 rounded-2xl py-6 border border-zinc-800">
+            <p class="text-4xl font-bold text-emerald-400">Daily</p>
+            <p class="text-sm uppercase tracking-[0.3em] text-zinc-400">New Research</p>
+          </div>
+          <div class="bg-zinc-950/60 rounded-2xl py-6 border border-zinc-800">
+            <p class="text-4xl font-bold text-emerald-400">$27</p>
+            <p class="text-sm uppercase tracking-[0.3em] text-zinc-400">Deep Dives</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="max-w-5xl mx-auto px-6 pb-20">
+      <div class="bg-zinc-900 rounded-3xl p-10 border border-zinc-800">
+        <div class="flex flex-col lg:flex-row gap-8 items-start lg:items-center">
+          <div class="flex-1">
+            <h2 class="text-3xl font-semibold mb-4">Connect with Secure by DeZign</h2>
+            <p class="text-zinc-400 mb-6">Have a question, partnership idea, or want coverage of a specific AI security challenge? Reach out — we answer every note.</p>
+            <div class="space-y-4">
+              <a href="mailto:pax@securebydezign.com" class="flex items-center gap-3 text-zinc-200 hover:text-emerald-400 transition" aria-label="Email Pax">
+                <i class="fas fa-envelope text-emerald-400" aria-hidden="true"></i>
+                <span>pax@securebydezign.com</span>
+              </a>
+              <a href="https://x.com/Pax_SBD" target="_blank" rel="noopener" class="flex items-center gap-3 text-zinc-200 hover:text-emerald-400 transition" aria-label="Follow Pax on X">
+                <i class="fab fa-x-twitter text-emerald-400" aria-hidden="true"></i>
+                <span>@Pax_SBD on X</span>
+              </a>
+            </div>
+          </div>
+          <div class="bg-zinc-950/70 border border-zinc-800 rounded-2xl p-6 min-w-[240px]">
+            <p class="text-sm uppercase tracking-[0.3em] text-zinc-400">Subscribe</p>
+            <p class="text-2xl font-semibold text-white mt-2">Stay ahead of AI threats.</p>
+            <p class="text-zinc-400 text-sm mt-3">New research hits the site every morning at 4AM PT.</p>
+            <a href="articles/" class="inline-flex items-center gap-2 mt-6 px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 font-medium">
+              Browse articles <i class="fas fa-arrow-right" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo" class="border-t border-zinc-800 py-10 text-center text-zinc-500 text-sm">
+    © 2026 Secure by DeZign
+  </footer>
+  <script src="/js/i18n.js" defer></script>
+</body>
+</html>
