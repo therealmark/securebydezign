@@ -1,6 +1,8 @@
 /* ── Base ──────────────────────────────────────────────────── */
 body {
   font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #f8fafc; /* Soft light blue-gray for cozy feel */
+  color: #334155; /* Soft dark gray for text */
 }
 
 /* ── Hero Background ───────────────────────────────────────── */
@@ -8,8 +10,8 @@ body {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(52, 211, 153, 0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(147, 197, 253, 0.25) 0%, transparent 70%), /* Soft blue */
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(250, 204, 21, 0.15) 0%, transparent 60%); /* Soft yellow */
   pointer-events: none;
 }
 
@@ -17,8 +19,8 @@ body {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(52, 211, 153, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(52, 211, 153, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(147, 197, 253, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(147, 197, 253, 0.08) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 0%, transparent 75%);
   pointer-events: none;
@@ -26,7 +28,7 @@ body {
 
 /* ── Text gradient ─────────────────────────────────────────── */
 .text-gradient {
-  background: linear-gradient(135deg, #34d399 0%, #6ee7b7 50%, #a7f3d0 100%);
+  background: linear-gradient(135deg, #93c5fd 0%, #a5b4fc 50%, #c7d2fe 100%); /* Pastel blue gradient */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -34,14 +36,14 @@ body {
 
 /* ── Terminal ──────────────────────────────────────────────── */
 .terminal-window {
-  background: #0d0d0d;
-  border: 1px solid rgba(52, 211, 153, 0.25);
+  background: #ffffff; /* White for light mode */
+  border: 1px solid rgba(147, 197, 253, 0.3);
   border-radius: 16px;
   overflow: hidden;
   box-shadow:
-    0 0 0 1px rgba(52, 211, 153, 0.05),
-    0 20px 60px rgba(0, 0, 0, 0.6),
-    0 0 80px rgba(52, 211, 153, 0.06);
+    0 0 0 1px rgba(147, 197, 253, 0.1),
+    0 20px 60px rgba(0, 0, 0, 0.05),
+    0 0 80px rgba(147, 197, 253, 0.08);
 }
 
 .terminal-bar {
@@ -49,8 +51,8 @@ body {
   align-items: center;
   gap: 8px;
   padding: 12px 16px;
-  background: #111;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: #f1f5f9; /* Light gray */
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 .dot {
@@ -67,7 +69,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   font-size: 12px;
-  color: #555;
+  color: #64748b;
   font-family: 'SF Mono', 'Fira Code', monospace;
   letter-spacing: 0.05em;
 }
@@ -77,6 +79,7 @@ body {
   font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
   font-size: 14px;
   min-height: 80px;
+  color: #1e293b; /* Dark slate for text */
 }
 
 .terminal-line {
@@ -86,16 +89,16 @@ body {
 }
 
 .terminal-prompt {
-  color: #34d399;
+  color: #3b82f6; /* Blue accent */
   flex-shrink: 0;
 }
 
 .terminal-task {
-  color: #e4e4e7;
+  color: #475569;
 }
 
 .terminal-cursor {
-  color: #34d399;
+  color: #3b82f6;
   animation: blink 1s step-end infinite;
   font-size: 16px;
   line-height: 1;
@@ -109,7 +112,7 @@ body {
 .terminal-status {
   margin-top: 10px;
   padding-left: 22px;
-  color: #34d399;
+  color: #10b981; /* Keep green for success, but softer */
   font-size: 13px;
   opacity: 0;
   transform: translateY(4px);
@@ -125,8 +128,8 @@ body {
 .power-strip {
   display: flex;
   gap: 0;
-  background: rgba(52, 211, 153, 0.05);
-  border: 1px solid rgba(52, 211, 153, 0.15);
+  background: rgba(147, 197, 253, 0.1);
+  border: 1px solid rgba(147, 197, 253, 0.2);
   border-radius: 16px;
   overflow: hidden;
   max-width: 560px;
@@ -144,21 +147,21 @@ body {
 .power-number {
   font-size: 32px;
   font-weight: 800;
-  color: #34d399;
+  color: #3b82f6; /* Blue accent */
   line-height: 1;
 }
 
 .power-suffix {
   font-size: 18px;
   font-weight: 700;
-  color: #34d399;
+  color: #3b82f6;
   line-height: 1;
   display: inline;
 }
 
 .power-label {
   font-size: 11px;
-  color: #71717a;
+  color: #475569;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   text-align: center;
@@ -167,7 +170,7 @@ body {
 
 .power-divider {
   width: 1px;
-  background: rgba(52, 211, 153, 0.1);
+  background: rgba(147, 197, 253, 0.15);
   margin: 12px 0;
 }
 
@@ -176,8 +179,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: #10b981;
-  color: #000;
+  background: #3b82f6; /* Blue primary */
+  color: #fff;
   font-weight: 700;
   font-size: 17px;
   padding: 16px 28px;
@@ -185,13 +188,13 @@ body {
   border: none;
   cursor: pointer;
   transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
-  box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
   white-space: nowrap;
 }
 
 .cta-primary:hover {
-  background: #34d399;
-  box-shadow: 0 0 50px rgba(52, 211, 153, 0.45);
+  background: #60a5fa;
+  box-shadow: 0 0 50px rgba(147, 197, 253, 0.45);
   transform: translateY(-1px);
 }
 
@@ -203,8 +206,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #3f3f46;
-  color: #d4d4d8;
+  border: 1px solid #cbd5e1;
+  color: #475569;
   font-size: 17px;
   padding: 16px 28px;
   border-radius: 14px;
@@ -213,38 +216,38 @@ body {
 }
 
 .cta-secondary:hover {
-  border-color: #34d399;
-  color: #fff;
+  border-color: #3b82f6;
+  color: #1e40af;
 }
 
 /* ── Before / After cards ──────────────────────────────────── */
 .before-card {
-  background: rgba(239, 68, 68, 0.04);
-  border: 1px solid rgba(239, 68, 68, 0.15);
+  background: rgba(248, 113, 113, 0.1); /* Soft red */
+  border: 1px solid rgba(248, 113, 113, 0.2);
   border-radius: 24px;
   padding: 28px;
 }
 
 .after-card {
-  background: rgba(52, 211, 153, 0.05);
-  border: 1px solid rgba(52, 211, 153, 0.2);
+  background: rgba(147, 197, 253, 0.1); /* Soft blue */
+  border: 1px solid rgba(147, 197, 253, 0.25);
   border-radius: 24px;
   padding: 28px;
 }
 
 /* ── Power cards ───────────────────────────────────────────── */
 .power-card {
-  background: #18181b;
-  border: 1px solid #27272a;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 24px;
   padding: 28px;
   transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .power-card:hover {
-  border-color: rgba(52, 211, 153, 0.3);
+  border-color: rgba(147, 197, 253, 0.4);
   transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(52, 211, 153, 0.06);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05), 0 0 30px rgba(147, 197, 253, 0.1);
 }
 
 .power-icon {
@@ -264,28 +267,28 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(52, 211, 153, 0.1);
-  border: 1px solid rgba(52, 211, 153, 0.3);
+  background: rgba(147, 197, 253, 0.15);
+  border: 1px solid rgba(147, 197, 253, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  color: #34d399;
+  color: #3b82f6;
   font-size: 15px;
 }
 
 /* ── Vision quote section ──────────────────────────────────── */
 .vision-section {
-  background: linear-gradient(135deg, rgba(52, 211, 153, 0.06) 0%, rgba(16, 185, 129, 0.02) 100%);
-  border: 1px solid rgba(52, 211, 153, 0.12);
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.08) 0%, rgba(250, 204, 21, 0.05) 100%);
+  border: 1px solid rgba(147, 197, 253, 0.15);
   border-radius: 32px;
   padding: 52px 48px;
 }
 
 /* ── CTA section ───────────────────────────────────────────── */
 .cta-section {
-  background: linear-gradient(135deg, rgba(52, 211, 153, 0.1) 0%, rgba(16, 185, 129, 0.04) 100%);
-  border: 1px solid rgba(52, 211, 153, 0.2);
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.15) 0%, rgba(250, 204, 21, 0.08) 100%);
+  border: 1px solid rgba(147, 197, 253, 0.25);
   border-radius: 32px;
   padding: 52px 48px;
   display: flex;
@@ -298,7 +301,7 @@ summary::-webkit-details-marker { display: none; }
 summary::after {
   content: '+';
   float: right;
-  color: #52525b;
+  color: #94a3b8;
   font-size: 20px;
   font-weight: 300;
 }
