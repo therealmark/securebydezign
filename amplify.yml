@@ -1,12 +1,18 @@
 version: 1
 frontend:
   phases:
+    preBuild:
+      commands:
+        - echo "Static site — checking changed files..."
     build:
       commands:
-        - echo "Static site — no build step required"
+        - echo "Build complete"
   artifacts:
     baseDirectory: /
     files:
       - '**/*'
+    exclude:
+      - 'sidekick/**'
+      - 'node_modules/**'
   cache:
     paths: []
