@@ -5,6 +5,7 @@
  */
 (function () {
   var TEST = {
+    'sidekick-kit': 'https://buy.stripe.com/28EfZg1ICbTWfzqeGZb7y0b',
     'supply-chain-ai':     'https://buy.stripe.com/test_9B614m68N5imdLc5v0eME02',
     'llm-red-teaming':     'https://buy.stripe.com/test_4gM6oGeFj7qu5eG7D8eME03',
     'api-security':        'https://buy.stripe.com/test_14A3cubt76mqbD40aGeME04',
@@ -16,6 +17,7 @@
   };
 
   var LIVE = {
+    'sidekick-kit': 'https://buy.stripe.com/8x2cN42MG8HK2ME7exb7y0c',
     'supply-chain-ai':     'https://buy.stripe.com/cNi5kCevogac5YQdCVb7y01',
     'llm-red-teaming':     'https://buy.stripe.com/4gM4gy5YSbTWfzqgP7b7y02',
     'api-security':        'https://buy.stripe.com/9B65kCaf8e24af6fL3b7y03',
@@ -29,6 +31,11 @@
   var useTest = window.location.hostname === 'localhost' ||
                 window.location.search.indexOf('test=1') !== -1;
 
+  function linkFor(slug) {
+    if (!slug) return null;
+    return useTest ? TEST[slug] : LIVE[slug];
+  }
+
   var path = window.location.pathname;
   var slug = null;
   var keys = Object.keys(TEST);
@@ -36,7 +43,14 @@
     if (path.indexOf(keys[i]) !== -1) { slug = keys[i]; break; }
   }
 
-  var url = slug ? (useTest ? TEST[slug] : LIVE[slug]) : null;
+  document.querySelectorAll('[data-checkout]').forEach(function(btn){
+    var targetSlug = btn.getAttribute('data-checkout');
+    var href = linkFor(targetSlug);
+    if (!href) return;
+    btn.addEventListener('click', function(){ window.location.href = href; });
+  });
+
+  var url = linkFor(slug);
   if (!url) return;
 
   function apply() {

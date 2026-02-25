@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="ztHeroTitle">
+  <title id="ztHeroTitle">Zero Trust AI Fabric</title>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#1f2937" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#34d399" />
+    </linearGradient>
+    <linearGradient id="magenta" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a855f7" />
+      <stop offset="100%" stop-color="#ec4899" />
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="40" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)" />
+  <g filter="url(#glow)">
+    <circle cx="300" cy="250" r="140" fill="rgba(16,185,129,0.2)" />
+    <circle cx="1300" cy="180" r="180" fill="rgba(168,85,247,0.18)" />
+    <circle cx="900" cy="650" r="220" fill="rgba(59,130,246,0.15)" />
+  </g>
+  <g stroke="#1e293b" stroke-width="4" fill="none">
+    <rect x="200" y="200" width="360" height="420" rx="32" />
+    <rect x="620" y="140" width="360" height="520" rx="32" />
+    <rect x="1040" y="200" width="360" height="420" rx="32" />
+  </g>
+  <g fill="none" stroke-dasharray="12 10" stroke-width="3">
+    <rect x="230" y="230" width="300" height="360" rx="26" stroke="#f59e0b" />
+    <rect x="650" y="170" width="300" height="460" rx="26" stroke="#10b981" />
+    <rect x="1070" y="230" width="300" height="360" rx="26" stroke="#a855f7" />
+  </g>
+  <g font-family="Inter,Arial,Helvetica,sans-serif" fill="#e2e8f0">
+    <text x="380" y="260" font-weight="600" font-size="32" text-anchor="middle">Edge</text>
+    <text x="800" y="200" font-weight="600" font-size="32" text-anchor="middle">Policy Plane</text>
+    <text x="1220" y="260" font-weight="600" font-size="32" text-anchor="middle">Data Domains</text>
+  </g>
+  <g fill="#0f172a" stroke="#0ea5e9" stroke-width="4">
+    <rect x="700" y="260" width="180" height="80" rx="16" />
+    <rect x="770" y="380" width="180" height="80" rx="16" />
+    <rect x="630" y="380" width="120" height="80" rx="16" />
+  </g>
+  <g fill="#f8fafc" font-family="Inter,Arial,Helvetica,sans-serif" font-size="24">
+    <text x="790" y="305">Prompt Guard</text>
+    <text x="860" y="425">Policy PDP</text>
+    <text x="690" y="425">Risk</text>
+  </g>
+  <g stroke="url(#accent)" stroke-width="6" stroke-linecap="round">
+    <polyline points="380,330 620,330" />
+    <polyline points="620,470 790,470" />
+    <polyline points="950,420 1070,420" />
+  </g>
+  <g stroke="url(#magenta)" stroke-width="6" stroke-linecap="round">
+    <polyline points="380,520 640,520 900,640 1220,640" />
+  </g>
+  <g font-family="Inter,Arial,Helvetica,sans-serif" fill="#94a3b8" font-size="22">
+    <text x="380" y="360" text-anchor="middle">Users · Plugins · SaaS</text>
+    <text x="1220" y="300" text-anchor="middle">RAG · Feature Stores · APIs</text>
+    <text x="800" y="700" text-anchor="middle">Continuous verification between every hop</text>
+  </g>
+  <text x="800" y="820" fill="#38bdf8" font-size="46" font-family="Inter,Arial,Helvetica,sans-serif" text-anchor="middle" font-weight="600">Zero Trust AI Fabric</text>
+</svg>

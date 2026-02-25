@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donation received • Sidekick kit download</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-950 text-zinc-50 min-h-screen">
+  <main class="max-w-3xl mx-auto px-6 py-16 flex flex-col gap-6">
+    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-10 text-center">
+      <h1 class="text-3xl font-bold">Thank you!</h1>
+      <p class="text-zinc-300 mt-3">Your donation is confirmed. We’re preparing your download.</p>
+      <div id="status" class="text-sm text-zinc-500 mt-6">Checking session…</div>
+      <button id="retry" class="hidden bg-emerald-500 hover:bg-emerald-400 text-black font-semibold px-4 py-2 rounded-xl mt-4">Retry download</button>
+    </div>
+  </main>
+
+  <script>
+    const API_BASE = 'https://z01mzuzo05.execute-api.us-east-1.amazonaws.com/prod';
+    const statusEl = document.getElementById('status');
+    const retryBtn = document.getElementById('retry');
+
+    async function fetchSession(sessionId) {
+      try {
+        const res = await fetch(`${API_BASE}/api/session?session_id=${sessionId}`);
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+        return await res.json();
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    function triggerDownloads(downloads = []) {
+      downloads.forEach((d, idx) => {
+        setTimeout(() => {
+          const a = document.createElement('a');
+          a.href = d.url;
+          a.download = d.filename || 'sidekick-kit.zip';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }, idx * 1000);
+      });
+    }
+
+    async function init() {
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get('session_id');
+      if (!sessionId) {
+        statusEl.textContent = 'Missing session ID. Check your e-mail for the download link or contact support.';
+        retryBtn.classList.remove('hidden');
+        return;
+      }
+      statusEl.textContent = 'Verifying donation…';
+      try {
+        const data = await fetchSession(sessionId);
+        if (data.email) {
+          statusEl.textContent = `We also e-mailed ${data.email} a copy.`;
+        } else {
+          statusEl.textContent = 'Download starting…';
+        }
+        triggerDownloads(data.downloads || []);
+      } catch (err) {
+        statusEl.textContent = `Could not verify payment (${err.message}).`;
+        retryBtn.classList.remove('hidden');
+      }
+    }
+
+    retryBtn.addEventListener('click', init);
+    init();
+  </script>
+</body>
+</html>

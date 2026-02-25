@@ -1,0 +1,20 @@
+body {
+  font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+summary::after {
+  content: '+';
+  float: right;
+  color: #a1a1aa;
+}
+details[open] summary::after {
+  content: '−';
+}
+button[data-checkout] {
+  transition: transform 0.1s ease;
+}
+button[data-checkout]:active {
+  transform: translateY(1px);
+}

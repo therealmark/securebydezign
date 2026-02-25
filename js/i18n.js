@@ -5,6 +5,10 @@
 (function () {
   'use strict';
 
+  if (window.location.pathname === '/articles' || window.location.pathname === '/articles/') {
+    window.location.replace('/');
+  }
+
   const SUPPORTED = ['en', 'es'];
   const DEFAULT   = 'en';
 

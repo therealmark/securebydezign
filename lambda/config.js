@@ -21,6 +21,7 @@ export const PRICE_PDF_MAP = {
   'price_1T3hSIB50TQ4M7eDya2ws2sO': 'pinjection.pdf',
   'price_1T3hSJB50TQ4M7eDqd926TEt': 'agentic-ai-security.pdf',
   'price_1T3jN8B50TQ4M7eD6YQppz0e': 'enterprise-agentic-security.pdf',
+  'price_1T4Vb3B50TQ4M7eDtHTPP7Dl': 'sidekick-kit.zip',
 };
 
 // PDF display names for email
@@ -33,6 +34,7 @@ export const PDF_TITLES = {
   'pinjection.pdf':         'Prompt Injection Attacks & Defenses',
   'agentic-ai-security.pdf':        'Agentic AI Security',
   'enterprise-agentic-security.pdf':'Securing Enterprise AI & Agentic Workflows: The CISO Playbook',
+  'sidekick-kit.zip': 'Build Your Own AI Sidekick Kit',
 };
 
 function parsePdfBucketEnv() {
