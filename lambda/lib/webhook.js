@@ -30,7 +30,7 @@ function emailContentFor(filename) {
         "This is just the beginning.",
         '',
         '— The AI Operator Team',
-        'https://ai-operator.securebydezign.com',
+        'https://ai-operator.biz',
       ].join('\n'),
     };
   }
