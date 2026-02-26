@@ -3,6 +3,7 @@
 // Maps Stripe price IDs → PDF filename (test + live)
 export const PRICE_PDF_MAP = {
   // ── TEST ──────────────────────────────────────────────────────────────────
+  'price_1T57J0BSD7Ij1cUSxF3SkhaE': 'sidekick-kit.zip',
   'price_1T3hMKBSD7Ij1cUSBOknTQ4t': 'supply-chain-ai.pdf',
   'price_1T3hMLBSD7Ij1cUSyzVmqVB7': 'llm-red-teaming.pdf',
   'price_1T3hMMBSD7Ij1cUSpzQ3oZBY': 'api-security.pdf',
