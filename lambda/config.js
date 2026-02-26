@@ -61,7 +61,7 @@ export const config = {
   stripeLiveWebhookSecret:  process.env.STRIPE_LIVE_WEBHOOK_SECRET || '',  // live webhook secret
   pdfBucket,
   pdfPrefix,
-  sesFromEmail:         process.env.SES_FROM_EMAIL         || 'hello@securebydezign.com',
+  sesFromEmail:         process.env.SES_FROM_EMAIL         || 'support@ai-operator.biz',
   sesRegion:            process.env.AWS_REGION             || 'us-east-1',
   presignExpirySeconds: Number(process.env.PRESIGN_EXPIRY_SECONDS) || 300,
 };
