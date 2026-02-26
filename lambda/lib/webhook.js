@@ -18,19 +18,19 @@ function mimeTypeFor(filename) {
 
 /** Returns product-specific email subject + body. */
 function emailContentFor(filename) {
-  if (filename === 'sidekick-kit.zip') {
+  if (filename === 'ai-operator-kit.zip') {
     return {
-      subject: "Your Sidekick Kit is here 🎉",
+      subject: "Your AI Operator Kit is here 🎉",
       body: [
-        "You're in. Your Sidekick Kit is attached — everything you need to get started.",
+        "You're in. Your AI Operator Kit is attached — everything you need to get started.",
         '',
         "Your coach will be in touch shortly to schedule your first 1-on-1 session.",
         "In the meantime, take a look inside the kit and get familiar with what's there.",
         '',
         "This is just the beginning.",
         '',
-        '— The Sidekick Team',
-        'https://sidekick.securebydezign.com',
+        '— The AI Operator Team',
+        'https://ai-operator.securebydezign.com',
       ].join('\n'),
     };
   }

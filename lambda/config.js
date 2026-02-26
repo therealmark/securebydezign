@@ -3,7 +3,7 @@
 // Maps Stripe price IDs → PDF filename (test + live)
 export const PRICE_PDF_MAP = {
   // ── TEST ──────────────────────────────────────────────────────────────────
-  'price_1T57J0BSD7Ij1cUSxF3SkhaE': 'sidekick-kit.zip',
+  'price_1T57J0BSD7Ij1cUSxF3SkhaE': 'ai-operator-kit.zip',
   'price_1T3hMKBSD7Ij1cUSBOknTQ4t': 'supply-chain-ai.pdf',
   'price_1T3hMLBSD7Ij1cUSyzVmqVB7': 'llm-red-teaming.pdf',
   'price_1T3hMMBSD7Ij1cUSpzQ3oZBY': 'api-security.pdf',
@@ -22,7 +22,7 @@ export const PRICE_PDF_MAP = {
   'price_1T3hSIB50TQ4M7eDya2ws2sO': 'pinjection.pdf',
   'price_1T3hSJB50TQ4M7eDqd926TEt': 'agentic-ai-security.pdf',
   'price_1T3jN8B50TQ4M7eD6YQppz0e': 'enterprise-agentic-security.pdf',
-  'price_1T4Vb3B50TQ4M7eDtHTPP7Dl': 'sidekick-kit.zip',
+  'price_1T4Vb3B50TQ4M7eDtHTPP7Dl': 'ai-operator-kit.zip',
 };
 
 // PDF display names for email
@@ -35,7 +35,7 @@ export const PDF_TITLES = {
   'pinjection.pdf':         'Prompt Injection Attacks & Defenses',
   'agentic-ai-security.pdf':        'Agentic AI Security',
   'enterprise-agentic-security.pdf':'Securing Enterprise AI & Agentic Workflows: The CISO Playbook',
-  'sidekick-kit.zip': 'Build Your Own AI Sidekick Kit',
+  'ai-operator-kit.zip': 'Build Your Own AI Operator Kit',
 };
 
 function parsePdfBucketEnv() {
