@@ -1,6 +1,6 @@
 /**
  * Stripe webhook: on checkout.session.completed, email the specific purchased
- * PDF to the customer via SES.
+ * file to the customer via SES.
  */
 import Stripe from 'stripe';
 import { SESClient, SendRawEmailCommand } from '@aws-sdk/client-ses';
@@ -9,12 +9,50 @@ import { config, PRICE_PDF_MAP, PDF_TITLES, stripeKeyFor } from '../config.js';
 const ses = new SESClient({ region: config.sesRegion });
 const s3 = new S3Client({});
 
-function buildMimeMessage(toEmail, pdfParts) {
+/** Returns MIME type based on file extension. */
+function mimeTypeFor(filename) {
+  if (filename.endsWith('.zip'))  return 'application/zip';
+  if (filename.endsWith('.pdf'))  return 'application/pdf';
+  return 'application/octet-stream';
+}
+
+/** Returns product-specific email subject + body. */
+function emailContentFor(filename) {
+  if (filename === 'sidekick-kit.zip') {
+    return {
+      subject: "Your Sidekick Kit is here 🎉",
+      body: [
+        "You're in. Your Sidekick Kit is attached — everything you need to get started.",
+        '',
+        "Your coach will be in touch shortly to schedule your first 1-on-1 session.",
+        "In the meantime, take a look inside the kit and get familiar with what's there.",
+        '',
+        "This is just the beginning.",
+        '',
+        '— The Sidekick Team',
+        'https://sidekick.securebydezign.com',
+      ].join('\n'),
+    };
+  }
+  // Default: security guide
+  return {
+    subject: 'Your Secure by DeZign guide',
+    body: [
+      'Thank you for your purchase. Your AI Security guide is attached.',
+      '',
+      '— Secure by DeZign',
+      'https://www.securebydezign.com',
+    ].join('\n'),
+  };
+}
+
+function buildMimeMessage(toEmail, parts) {
   const boundary = `----=_Part_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+  const { subject, body } = emailContentFor(parts[0]?.filename ?? '');
   const lines = [
     `From: ${config.sesFromEmail}`,
     `To: ${toEmail}`,
-    'Subject: Your Secure by DeZign guide',
+    `Subject: ${subject}`,
     'MIME-Version: 1.0',
     `Content-Type: multipart/mixed; boundary="${boundary}"`,
     '',
@@ -22,16 +60,14 @@ function buildMimeMessage(toEmail, pdfParts) {
     'Content-Type: text/plain; charset=UTF-8',
     'Content-Transfer-Encoding: 7bit',
     '',
-    'Thank you for your purchase. Your AI Security guide is attached.',
-    '',
-    '— Secure by DeZign',
-    'https://www.securebydezign.com',
+    body,
   ];
-  for (const { filename, data } of pdfParts) {
+  for (const { filename, data } of parts) {
     const base64 = Buffer.from(data).toString('base64');
+    const mime = mimeTypeFor(filename);
     lines.push(
       `--${boundary}`,
-      `Content-Type: application/pdf; name="${filename}"`,
+      `Content-Type: ${mime}; name="${filename}"`,
       'Content-Transfer-Encoding: base64',
       `Content-Disposition: attachment; filename="${filename}"`,
       '',
@@ -115,7 +151,7 @@ export async function handleWebhook(rawBody, signature) {
     pdfData = await getPdfFromS3(key);
   } catch (e) {
     console.error(`[webhook] S3 get failed for ${key}:`, e.message);
-    return { statusCode: 500, body: JSON.stringify({ error: 'PDF not found' }) };
+    return { statusCode: 500, body: JSON.stringify({ error: 'Asset not found' }) };
   }
 
   try {
