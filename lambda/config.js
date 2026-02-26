@@ -23,6 +23,7 @@ export const PRICE_PDF_MAP = {
   'price_1T3hSJB50TQ4M7eDqd926TEt': 'agentic-ai-security.pdf',
   'price_1T3jN8B50TQ4M7eD6YQppz0e': 'enterprise-agentic-security.pdf',
   'price_1T4Vb3B50TQ4M7eDtHTPP7Dl': 'ai-operator-kit.zip',
+  'price_1T59QpB50TQ4M7eDye3IWYBD': 'ai-operator-kit.zip',
 };
 
 // PDF display names for email
