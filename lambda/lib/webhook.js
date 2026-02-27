@@ -1,89 +1,84 @@
 /**
- * Stripe webhook: on checkout.session.completed, email the specific purchased
- * file to the customer via SES.
+ * Stripe webhook: on checkout.session.completed, email a pre-signed S3
+ * download link to the customer. No attachments — avoids Gmail zip filtering.
  */
 import Stripe from 'stripe';
-import { SESClient, SendRawEmailCommand } from '@aws-sdk/client-ses';
+import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { config, PRICE_PDF_MAP, PDF_TITLES, stripeKeyFor } from '../config.js';
-const ses = new SESClient({ region: config.sesRegion });
-const s3 = new S3Client({});
 
-/** Returns MIME type based on file extension. */
-function mimeTypeFor(filename) {
-  if (filename.endsWith('.zip'))  return 'application/zip';
-  if (filename.endsWith('.pdf'))  return 'application/pdf';
-  return 'application/octet-stream';
-}
+const ses = new SESClient({ region: config.sesRegion });
+const s3  = new S3Client({});
+
+const LINK_EXPIRY_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
 /** Returns product-specific email subject + body. */
-function emailContentFor(filename) {
+function emailContentFor(filename, downloadUrl) {
+  const title = PDF_TITLES[filename] ?? filename;
+
   if (filename === 'ai-operator-kit.zip') {
     return {
-      subject: "Your AI Operator Kit is here 🎉",
-      body: [
-        "You're in. Your AI Operator Kit is attached — everything you need to get started.",
+      subject: `Your AI Operator Kit is ready`,
+      text: [
+        `You're in.`,
         '',
-        "Your coach will be in touch shortly to schedule your first 1-on-1 session.",
-        "In the meantime, take a look inside the kit and get familiar with what's there.",
+        `Your AI Operator Kit is ready to download:`,
         '',
-        "This is just the beginning.",
+        downloadUrl,
         '',
-        '— The AI Operator Team',
-        'https://ai-operator.biz',
+        `This link is active for 7 days.`,
+        '',
+        `Your Architect will be in touch shortly to schedule your first session.`,
+        `In the meantime, open the kit and get familiar with what's inside.`,
+        '',
+        `This is just the beginning.`,
+        '',
+        `— The AI Operator Team`,
+        `https://ai-operator.biz`,
       ].join('\n'),
+      html: `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 24px; color: #1e293b;">
+          <img src="https://ai-operator.biz/images/logo.png" alt="AI Operator" style="height: 36px; margin-bottom: 32px;" />
+          <h1 style="font-size: 24px; font-weight: 700; margin: 0 0 8px;">You're in.</h1>
+          <p style="color: #64748b; font-size: 16px; margin: 0 0 32px;">Your AI Operator Kit is ready to download.</p>
+          <a href="${downloadUrl}" style="display: inline-block; background: linear-gradient(135deg, #ec4899, #a855f7); color: white; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-weight: 600; font-size: 16px;">
+            Download Your Kit →
+          </a>
+          <p style="color: #94a3b8; font-size: 13px; margin: 24px 0 0;">Link expires in 7 days.</p>
+          <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 32px 0;" />
+          <p style="color: #64748b; font-size: 14px; margin: 0;">Your Architect will be in touch shortly to schedule your first session. In the meantime, open the kit and get familiar with what's inside.</p>
+          <p style="color: #64748b; font-size: 14px; margin: 16px 0 0;">This is just the beginning.</p>
+          <p style="color: #94a3b8; font-size: 13px; margin: 32px 0 0;">— The AI Operator Team · <a href="https://ai-operator.biz" style="color: #ec4899;">ai-operator.biz</a></p>
+        </div>
+      `,
     };
   }
-  // Default: security guide
+
+  // Default fallback
   return {
-    subject: 'Your Secure by DeZign guide',
-    body: [
-      'Thank you for your purchase. Your AI Security guide is attached.',
+    subject: `Your ${title} is ready`,
+    text: [
+      `Thank you for your purchase.`,
       '',
-      '— Secure by DeZign',
-      'https://www.securebydezign.com',
+      `Download your ${title} here:`,
+      '',
+      downloadUrl,
+      '',
+      `This link is active for 7 days.`,
+      '',
+      `— Secure by DeZign`,
+      `https://www.securebydezign.com`,
     ].join('\n'),
+    html: `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 24px; color: #1e293b;">
+        <h2 style="margin: 0 0 16px;">Your ${title}</h2>
+        <a href="${downloadUrl}" style="display: inline-block; background: #0f172a; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-weight: 600;">Download Now →</a>
+        <p style="color: #94a3b8; font-size: 13px; margin: 16px 0 0;">Link expires in 7 days.</p>
+        <p style="color: #94a3b8; font-size: 13px; margin: 24px 0 0;">— Secure by DeZign · <a href="https://www.securebydezign.com" style="color: #6366f1;">securebydezign.com</a></p>
+      </div>
+    `,
   };
-}
-
-function buildMimeMessage(toEmail, parts) {
-  const boundary = `----=_Part_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-  const { subject, body } = emailContentFor(parts[0]?.filename ?? '');
-  const lines = [
-    `From: ${config.sesFromEmail}`,
-    `To: ${toEmail}`,
-    `Subject: ${subject}`,
-    'MIME-Version: 1.0',
-    `Content-Type: multipart/mixed; boundary="${boundary}"`,
-    '',
-    `--${boundary}`,
-    'Content-Type: text/plain; charset=UTF-8',
-    'Content-Transfer-Encoding: 7bit',
-    '',
-    body,
-  ];
-  for (const { filename, data } of parts) {
-    const base64 = Buffer.from(data).toString('base64');
-    const mime = mimeTypeFor(filename);
-    lines.push(
-      `--${boundary}`,
-      `Content-Type: ${mime}; name="${filename}"`,
-      'Content-Transfer-Encoding: base64',
-      `Content-Disposition: attachment; filename="${filename}"`,
-      '',
-      base64.replace(/(.{76})/g, '$1\n'),
-      ''
-    );
-  }
-  lines.push(`--${boundary}--`, '');
-  return Buffer.from(lines.join('\r\n'), 'utf8');
-}
-
-async function getPdfFromS3(key) {
-  const res = await s3.send(new GetObjectCommand({ Bucket: config.pdfBucket, Key: key }));
-  const chunks = [];
-  for await (const chunk of res.Body) chunks.push(chunk);
-  return Buffer.concat(chunks);
 }
 
 export async function handleWebhook(rawBody, signature) {
@@ -93,7 +88,6 @@ export async function handleWebhook(rawBody, signature) {
   }
 
   // Try live secret first, fall back to test secret.
-  // We don't know livemode until after signature verification, so we try both.
   let event;
   const secrets = [config.stripeLiveWebhookSecret, config.stripeWebhookSecret].filter(Boolean);
   for (const secret of secrets) {
@@ -111,11 +105,10 @@ export async function handleWebhook(rawBody, signature) {
     return { statusCode: 200, body: JSON.stringify({ received: true }) };
   }
 
-  // Pick key based on event mode
   const stripe = new Stripe(stripeKeyFor(event.livemode));
-
   const session = event.data.object;
   const customerEmail = session.customer_details?.email || session.customer_email;
+
   if (!customerEmail) {
     console.warn('[webhook] No customer email in session');
     return { statusCode: 200, body: JSON.stringify({ received: true }) };
@@ -126,7 +119,7 @@ export async function handleWebhook(rawBody, signature) {
     return { statusCode: 500, body: JSON.stringify({ error: 'Server configuration error' }) };
   }
 
-  // Retrieve session with line items to identify which PDF was purchased
+  // Expand line items to identify purchased product
   let fullSession;
   try {
     fullSession = await stripe.checkout.sessions.retrieve(session.id, {
@@ -137,31 +130,44 @@ export async function handleWebhook(rawBody, signature) {
     return { statusCode: 500, body: JSON.stringify({ error: 'Could not retrieve session' }) };
   }
 
-  const priceId = fullSession.line_items?.data?.[0]?.price?.id;
+  const priceId    = fullSession.line_items?.data?.[0]?.price?.id;
   const pdfFilename = priceId ? PRICE_PDF_MAP[priceId] : null;
 
   if (!pdfFilename) {
-    console.warn('[webhook] Unknown price ID, cannot determine PDF:', priceId);
+    console.warn('[webhook] Unknown price ID, cannot determine asset:', priceId);
     return { statusCode: 200, body: JSON.stringify({ received: true }) };
   }
 
+  // Generate pre-signed S3 download URL (7-day expiry)
   const key = config.pdfPrefix + pdfFilename;
-  let pdfData;
+  let downloadUrl;
   try {
-    pdfData = await getPdfFromS3(key);
+    const command = new GetObjectCommand({
+      Bucket: config.pdfBucket,
+      Key: key,
+      ResponseContentDisposition: `attachment; filename="${pdfFilename}"`,
+    });
+    downloadUrl = await getSignedUrl(s3, command, { expiresIn: LINK_EXPIRY_SECONDS });
   } catch (e) {
-    console.error(`[webhook] S3 get failed for ${key}:`, e.message);
+    console.error(`[webhook] Failed to generate pre-signed URL for ${key}:`, e.message);
     return { statusCode: 500, body: JSON.stringify({ error: 'Asset not found' }) };
   }
 
+  // Send email with download link (no attachment)
+  const { subject, text, html } = emailContentFor(pdfFilename, downloadUrl);
   try {
-    const rawMessage = buildMimeMessage(customerEmail, [{ filename: pdfFilename, data: pdfData }]);
-    await ses.send(new SendRawEmailCommand({
+    await ses.send(new SendEmailCommand({
       Source: config.sesFromEmail,
-      Destinations: [customerEmail],
-      RawMessage: { Data: rawMessage },
+      Destination: { ToAddresses: [customerEmail] },
+      Message: {
+        Subject: { Data: subject, Charset: 'UTF-8' },
+        Body: {
+          Text: { Data: text, Charset: 'UTF-8' },
+          Html: { Data: html, Charset: 'UTF-8' },
+        },
+      },
     }));
-    console.log(`[webhook] Emailed ${pdfFilename} to ${customerEmail}`);
+    console.log(`[webhook] Emailed download link for ${pdfFilename} to ${customerEmail}`);
   } catch (err) {
     console.error('[webhook] SES send failed:', err.message);
     return { statusCode: 500, body: JSON.stringify({ error: 'Failed to send email' }) };
