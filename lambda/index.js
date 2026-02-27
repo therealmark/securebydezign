@@ -7,6 +7,7 @@ import { handleSession } from './lib/session.js';
 import { handleXaiProxy } from './lib/xai-proxy.js';
 import { handleSearchDefs } from './lib/search-defs.js';
 import { wafCheck } from './lib/waf.js';
+import { handleTrack, handleAnalytics } from './lib/analytics.js';
 
 function getPath(event) {
   return event.path ?? event.rawPath ?? event.requestContext?.http?.path ?? '';
@@ -89,6 +90,21 @@ export const handler = async (event) => {
     // POST /proxy/xai — proxies to api.x.ai bypassing Cloudflare ASN block
     if ((path === '/proxy/xai' || path.endsWith('/proxy/xai')) && method === 'POST') {
       const result = await handleXaiProxy(event);
+      return ensureResponse(result);
+    }
+
+    // POST /api/track — receive analytics events from the site
+    if ((path === '/api/track' || path.endsWith('/api/track')) && method === 'POST') {
+      const body = event.isBase64Encoded
+        ? Buffer.from(event.body, 'base64').toString('utf8')
+        : (event.body || '{}');
+      const result = await handleTrack(body, event.headers || {});
+      return ensureResponse(result);
+    }
+
+    // GET /api/analytics — metrics dashboard data (key-protected)
+    if ((path === '/api/analytics' || path.endsWith('/api/analytics')) && method === 'GET') {
+      const result = await handleAnalytics(event.headers || {});
       return ensureResponse(result);
     }
 
