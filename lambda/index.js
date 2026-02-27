@@ -34,7 +34,7 @@ export const handler = async (event) => {
         statusCode: 204,
         headers: {
           'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
           'Access-Control-Allow-Headers': 'Content-Type, Stripe-Signature, x-metrics-key',
         },
         body: '',
@@ -109,8 +109,8 @@ export const handler = async (event) => {
       return ensureResponse(result);
     }
 
-    // GET /api/customers — customer list (key-protected)
-    if ((path === '/api/customers' || path.endsWith('/api/customers')) && method === 'GET') {
+    // GET|POST|DELETE /api/customers — customer management (key-protected)
+    if (path === '/api/customers' || path.endsWith('/api/customers')) {
       const result = await handleCustomers(event);
       return ensureResponse(result);
     }
