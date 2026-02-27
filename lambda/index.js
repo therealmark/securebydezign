@@ -8,6 +8,7 @@ import { handleXaiProxy } from './lib/xai-proxy.js';
 import { handleSearchDefs } from './lib/search-defs.js';
 import { wafCheck } from './lib/waf.js';
 import { handleTrack, handleAnalytics } from './lib/analytics.js';
+import { handleCustomers } from './lib/customers.js';
 
 function getPath(event) {
   return event.path ?? event.rawPath ?? event.requestContext?.http?.path ?? '';
@@ -105,6 +106,12 @@ export const handler = async (event) => {
     // GET /api/analytics — metrics dashboard data (key-protected)
     if ((path === '/api/analytics' || path.endsWith('/api/analytics')) && method === 'GET') {
       const result = await handleAnalytics(event.headers || {});
+      return ensureResponse(result);
+    }
+
+    // GET /api/customers — customer list (key-protected)
+    if ((path === '/api/customers' || path.endsWith('/api/customers')) && method === 'GET') {
+      const result = await handleCustomers(event);
       return ensureResponse(result);
     }
 

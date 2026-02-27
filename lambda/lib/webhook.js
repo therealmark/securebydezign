@@ -6,7 +6,11 @@ import Stripe from 'stripe';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { DynamoDBClient, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
 import { config, PRICE_PDF_MAP, PDF_TITLES, stripeKeyFor } from '../config.js';
+
+const db = new DynamoDBClient({});
+const CUSTOMERS_TABLE = process.env.CUSTOMERS_TABLE || 'ai-operator-customers';
 
 const ses = new SESClient({ region: config.sesRegion });
 const s3  = new S3Client({});
@@ -79,6 +83,52 @@ function emailContentFor(filename, downloadUrl) {
       </div>
     `,
   };
+}
+
+/**
+ * Upsert a customer record in DynamoDB.
+ * Increments purchaseCount, appends product to products list,
+ * sets firstPurchaseAt on first purchase, updates lastPurchaseAt always.
+ */
+async function captureCustomer({ email, name, businessName, productName, stripeCustomerId }) {
+  if (!email) return;
+  const now = new Date().toISOString();
+
+  try {
+    await db.send(new UpdateItemCommand({
+      TableName: CUSTOMERS_TABLE,
+      Key: { email: { S: email } },
+      UpdateExpression: [
+        'SET #name = if_not_exists(#name, :name)',
+        '#firstPurchaseAt = if_not_exists(#firstPurchaseAt, :now)',
+        '#lastPurchaseAt = :now',
+        '#stripeCustomerId = if_not_exists(#stripeCustomerId, :scid)',
+        '#businessName = if_not_exists(#businessName, :biz)',
+        'ADD #purchaseCount :one, #products :product',
+      ].join(', '),
+      ExpressionAttributeNames: {
+        '#name': 'name',
+        '#firstPurchaseAt': 'firstPurchaseAt',
+        '#lastPurchaseAt': 'lastPurchaseAt',
+        '#stripeCustomerId': 'stripeCustomerId',
+        '#businessName': 'businessName',
+        '#purchaseCount': 'purchaseCount',
+        '#products': 'products',
+      },
+      ExpressionAttributeValues: {
+        ':name': { S: name || 'Unknown' },
+        ':now':  { S: now },
+        ':scid': { S: stripeCustomerId || '' },
+        ':biz':  { S: businessName || '' },
+        ':one':  { N: '1' },
+        ':product': { SS: [productName || 'unknown'] },
+      },
+    }));
+    console.log(`[webhook] Customer captured: ${email}`);
+  } catch (err) {
+    // Non-fatal — log but don't fail the webhook
+    console.error('[webhook] Failed to capture customer:', err.message);
+  }
 }
 
 export async function handleWebhook(rawBody, signature) {
@@ -172,6 +222,18 @@ export async function handleWebhook(rawBody, signature) {
     console.error('[webhook] SES send failed:', err.message);
     return { statusCode: 500, body: JSON.stringify({ error: 'Failed to send email' }) };
   }
+
+  // Capture customer data (non-fatal — runs after email success)
+  const customerName = session.customer_details?.name || fullSession.customer_details?.name || '';
+  const businessName = session.metadata?.businessName || fullSession.metadata?.businessName || '';
+  const stripeCustomerId = typeof session.customer === 'string' ? session.customer : '';
+  await captureCustomer({
+    email: customerEmail,
+    name: customerName,
+    businessName,
+    productName: pdfFilename,
+    stripeCustomerId,
+  });
 
   return { statusCode: 200, body: JSON.stringify({ received: true }) };
 }
