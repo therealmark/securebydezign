@@ -3,7 +3,8 @@
 // Maps Stripe price IDs → PDF filename (test + live)
 export const PRICE_PDF_MAP = {
   // ── TEST ──────────────────────────────────────────────────────────────────
-  'price_1T57J0BSD7Ij1cUSxF3SkhaE': 'ai-operator-kit.zip',  // AI Operator Bootcamp (test)
+  'price_1T57J0BSD7Ij1cUSxF3SkhaE': 'ai-operator-kit.zip',  // AI Operator Engagement old (test)
+  'price_1T5Be5BSD7Ij1cUSYo5KcM9K': 'ai-operator-kit.zip',  // AI Operator Engagement $200 (test)
   'price_1T5ADBBSD7Ij1cUSP2WXJqf1': 'ai-operator-kit.zip',  // Fractional Principal Architect monthly (test)
   'price_1T3hMKBSD7Ij1cUSBOknTQ4t': 'supply-chain-ai.pdf',
   'price_1T3hMLBSD7Ij1cUSyzVmqVB7': 'llm-red-teaming.pdf',
