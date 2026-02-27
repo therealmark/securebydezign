@@ -5,7 +5,8 @@ export const PRICE_PDF_MAP = {
   // ── TEST ──────────────────────────────────────────────────────────────────
   'price_1T57J0BSD7Ij1cUSxF3SkhaE': 'ai-operator-kit.zip',  // AI Operator Engagement old (test)
   'price_1T5Be5BSD7Ij1cUSYo5KcM9K': 'ai-operator-kit.zip',  // AI Operator Engagement $200 (test)
-  'price_1T5ADBBSD7Ij1cUSP2WXJqf1': 'ai-operator-kit.zip',  // Fractional Principal Architect monthly (test)
+  'price_1T5ADBBSD7Ij1cUSP2WXJqf1': 'ai-operator-kit.zip',  // Fractional Principal Architect $50/mo old (test)
+  'price_1T5FsJBSD7Ij1cUSAC39kl4b': 'ai-operator-kit.zip',  // Fractional Principal Architect $397/mo (test)
   'price_1T3hMKBSD7Ij1cUSBOknTQ4t': 'supply-chain-ai.pdf',
   'price_1T3hMLBSD7Ij1cUSyzVmqVB7': 'llm-red-teaming.pdf',
   'price_1T3hMMBSD7Ij1cUSpzQ3oZBY': 'api-security.pdf',
@@ -26,7 +27,8 @@ export const PRICE_PDF_MAP = {
   'price_1T3jN8B50TQ4M7eD6YQppz0e': 'enterprise-agentic-security.pdf',
   'price_1T4Vb3B50TQ4M7eDtHTPP7Dl': 'ai-operator-kit.zip',  // AI Operator Bootcamp old (live)
   'price_1T59QpB50TQ4M7eDye3IWYBD': 'ai-operator-kit.zip',  // AI Operator Bootcamp (live)
-  'price_1T5A8jB50TQ4M7eDScR12nAw': 'ai-operator-kit.zip',  // Fractional Principal Architect monthly (live)
+  'price_1T5A8jB50TQ4M7eDScR12nAw': 'ai-operator-kit.zip',  // Fractional Principal Architect $50/mo old (live)
+  'price_1T5FsJB50TQ4M7eDMIAn3lKU': 'ai-operator-kit.zip',  // Fractional Principal Architect $397/mo (live)
 };
 
 // PDF display names for email
