@@ -26,6 +26,7 @@
     'prompt-injection':   '/pdfs/pinjection.pdf',
     'agentic-ai-security':'/pdfs/agentic-ai-security.pdf',
     'enterprise-agentic-security': '/pdfs/enterprise-agentic-security.pdf',
+    'zero-trust-ai':      '/pdfs/zero-trust-ai.pdf',
   };
 
   var path = window.location.pathname;

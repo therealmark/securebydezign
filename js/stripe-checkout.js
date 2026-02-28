@@ -14,6 +14,7 @@
     'prompt-injection':    'https://buy.stripe.com/test_28E7sK68N7quePg5v0eME07',
     'agentic-ai-security': 'https://buy.stripe.com/test_8x27sK9kZh147mOf5AeME08',
     'enterprise-agentic-security': 'https://buy.stripe.com/test_fZuaEW7cR8uyePg7D8eME09',
+    'zero-trust-ai': 'https://buy.stripe.com/test_7sY8wO54J3ae36y7D8eME0e',
   };
 
   var LIVE = {
@@ -26,6 +27,7 @@
     'prompt-injection':    'https://buy.stripe.com/4gM6oG2MG4rubja1Udb7y06',
     'agentic-ai-security': 'https://buy.stripe.com/bJeeVc8702jm2MEgP7b7y07',
     'enterprise-agentic-security': 'https://buy.stripe.com/28EeVcaf8e2472U8iBb7y08',
+    'zero-trust-ai': 'https://buy.stripe.com/28E00ievo2jmfzqfL3b7y0i',
   };
 
   var useTest = window.location.hostname === 'localhost' ||
