@@ -15,6 +15,12 @@
  *   if (blocked) return blocked;
  */
 
+// ── Whitelist ───────────────────────────────────────────────────────────────
+
+const WHITELIST = [
+  '24.22.216.221',  // Mark's IP (whitelisted 2026-02-28)
+];
+
 // ── Rule definitions ────────────────────────────────────────────────────────
 
 const RULES = [
@@ -213,6 +219,14 @@ function logBlock(rule, event, extracted) {
 
 export function wafCheck(event) {
   const extracted = extractTargets(event);
+
+  // 0. Check whitelist first
+  const sourceIp = event.requestContext?.identity?.sourceIp 
+                    ?? event.requestContext?.http?.sourceIp 
+                    ?? 'unknown';
+  if (WHITELIST.includes(sourceIp)) {
+    return null; // whitelisted — skip all checks
+  }
 
   // 1. Oversized body (> 512KB is suspicious for our API)
   if (extracted.body.length > 524288) {

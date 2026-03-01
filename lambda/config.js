@@ -16,6 +16,7 @@ export const PRICE_PDF_MAP = {
   'price_1T3hMQBSD7Ij1cUSrlDQSOGn': 'agentic-ai-security.pdf',
   'price_1T3jN4BSD7Ij1cUSs4Bkug3E': 'enterprise-agentic-security.pdf',
   'price_1T5mEQBSD7Ij1cUSEiz3XAAk': 'zero-trust-ai.pdf',
+  'price_1T68jUBSD7Ij1cUSZiASFRiH': 'context-window-poisoning.pdf',  // test — context-window-poisoning
 
   // ── LIVE ──────────────────────────────────────────────────────────────────
   'price_1T3hSEB50TQ4M7eDLwmSbW3y': 'supply-chain-ai.pdf',
@@ -27,6 +28,7 @@ export const PRICE_PDF_MAP = {
   'price_1T3hSJB50TQ4M7eDqd926TEt': 'agentic-ai-security.pdf',
   'price_1T3jN8B50TQ4M7eD6YQppz0e': 'enterprise-agentic-security.pdf',
   'price_1T5mEUB50TQ4M7eD37sOcyNb': 'zero-trust-ai.pdf',
+  'price_1T68jZB50TQ4M7eDHeEGh1v6': 'context-window-poisoning.pdf',  // live — context-window-poisoning
   'price_1T4Vb3B50TQ4M7eDtHTPP7Dl': 'ai-operator-kit.zip',  // AI Operator Bootcamp old (live)
   'price_1T59QpB50TQ4M7eDye3IWYBD': 'ai-operator-kit.zip',  // AI Operator Bootcamp (live)
   'price_1T5A8jB50TQ4M7eDScR12nAw': 'ai-operator-kit.zip',  // Fractional Principal Architect $50/mo old (live)
@@ -44,6 +46,7 @@ export const PDF_TITLES = {
   'agentic-ai-security.pdf':        'Agentic AI Security',
   'enterprise-agentic-security.pdf':'Securing Enterprise AI & Agentic Workflows: The CISO Playbook',
   'zero-trust-ai.pdf':              'Zero Trust for AI & LLM Systems',
+  'context-window-poisoning.pdf':   'Context Window Poisoning: Long-Context LLM Attacks in 128K+ Token Models',
   'ai-operator-kit.zip': 'Build Your Own AI Operator Kit',
 };
 

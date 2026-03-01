@@ -2,15 +2,14 @@
  * GET /api/search-defs?q=...  — semantic search over attack definitions
  * POST /api/search-defs       — body: { "q": "..." }
  *
- * Loads metadata + embeddings from S3, embeds the query via OpenAI,
- * returns top-N results ranked by cosine similarity.
+ * Loads precomputed embeddings from S3 and returns top matches.
+ * Embeddings are generated offline via sentence-transformers.
  */
 
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 
 const s3 = new S3Client({ region: process.env.AWS_REGION || 'us-east-1' });
 const BUCKET = process.env.PDF_BUCKET || 'securebydezign.com';
-const MODEL  = 'text-embedding-3-small';
 const TOP_N  = 8;
 
 // In-memory cache (warm Lambda reuse)
@@ -36,19 +35,6 @@ async function getStore() {
   return { meta: _meta, emb: _emb };
 }
 
-async function embedQuery(q) {
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) throw new Error('OPENAI_API_KEY not set');
-  const res = await fetch('https://api.openai.com/v1/embeddings', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: MODEL, input: q }),
-  });
-  if (!res.ok) throw new Error(`OpenAI embedding error: ${res.status}`);
-  const data = await res.json();
-  return data.data[0].embedding;
-}
-
 function cosine(a, b) {
   let dot = 0, na = 0, nb = 0;
   for (let i = 0; i < a.length; i++) {
@@ -72,9 +58,28 @@ function json(statusCode, body, extra = {}) {
   };
 }
 
+/**
+ * Simple keyword-based fallback when no query embedding is provided.
+ * Searches term + short description for keyword matches.
+ */
+function keywordSearch(meta, query) {
+  const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+  return meta
+    .map(d => {
+      const text = `${d.term} ${d.short}`.toLowerCase();
+      const matches = terms.filter(t => text.includes(t)).length;
+      return { ...d, score: matches / terms.length };
+    })
+    .filter(d => d.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, TOP_N);
+}
+
 export async function handleSearchDefs(event) {
   // Parse query from GET or POST
   let q = '';
+  let queryVec = null;
+  
   const method = (event.httpMethod ?? event.requestContext?.http?.method ?? '').toUpperCase();
   if (method === 'GET') {
     q = (event.queryStringParameters?.q ?? '').trim();
@@ -82,6 +87,7 @@ export async function handleSearchDefs(event) {
     try {
       const body = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
       q = (body?.q ?? '').trim();
+      queryVec = body?.embedding; // optional: client can send pre-computed embedding
     } catch {
       return json(400, { error: 'Invalid JSON body' });
     }
@@ -95,16 +101,29 @@ export async function handleSearchDefs(event) {
   }
 
   try {
-    const [{ meta, emb }, queryVec] = await Promise.all([getStore(), embedQuery(q)]);
+    const { meta, emb } = await getStore();
 
-    const scored = meta
-      .filter(d => emb[d.id])
-      .map(d => ({ ...d, score: cosine(queryVec, emb[d.id]) }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, TOP_N)
-      .map(({ score, ...rest }) => ({ ...rest, score: Math.round(score * 1000) / 1000 }));
+    let scored;
+    
+    if (queryVec && Array.isArray(queryVec) && queryVec.length > 0) {
+      // Semantic search using provided embedding
+      scored = meta
+        .filter(d => emb[d.id])
+        .map(d => ({ ...d, score: cosine(queryVec, emb[d.id]) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, TOP_N)
+        .map(({ score, ...rest }) => ({ ...rest, score: Math.round(score * 1000) / 1000 }));
+    } else {
+      // Fallback: keyword search
+      scored = keywordSearch(meta, q);
+    }
 
-    return json(200, { q, results: scored, total: meta.length });
+    return json(200, { 
+      q, 
+      results: scored, 
+      total: meta.length,
+      method: queryVec ? 'semantic' : 'keyword'
+    });
   } catch (err) {
     console.error('[search-defs] error', err);
     return json(500, { error: 'Search failed. Please try again.' });

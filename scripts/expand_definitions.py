@@ -2,18 +2,22 @@
 """
 expand_definitions.py
 Adds net-new definitions sourced from article content audit.
+Uses open-source sentence-transformers for embeddings.
+
 Run: python3 scripts/expand_definitions.py
+
+Requirements:
+  pip install sentence-transformers
 """
-import json, time, urllib.request, urllib.error
+import json
 from pathlib import Path
+from sentence_transformers import SentenceTransformer
 
 ROOT = Path('/Users/pax/.openclaw/workspace/securebydezign.com')
 META_FILE = ROOT / 'data' / 'definitions-meta.json'
 EMB_FILE  = ROOT / 'data' / 'definitions-embeddings.json'
 
-# ── Load .env.local ────────────────────────────────────────────────────────
-dotenv = Path('/Users/pax/.openclaw/workspace/.env.local').read_text()
-api_key = next(l.split('=',1)[1].strip() for l in dotenv.splitlines() if l.startswith('OPENAI_API_KEY='))
+MODEL_NAME = 'sentence-transformers/all-MiniLM-L6-v2'  # 384 dimensions
 
 # ── New definitions (sourced from article audit) ───────────────────────────
 NEW_DEFS = [
@@ -448,32 +452,18 @@ NEW_DEFS = [
   },
 ]
 
+# ── Load embedding model ───────────────────────────────────────────────────
+print(f"Loading embedding model: {MODEL_NAME}")
+model = SentenceTransformer(MODEL_NAME)
+
 # ── Embed all new definitions ──────────────────────────────────────────────
-def embed_batch(texts):
-    data = json.dumps({"model": "text-embedding-3-small", "input": texts}).encode()
-    req = urllib.request.Request(
-        'https://api.openai.com/v1/embeddings',
-        data=data,
-        headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}
-    )
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.loads(r.read())['data']
-
-BATCH = 20
 all_texts = [f"{d['term']}: {d['short']}" for d in NEW_DEFS]
-embeddings = {}
-
 print(f"Generating embeddings for {len(NEW_DEFS)} new definitions...")
-for i in range(0, len(all_texts), BATCH):
-    batch_texts = all_texts[i:i+BATCH]
-    batch_defs  = NEW_DEFS[i:i+BATCH]
-    print(f"  Batch {i//BATCH + 1}: {len(batch_texts)} entries...")
-    results = embed_batch(batch_texts)
-    for j, res in enumerate(results):
-        embeddings[batch_defs[j]['id']] = res['embedding']
-    if i + BATCH < len(all_texts):
-        time.sleep(0.5)
 
+# Batch encode all at once (sentence-transformers handles batching internally)
+emb_vectors = model.encode(all_texts, show_progress_bar=True, normalize_embeddings=True)
+
+embeddings = {d['id']: emb.tolist() for d, emb in zip(NEW_DEFS, emb_vectors)}
 print(f"Generated {len(embeddings)} embeddings")
 
 # ── Merge into existing files ──────────────────────────────────────────────
